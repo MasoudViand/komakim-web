@@ -1,1 +1,7 @@
 /.idea
+/docker/logs/nginx/laravel_access.log
+/docker/logs/nginx/laravel_error.log
+/web-server/storage/*.key
+/web-server/public/storage
+web-server/vendor
+
