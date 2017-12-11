@@ -165,6 +165,12 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * package mongodb driver
+         */
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+
+
+        /*
          * Package Service Providers...
          */
 
