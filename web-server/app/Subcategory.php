@@ -15,4 +15,10 @@ class Subcategory extends Eloquent
     {
         return $this->belongsTo('App\Category');
     }
+
+    public function services()
+    {
+
+        return $this->hasMany('App\Service');
+    }
 }

@@ -40,6 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+@yield('head')
 <![endif]-->
 </head>
 
@@ -116,5 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset("AdminLTE-RTL/dist/js/pages/dashboard.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset("AdminLTE-RTL/dist/js/demo.js") }}"></script>
+@yield('foot')
+
 </body>
 </html>

@@ -31,20 +31,16 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">HEADER</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span>Reports</span>
-                    <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+            <li class="active">
+                <a href="{{ route('admin.service') }}">
+                    <i class="fa fa-th"></i> <span> سرویس</span>
                 </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{ url('admin/report/profile') }}">Profile</a></li>
-                    <li><a href="{{ url('admin/report/post') }}">Posts</a></li>
-                    <li><a href="#">Commnet</a></li>
-                </ul>
-                <ul>
-                    <li><a href="{{ url('admin/slider') }}"> Slider</a></li>
-                </ul>
+                <a href="{{ route('admin.list.email.template') }}">
+                    <i class="fa fa-th"></i> <span> قالبهای ایمیل</span>
+                </a>
+                <a href="{{ route('admin.list.survey') }}">
+                    <i class="fa fa-th"></i> <span> نظرات کاربران </span>
+                </a>
             </li>
 
         </ul>
