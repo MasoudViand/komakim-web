@@ -17,6 +17,8 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
+    protected $phoneNumber ='phone_number';
+
 
     use AuthenticatesUsers;
 

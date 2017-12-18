@@ -23,7 +23,7 @@
     @endif
 
 
-    <form role="form" method="POST" action="{{ route('admin.addservice.submit') }}">
+    <form role="form" method="POST" action="{{ route('admin.service.insert.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
 
@@ -119,7 +119,7 @@
 
                 if(stateID) {
                     $.ajax({
-                        url: '/admin/getsubcategory/'+stateID,
+                        url: '/admin/service/subcategory/'+stateID,
                         type: "GET",
                         dataType: "json",
                         success:function(data) {

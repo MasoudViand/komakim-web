@@ -24,10 +24,6 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $email_template = new MailTemplate();
-        $email_template->name ='test';
-        $email_template->html_email_template='<html> test</html>';
-        $email_template->save();
 
 
         $services = Service::paginate(15);
@@ -163,6 +159,14 @@ class ServiceController extends Controller
 
         }
 
+    }
+    public function deleteService($service_id)
+    {
+        if (Service::destroy($service_id))
+            $message['success'] = 'سرویس با موفقیت حذف شد';
+        else
+            $message['error'] = 'محددا تلاش کنید';
+        return redirect()->back()->with($message);
     }
 
     public function addQuestionService(Request $request)

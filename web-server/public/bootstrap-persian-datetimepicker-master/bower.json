@@ -1,0 +1,39 @@
+{
+  "name": "bootstrap-persian-datetimepicker",
+  "version": "4.7.147",
+  "main": [
+    "build/css/bootstrap-datetimepicker.min.css",
+    "build/js/bootstrap-persian-datetimepicker.min.js",
+    "src/less/_bootstrap-datetimepicker.less",
+    "src/less/bootstrap-datetimepicker-build.less",
+    "src/js/bootstrap-datetimepicker.js"
+  ],
+  "dependencies": {
+    "jquery": ">=1.8.3",
+    "moment": ">=2.8.0"
+  },
+  "homepage": "https://github.com/beygi/bootstrap-persian-datetimepicker",
+  "authors": [
+    "Mahdy Beygi"
+  ],
+  "description": "bootstrap3 persian datetimepicker",
+  "keywords": [
+    "twitter-bootstrap",
+    "bootstrap",
+    "datepicker",
+    "datetimepicker",
+    "timepicker",
+    "moment"
+  ],
+  "license": "GPL v3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "pdate": "~0.0.5"
+  }
+}

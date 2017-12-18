@@ -20,7 +20,7 @@
             <!-- AREA CHART -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <form role="form" method="POST" action="{{ route('admin.editservice.submit') }}">
+                    <form role="form" method="POST" action="{{ route('admin.service.update.submit') }}">
                         {{ csrf_field() }}
                         <div id="subform" class="box-body">
 
@@ -113,7 +113,7 @@
                     </div>
 
                 @endforeach
-                    <form role="form" method="POST" action="{{ route('admin.add.question.service.submit') }}">
+                    <form role="form" method="POST" action="{{ route('admin.service.question.insert.submit') }}">
                         {{ csrf_field() }}
                         <input  class="form-control"type="hidden" id="idService" name="idService" value={{$service->id}}>
                         <div id="subform" class="box-body">
@@ -136,8 +136,6 @@
 
 
         </div>
-    </div>
-
     </div>
 
 

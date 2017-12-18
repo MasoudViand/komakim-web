@@ -29,7 +29,7 @@
                         <tr role="row" class="odd">
                             <td class="sorting_1">{{$item->name}}</td>
 
-                            <td><a href="{{route('admin.mail.edit',['mail_template_id' => $item['id']])}}"><i class="fa fa-edit"></i></a></td>
+                            <td><a href="{{route('admin.emailtemplate.update',['emailtemplate_id' => $item['id']])}}"><i class="fa fa-edit"></i></a></td>
 
                         </tr>
 
@@ -58,7 +58,7 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ route('admin.create.email.template') }}">
+            <a href="{{ route('admin.emailtemplate.insert') }}">
                 <button class="btn btn-block btn-primary btn-lg">اضافه کردن قالب</button>
             </a>
 

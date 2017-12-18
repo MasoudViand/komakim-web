@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\WorkerProfile;
+use function GuzzleHttp\Psr7\_parse_message;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,10 +14,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('auth');
+//    }
 
     /**
      * Show the application dashboard.
@@ -24,5 +27,77 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    function getworkwithusForm(){
+       return view('work_with_us');
+    }
+
+    function registerWorker(Request $request)
+    {
+
+
+        $this->validate($request,[
+            'name' => 'required',
+            'family' => 'required',
+            'nationalCode' => 'required',
+            'phoneNumber' => 'required',
+            'mobileNumber' => 'required',
+            'address' => 'required',
+            'birthday' => 'required',
+        ]);
+
+
+
+        $user = User::where('phone_number',$request['mobileNumber'])->first();
+
+        if ($user){
+            $message['error'] = 'این شماره تلفن قبلا ثبت شده است ';
+            return redirect()->back()->with($message);
+        }
+
+        $user =new User();
+        $user->name =$request['name'];
+        $user->name =$request['family'];
+        if ($request['email'])
+            $user->email =$request['email'];
+        else
+            $user->email =$request['mobileNumber'];
+        $user->password=$request['mobileNumber'];
+        $user->phone_number=$request['mobileNumber'];
+        $user->isCompleted =true;
+        $user->role ='worker';
+        if ($user->save()){
+            $message =$this->_saveProfile($request,$user->id);
+        }else
+            $message = 'مشکلی برای ذخیره یوزر';
+
+        return redirect()->route('home')->with($message);
+    }
+
+    protected function _saveProfile( $request ,$user_id)
+    {
+        $workerProfile= new WorkerProfile();
+        $workerProfile->user_id=$user_id;
+        $workerProfile->nationalCode=$request['nationalCode'];
+        $workerProfile->address =$request['address'];
+        $workerProfile->home_phone_number = $request['phoneNumber'];
+        $workerProfile->birthDay =  \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request['birthday'].' 00:00:00');
+        $workerProfile->field = $request['field'];
+        $workerProfile->last_education = $request['lastEducation'];
+        $workerProfile->marriage_status = $request['marriageStatus'];
+        $workerProfile->gender = $request['gender'];
+        $workerProfile->another_capability = $request['anotherCapability'];
+        $workerProfile->certificates = $request['certificates'];
+        $workerProfile->experience = $request['experience'];
+        $workerProfile->status ='pending';
+        $message=null;
+        if ($workerProfile->save()){
+            $message['success'] ='پروفایل به درستی ذخیره شد';
+        }else
+            $message['error'] ='مشکلی به وجود امده مجددا تلاش کنید';
+        return $message;
+
+
     }
 }

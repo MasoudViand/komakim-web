@@ -18,7 +18,7 @@
 
         </div><!-- /.box-header -->
         <div class="box-body pad">
-            <form method="post" action="{{route('admin.create.email.template.submit')}}">
+            <form method="post" action="{{route('admin.emailtemplate.insert.submit')}}">
 
                 {{ csrf_field() }}
 

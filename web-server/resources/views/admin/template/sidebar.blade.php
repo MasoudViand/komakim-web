@@ -35,11 +35,23 @@
                 <a href="{{ route('admin.service') }}">
                     <i class="fa fa-th"></i> <span> سرویس</span>
                 </a>
-                <a href="{{ route('admin.list.email.template') }}">
+                <a href="{{ route('admin.category') }}">
+                    <i class="fa fa-th"></i> <span>دسته بندی</span>
+                </a>
+                <a href="{{ route('admin.subcategory') }}">
+                    <i class="fa fa-th"></i> <span>زیر دسته بندی</span>
+                </a>
+                <a href="{{ route('admin.emailtemplate') }}">
                     <i class="fa fa-th"></i> <span> قالبهای ایمیل</span>
                 </a>
                 <a href="{{ route('admin.list.survey') }}">
                     <i class="fa fa-th"></i> <span> نظرات کاربران </span>
+                </a>
+                <a href="{{ route('admin.dissatisfied.reason.list') }}">
+                    <i class="fa fa-th"></i> <span> دلایل عدم رضایت </span>
+                </a>
+                <a href="{{ route('admin.user.list') }}">
+                    <i class="fa fa-th"></i> <span> کاربران </span>
                 </a>
             </li>
 
