@@ -2,14 +2,9 @@
 
 @section('header')
     <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">
-    <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">
 
-    <link rel="stylesheet" href="{{asset("bootstrap-persian-datetimepicker-master/build/css/bootstrap-datetimepicker.min.css") }}">
 
-    <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.0/locale/af.js"></script>
-    <script src="{{asset("bootstrap-persian-datetimepicker-master/build/js/bootstrap-persian-datetimepicker.js") }}"></script>
-
+    <link rel="stylesheet" href="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.css") }}">
 
 @endsection
 
@@ -270,4 +265,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('foot')
+
+    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>--}}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+
+    {{--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>--}}
+
+
+    <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
+    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.min.js") }}"></script>
+    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.fa.min.js") }}"></script>
+
+    <script src="{{asset("js/test.js") }}">
+
+    </script>
 @endsection

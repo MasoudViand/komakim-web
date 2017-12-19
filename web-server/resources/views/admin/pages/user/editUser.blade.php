@@ -1,8 +1,12 @@
 @extends('admin.template.admin_template')
 
+@section('head')
+
+    <link rel="stylesheet" href="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.css") }}">
+
+@endsection
+
 @section('content')
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 
 
@@ -45,12 +49,10 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">نام </label>
                                 <input  class="form-control" id="nameUser" name="nameUser" value="{{$user->name}}">
-                                @if ($errors->has('nameUser'))
-                                    <span class="help-danger">
-                                        <strong>{{ $errors->first('nameUser') }}</strong>
-                                    </span>
-                                @endif
+
                             </div>
+
+
                             <div class="form-group">
                                 <label for="exampleInputEmail1">نام خانوادگی </label>
                                 <input  class="form-control" id="familyUser" name="familyUser" value="{{$user->family}}">
@@ -279,4 +281,24 @@
 
 
 
+
+
 @endsection
+
+@section('foot')
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.min.js") }}"></script>
+    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.fa.min.js") }}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+
+            $("#birthday").datepicker({
+                isRTL: true,
+                dateFormat: "d/m/yy"
+            });
+        });
+    </script>
+    @endsection

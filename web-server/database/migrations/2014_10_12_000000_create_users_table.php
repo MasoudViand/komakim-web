@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number')->unique();
             $table->boolean('isCompleted');
             $table->string('password');
+            $table->string('status');
             $table->rememberToken();
             $table->timestamps();
         });

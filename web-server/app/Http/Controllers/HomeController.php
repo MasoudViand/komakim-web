@@ -58,12 +58,10 @@ class HomeController extends Controller
 
         $user =new User();
         $user->name =$request['name'];
-        $user->name =$request['family'];
-        if ($request['email'])
-            $user->email =$request['email'];
-        else
-            $user->email =$request['mobileNumber'];
-        $user->password=$request['mobileNumber'];
+        $user->family =$request['family'];
+        $user->email =$request['email'];
+        $user->status = 'active';
+        $user->password=bcrypt($request['mobileNumber']);
         $user->phone_number=$request['mobileNumber'];
         $user->isCompleted =true;
         $user->role ='worker';

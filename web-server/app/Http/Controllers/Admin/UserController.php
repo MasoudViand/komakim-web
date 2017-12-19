@@ -43,7 +43,7 @@ class UserController extends Controller
             $data['filepath']=$filepath;
 
 
-            $date = \Morilog\Jalali\jDateTime::strftime('Y-m-d', strtotime($workerProfile->birthDay['date']));
+            $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($workerProfile->birthDay['date']));
            // $date=\Morilog\Jalali\jDateTime::convertNumbers($date);
             $data['date']=$date;
            // dd($workerProfile->status);
@@ -56,6 +56,7 @@ class UserController extends Controller
             $data['workerProfileStatus']=$workerProfileStatus;
 
         }
+
 
         $data['user']=$user;
         $data['workerProfile']=$workerProfile;
@@ -159,7 +160,7 @@ class UserController extends Controller
         $workerProfile->another_capability  =$request['anotherCapabilityProfile'];
         $workerProfile->certificates        =$request['certificatesProfile'];
         $workerProfile->experience          =$request['experienceProfile'];
-        $workerProfile->birthDay            =\Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y-m-d H:i:s', $request['birthdayProfile'].' 00:00:00');
+        $workerProfile->birthDay            =\Morilog\Jalali\jDateTime::createDatetimeFromFormat('d/m/Y H:i:s', $request['birthdayProfile'].' 00:00:00');
 
         if ($workerProfile->save())
         {

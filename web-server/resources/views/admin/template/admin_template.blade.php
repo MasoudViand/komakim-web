@@ -35,12 +35,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/fonts/fonts-fa.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/bootstrap-rtl.min.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/rtl.css") }}">
+@yield('head')
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-@yield('head')
+
 <![endif]-->
 </head>
 
@@ -102,9 +103,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset("AdminLTE-RTL/plugins/knob/jquery.knob.js") }}"></script>
 <!-- daterangepicker -->
 <script src="{{asset("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js") }}"></script>
-<script src="{{asset("AdminLTE-RTL/plugins/daterangepicker/daterangepicker.js") }}"></script>
+{{--<script src="{{asset("AdminLTE-RTL/plugins/daterangepicker/daterangepicker.js") }}"></script>--}}
 <!-- datepicker -->
-<script src="{{asset("AdminLTE-RTL/plugins/datepicker/bootstrap-datepicker.js") }}"></script>
+{{--<script src="{{asset("AdminLTE-RTL/plugins/datepicker/bootstrap-datepicker.js") }}"></script>--}}
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset("AdminLTE-RTL/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js") }}"></script>
 <!-- Slimscroll -->
