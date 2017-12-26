@@ -37,7 +37,7 @@ Route::middleware('auth:api','profile')->prefix('service')->group(function (){
     Route::get('/category', 'Api\ServiceController@listcategory')->name('api.service.category.list');
     Route::post('/', 'Api\ServiceController@listservice')->name('api.service.list');
     Route::post('/order', 'Api\ServiceController@registerOrder')->name('api.order.submit');
-    Route::post('/search', 'Api\ServiceController@searchWorker')->name('api.search.worker');
+    Route::post('/order/accept', 'Api\ServiceController@acceptOrder')->name('api.accept.order');
 
 });
 

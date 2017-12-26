@@ -205,7 +205,7 @@ class PhoneNumberController extends Controller
                 $sender = "100065995";
                 $receptor = $tempToken->phone_number;
                 $message = $tempToken->sms_code;
-                $api = new \Kavenegar\KavenegarApi("41415673525664384E6F334A7973504F685A434159773D3D");
+                $api = new \Kavenegar\KavenegarApi("41592B50794462786F746C68364338573231783474673D3D");
                 $api->Send($sender, $receptor, $message);
                 return response()->json(['validation_code'=>$tempToken->random_string_token]);
 
