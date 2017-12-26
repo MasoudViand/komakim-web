@@ -44,7 +44,8 @@ Route::prefix('admin')->group(function (){
 
     Route::prefix('user')->group(function (){
         Route::get('/', 'Admin\UserController@index')->name('admin.user.list');
-        Route::get('/update/{service_id}', 'Admin\UserController@showEditUserForm')->name('admin.user.update');
+        Route::post('/filter/', 'Admin\UserController@filterUser')->name('admin.user.filter.submit');
+        Route::get('/update/{user_id}', 'Admin\UserController@showEditUserForm')->name('admin.user.update');
         Route::post('/update/', 'Admin\UserController@editUser')->name('admin.user.update.submit');
         Route::post('/update/workerprofile', 'Admin\UserController@editWorkerProfile')->name('admin.worker.profile.update.submit');
 

@@ -6,6 +6,7 @@ use App\User;
 use App\WorkerProfile;
 use function GuzzleHttp\Psr7\_parse_message;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectID;
 
 class HomeController extends Controller
 {
@@ -76,8 +77,8 @@ class HomeController extends Controller
     protected function _saveProfile( $request ,$user_id)
     {
         $workerProfile= new WorkerProfile();
-        $workerProfile->user_id=$user_id;
-        $workerProfile->nationalCode=$request['nationalCode'];
+        $workerProfile->user_id=new ObjectID($user_id);
+        $workerProfile->national_code=$request['nationalCode'];
         $workerProfile->address =$request['address'];
         $workerProfile->home_phone_number = $request['phoneNumber'];
         $workerProfile->birthDay =  \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request['birthday'].' 00:00:00');
@@ -89,6 +90,7 @@ class HomeController extends Controller
         $workerProfile->certificates = $request['certificates'];
         $workerProfile->experience = $request['experience'];
         $workerProfile->status ='pending';
+        $workerProfile->availability_status ='available';
         $message=null;
         if ($workerProfile->save()){
             $message['success'] ='پروفایل به درستی ذخیره شد';

@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\WorkerProfile;
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('auth:admin')->except('filterUser');
     }
 
     function index(){
@@ -23,6 +25,71 @@ class UserController extends Controller
         return view('admin.pages.user.listUser')->with($data);
     }
 
+    function filterUser(Request $request)
+    {
+
+        $content = $request->getContent();
+
+        $content =(json_decode($content));
+
+        $query=[];
+
+        if (isset($content->mobile))
+            $query['phone_number']=$content->mobile;
+        if (isset($content->role))
+            $query['role']=$content->role;
+        if (isset($content->email))
+            $query['email']=$content->email;
+        if (isset($content->status))
+            $query['status']=$content->status;
+        if (isset($content->national_code))
+            $query['profile.national_code']=$content->national_code;
+        if (isset($content->field))
+            $query['profile.field'] =$content->field;
+        if (isset($content->gender))
+            $query['profile.gender']=$content->gender;
+        if (isset($content->admin_status))
+            $query['profile.status']=$content->admin_status;
+        if (isset($content->availabilitystatus))
+            $query['profile.availabilitystatus']=$content->availabilitystatus;
+
+
+       // dd($query);
+
+        $q = [
+            [ '$limit' => 10 ],
+            [ '$sort' => ['_id' => -1], ],
+
+            [ '$lookup' => [
+                'from'         => 'worker_profiles',
+                'localField'   => '_id',
+                'foreignField' => 'user_id',
+                'as'           => 'profile',],
+
+
+
+            ],
+
+            [
+                '$match' => $query            ]
+
+
+        ];
+        $model = User::raw()->aggregate($q);
+        $userArr=[];
+        foreach ($model as $item)
+        {
+            array_push($userArr,$item);
+        }
+       // dd($userArr);
+
+        return json_encode($userArr,true);
+
+
+    }
+
+
+
     function showEditUserForm($user_id)
     {
         $user = User::find($user_id);
@@ -32,34 +99,37 @@ class UserController extends Controller
         {
             $workerProfile=WorkerProfile::where('user_id',$user_id)->first();
             $filepath=null;
-            if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.png'))
-                $filepath=('images/workers').'/'.$workerProfile->id.'.png';
-            if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpg'))
-                $filepath=('images/workers').'/'.$workerProfile->id.'.jpg';
-            if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpeg'))
-                $filepath=('images/workers').'/'.$workerProfile->id.'.jpeg';
+            if ($workerProfile){
+                if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.png'))
+                    $filepath=('images/workers').'/'.$workerProfile->id.'.png';
+                if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpg'))
+                    $filepath=('images/workers').'/'.$workerProfile->id.'.jpg';
+                if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpeg'))
+                    $filepath=('images/workers').'/'.$workerProfile->id.'.jpeg';
 
 
-            $data['filepath']=$filepath;
+                $data['filepath']=$filepath;
 
 
-            $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($workerProfile->birthDay['date']));
-           // $date=\Morilog\Jalali\jDateTime::convertNumbers($date);
-            $data['date']=$date;
-           // dd($workerProfile->status);
-            if ($workerProfile->status=='pending')
-                $workerProfileStatus='منتظر تایید';
-            elseif ($workerProfile->status=='reject')
-                $workerProfileStatus ='رد شده';
-            else
-                $workerProfileStatus='تایید شده';
-            $data['workerProfileStatus']=$workerProfileStatus;
+                $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($workerProfile->birthDay['date']));
+                // $date=\Morilog\Jalali\jDateTime::convertNumbers($date);
+                $data['date']=$date;
+                // dd($workerProfile->status);
+                if ($workerProfile->status=='pending')
+                    $workerProfileStatus='منتظر تایید';
+                elseif ($workerProfile->status=='reject')
+                    $workerProfileStatus ='رد شده';
+                else
+                    $workerProfileStatus='تایید شده';
+                $data['workerProfileStatus']=$workerProfileStatus;
 
-        }
+            }
 
 
-        $data['user']=$user;
-        $data['workerProfile']=$workerProfile;
+            $data['user']=$user;
+            $data['workerProfile']=$workerProfile;
+            }
+
 
         $workerProfileStatus='pending';
 

@@ -91,22 +91,6 @@
         </div>
     </form>
 
-    {{--<div>--}}
-        {{--<label> سوالات </label>--}}
-        {{--<textarea class="form-control" rows="2" id="question"></textarea>--}}
-
-        {{--<button id="btn1" class="btn btn-primary">اضافه کردن سوال</button>--}}
-
-
-
-
-
-    {{--</div>--}}
-
-    {{--</div>--}}
-
-
-
 
 
 
@@ -140,20 +124,6 @@
             });
         });
     </script>
-    {{--<script>--}}
-        {{--$(document).ready(function(){--}}
-            {{--$("#btn1").click(function(){--}}
-               {{--var question = $("#question").val();--}}
-
-
-                {{--$("#subform").append("<b>"+question+"</b></br>");--}}
-               {{--// $("p").append(" <b>Appended text</b>.");--}}
-            {{--});--}}
-
-        {{--});--}}
-    {{--</script>--}}
-
-
 
 
 @endsection

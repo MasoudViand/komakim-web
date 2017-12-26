@@ -27,8 +27,17 @@ Route::middleware('api')->prefix('number')->group(function (){
 
 });
 
-Route::middleware('api')->prefix('profile')->group(function (){
+Route::middleware('auth:api')->prefix('profile')->group(function (){
     Route::post('/', 'Api\ProfileController@addprofile')->name('api.profile.insert.submit');
+});
+
+Route::middleware('auth:api','profile')->post('profile/fcm', 'Api\ProfileController@registerFcmToken')->name('api.fcm.insert.submit');
+
+Route::middleware('auth:api','profile')->prefix('service')->group(function (){
+    Route::get('/category', 'Api\ServiceController@listcategory')->name('api.service.category.list');
+    Route::post('/', 'Api\ServiceController@listservice')->name('api.service.list');
+    Route::post('/order', 'Api\ServiceController@registerOrder')->name('api.order.submit');
+    Route::post('/search', 'Api\ServiceController@searchWorker')->name('api.search.worker');
 
 });
 

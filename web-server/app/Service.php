@@ -8,6 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 class Service extends Eloquent
 {
+
+
     public function subcategory()
     {
         return $this->belongsTo('App\Subcategory');

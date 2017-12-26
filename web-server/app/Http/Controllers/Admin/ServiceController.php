@@ -9,6 +9,7 @@ use App\ServiceQuestion;
 use App\Subcategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use MongoDB\BSON\ObjectID;
 
 class ServiceController extends Controller
 {
@@ -91,13 +92,12 @@ class ServiceController extends Controller
 
        $service = new Service();
        $service->name=$request['nameService'];
-       $service->subcategory_id=$request['subcategory'];
+       $service->subcategory_id=new ObjectID($request['subcategory']);
        $service->price=$request['priceService'];
        $service->minimum_number=$request['minOrderService'];
        if (!is_null($request['descService']))
            $service->description = $request['descService'];
        $service->save();
-
 
         $message['success'] = 'سرویس با موفقیت اضافه شد';
 

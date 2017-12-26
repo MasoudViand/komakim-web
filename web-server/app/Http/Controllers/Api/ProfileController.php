@@ -22,10 +22,9 @@ class ProfileController extends Controller
             return response()->json(['errors'=>$validator->errors()])->setStatusCode(417);
         }
 
-        /* $user =$request->user()
-         *
-         */
-        $user =User::find('5a361040978ef42248205f97');
+         $user =$request->user();
+       /// dd($user);
+        //$user =User::find('5a361040978ef42248205f97');
 
         if ($user->isCompleted)
             return response()->json(['errors'=>"profile previously completed"])->setStatusCode(417);
@@ -44,20 +43,37 @@ class ProfileController extends Controller
 
 
         }else{
-            return response()->json(['errors'=>"something not wright"])->setStatusCode(417);
+            return response()->json(['errors'=>"something not right"])->setStatusCode(417);
 
 
         }
 
 
+    }
 
-
-        /**@var \App\User */
-        $user =$request->user();
-
-        if ($user->isCompleted)
+    function registerFcmToken(Request $request)
+    {
+        if (!$request->has('fcm_token'))
         {
+            return response()->json(['error'=>'fcm_token is require'])->setStatusCode('417');
 
         }
+
+        $user = $request->user();
+
+        $user->fcm_token=$request->input('fcm_token');
+        if ($user->save())
+        {
+            unset($user['isCompleted']);unset($user['role']);unset($user['updated_at']);unset($user['created_at']);unset($user['fcm_token']);
+
+            return response()->json(['profile'=>$user]);
+
+        }
+        else{
+
+            return response()->json(['error'=>'something wrong! try again'])->setStatusCode(409);
+        }
+
+
     }
 }

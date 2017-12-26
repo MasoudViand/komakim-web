@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Bootstrap 3.3.4 -->
 <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
 <!-- Morris.js charts -->
-<script src="{{asset("AdminLTE-RTL/https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js") }}"></script>
+<script src="{{asset("https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js") }}"></script>
 <script src="{{asset("AdminLTE-RTL/plugins/morris/morris.min.js") }}"></script>
 <!-- Sparkline -->
 <script src="{{asset("AdminLTE-RTL/plugins/sparkline/jquery.sparkline.min.js") }}"></script>
@@ -103,9 +103,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset("AdminLTE-RTL/plugins/knob/jquery.knob.js") }}"></script>
 <!-- daterangepicker -->
 <script src="{{asset("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js") }}"></script>
-{{--<script src="{{asset("AdminLTE-RTL/plugins/daterangepicker/daterangepicker.js") }}"></script>--}}
+<script src="{{asset("AdminLTE-RTL/plugins/daterangepicker/daterangepicker.js") }}"></script>
 <!-- datepicker -->
-{{--<script src="{{asset("AdminLTE-RTL/plugins/datepicker/bootstrap-datepicker.js") }}"></script>--}}
+<script src="{{asset("AdminLTE-RTL/plugins/datepicker/bootstrap-datepicker.js") }}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset("AdminLTE-RTL/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js") }}"></script>
 <!-- Slimscroll -->

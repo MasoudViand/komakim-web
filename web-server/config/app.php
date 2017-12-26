@@ -169,10 +169,14 @@ return [
          * package mongodb driver
          */
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Jenssegers\Mongodb\MongodbQueueServiceProvider::class,
+
 
         /*
-         * kavenegar api
+         * google fcm
          */
+
+        LaravelFCM\FCMServiceProvider::class,
 
 
         /*
@@ -240,13 +244,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'FORM' => Collective\Html\FormFacade::class,
         'HTML' => Collective\Html\HtmlFacade::class,
-        'jDate' => Morilog\Jalali\Facades\jDate::class
-
+        'jDate' => Morilog\Jalali\Facades\jDate::class,
 
         /*
-         * kevenegarapi
-         *
-         */
+         * google fcm
+        */
+        'FCM'      => LaravelFCM\Facades\FCM::class,
+	    'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
 
 
     ],
