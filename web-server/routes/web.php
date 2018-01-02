@@ -19,6 +19,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/callback', 'HomeController@callback')->name('home');
+
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/workwithus', 'HomeController@getworkwithusForm')->name('register.worker');
 Route::post('/workwithus', 'HomeController@registerWorker')->name('register.worker.submit');
@@ -48,6 +51,13 @@ Route::prefix('admin')->group(function (){
         Route::get('/update/{user_id}', 'Admin\UserController@showEditUserForm')->name('admin.user.update');
         Route::post('/update/', 'Admin\UserController@editUser')->name('admin.user.update.submit');
         Route::post('/update/workerprofile', 'Admin\UserController@editWorkerProfile')->name('admin.worker.profile.update.submit');
+        Route::get('/review/{user_id}', 'Admin\UserController@listReviewUser')->name('admin.user.review');
+
+    });
+    Route::prefix('order')->group(function (){
+        Route::get('/', 'Admin\OrderController@index')->name('admin.order.list');
+        Route::post('/filter/', 'Admin\OrderController@filterOrder')->name('admin.order.filter.submit');
+        Route::get('/detail/{order_id}', 'Admin\OrderController@showDetailOrder')->name('admin.order.detail');
 
     });
 
@@ -92,6 +102,8 @@ Route::prefix('admin')->group(function (){
 
 
 
+
+
 //    Route::get('/listemailtemplate/', 'Admin\EmailTemplateController@index')->name('admin.list.email.template');
 //    Route::get('/editemailtemplate/{mail_template_id}', 'Admin\EmailTemplateController@showMialEditForm')->name('admin.mail.edit');
 //    Route::post('/editemailtemplate/', 'Admin\EmailTemplateController@eEditEmailTemplateForm')->name('admin.edit.email.template.submit');
@@ -117,3 +129,11 @@ Route::prefix('admin')->group(function (){
 
 
 });
+
+Route::prefix('pay')->group(function (){
+    Route::get('/{order_id}/{amount}', 'PayController@index')->name('pay');
+    Route::post('/', 'PayController@pay')->name('pay.submit');
+    Route::post('/callback', 'PayController@callback')->name('pay.redirect.bank.callback');
+
+});
+

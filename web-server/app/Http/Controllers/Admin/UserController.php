@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DissatisfiedReason;
+use App\Review;
 use App\User;
 use App\WorkerProfile;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use MongoDB\BSON\ObjectID;
 
 
 class UserController extends Controller
@@ -54,19 +58,17 @@ class UserController extends Controller
             $query['profile.availabilitystatus']=$content->availabilitystatus;
 
 
-       // dd($query);
+
+      //  dd($query);
 
         $q = [
             [ '$limit' => 10 ],
-            [ '$sort' => ['_id' => -1], ],
 
             [ '$lookup' => [
                 'from'         => 'worker_profiles',
                 'localField'   => '_id',
                 'foreignField' => 'user_id',
                 'as'           => 'profile',],
-
-
 
             ],
 
@@ -75,6 +77,28 @@ class UserController extends Controller
 
 
         ];
+
+        if (isset($content->sort))
+        {
+            $q[]=
+                [ '$lookup' => [
+                'from'         => 'reviews',
+                'localField'   => '_id',
+                'foreignField' => 'worker_id',
+                'as'           => 'review',],
+
+            ];
+
+            if ($content->sort=='desc')
+            {
+                $q[]=[ '$sort' => ['review.mean_score' => 1], ];
+            }
+            else{
+
+                $q[]=[ '$sort' => ['review.mean_score' => -1], ];
+            }
+
+        }
         $model = User::raw()->aggregate($q);
         $userArr=[];
         foreach ($model as $item)
@@ -82,6 +106,8 @@ class UserController extends Controller
             array_push($userArr,$item);
         }
        // dd($userArr);
+
+       // return response()->json($userArr);
 
         return json_encode($userArr,true);
 
@@ -93,12 +119,13 @@ class UserController extends Controller
     function showEditUserForm($user_id)
     {
         $user = User::find($user_id);
-
-        $workerProfile=false;
+        $data['user']=$user;
+        $workerProfile=null;
         if ($user->role=='worker')
         {
-            $workerProfile=WorkerProfile::where('user_id',$user_id)->first();
-            $filepath=null;
+            $workerProfile=WorkerProfile::where('user_id',new ObjectID($user_id))->first();
+            $filepath=URL::to('/').'/images/workers/profile-default-male.png';
+
             if ($workerProfile){
                 if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.png'))
                     $filepath=('images/workers').'/'.$workerProfile->id.'.png';
@@ -108,7 +135,7 @@ class UserController extends Controller
                     $filepath=('images/workers').'/'.$workerProfile->id.'.jpeg';
 
 
-                $data['filepath']=$filepath;
+                $data['filepath']=URL::to('/').'/'.$filepath;
 
 
                 $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($workerProfile->birthDay['date']));
@@ -125,13 +152,27 @@ class UserController extends Controller
 
             }
 
+            $lastReview = Review::where('worker_id',new ObjectID($user->id))->orderBy('_id', 'desc')->first();
 
-            $data['user']=$user;
-            $data['workerProfile']=$workerProfile;
+            $meanReview = '--';
+
+            if ($lastReview)
+            {
+                $meanReview = $lastReview->mean_score;
             }
 
 
-        $workerProfileStatus='pending';
+            $data['meanReview']=round($meanReview,1);
+
+
+            $data['workerProfile']=$workerProfile;
+
+            }
+        $data['workerProfile']=$workerProfile;
+
+
+
+
 
         return view('admin.pages.user.editUser')->with($data);
     }
@@ -191,7 +232,7 @@ class UserController extends Controller
 
 
 
-        $workerProfile = WorkerProfile::where('user_id',$request['idUser'])->first();
+        $workerProfile = WorkerProfile::where('user_id',new ObjectID($request['idUser']))->first();
         $workerProfileByNationalCode = WorkerProfile::where('nationalCode',$request['nationCodeProfile'])->first();
         if ($workerProfileByNationalCode)
         {
@@ -201,6 +242,8 @@ class UserController extends Controller
                 return redirect()->back()->with($message);
             }
         }
+
+
 
        if ($request['imageProfile'])
        {
@@ -242,6 +285,39 @@ class UserController extends Controller
 
 
 
+
+
+
+    }
+    function listReviewUser($worker_id)
+    {
+
+
+        $reviewModel =Review::where('worker_id',new ObjectID($worker_id))->paginate(15);
+
+        $reviewArr=[];
+
+        foreach ($reviewModel as $item)
+        {
+            $review=[];
+            $review['user']=User::find($item->user_id);
+            $review['score']=$item['score'];
+            $reasons=[];
+
+            foreach ($item->reasons as $reason)
+            {
+                array_push($reasons ,DissatisfiedReason::find($reason));
+            }
+            $review['reasons']=$reasons;
+            $review['desc'] =$item->desc;
+            $review['order_id'] =(string)$item->order_id;
+
+            array_push($reviewArr,$review);
+
+        }
+
+        $data['reviews']=$reviewArr;
+        return view('admin.pages.user.list_review')->with($data);
 
 
 

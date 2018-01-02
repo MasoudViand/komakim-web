@@ -6,6 +6,8 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "brozot/laravel-fcm": "1.2.*",
+        "fergusean/nusoap": "^0.9.5",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "~6.0",
         "jenssegers/mongodb": "^3.3",
@@ -14,8 +16,7 @@
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
-        "morilog/jalali": "^2.3",
-        "brozot/laravel-fcm": "1.2.*"
+        "morilog/jalali": "^2.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

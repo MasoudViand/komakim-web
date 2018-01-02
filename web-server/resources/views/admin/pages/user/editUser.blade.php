@@ -25,7 +25,9 @@
             </strong>
         </div>
     @endif
-    @if($workerProfile)
+
+
+
 
 
 
@@ -37,9 +39,19 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div class="user-panel">
-                        <div class="text-center" >
-                            <img src="{{ $filepath ?'/'.$filepath:'/images/workers/profile-default-male.png' }}" class="center-block img-responsive img-circle" style="width:100px">
-                        </div>
+                        @if($workerProfile)
+
+
+                            <div class="text-center" >
+                                <img src="{{ $filepath  }}" class="center-block img-responsive img-circle" style="width:100px">
+                            </div>
+
+                            <div class="text-info text-center" style="margin-top: 12px">
+
+                               <a href="{{route('admin.user.review',['user_id' => $user->id])}}" >{{$meanReview}} </a>
+
+                            </div>
+                        @endif
 
                     </div>
                     <form role="form" method="POST" action="{{ route('admin.user.update.submit') }}">
@@ -117,10 +129,10 @@
         </div><!-- /.col (LEFT) -->
         <div class="col-md-12">
             <div class="box box-primary">
+                @if($workerProfile)
 
 
 
-                    {{--<form role="form" method="POST" action="{{ route('admin.worker.profile.update.submit') }}">--}}
                         {!! Form::open(array('route' => 'admin.worker.profile.update.submit','enctype' => 'multipart/form-data')) !!}
 
 
@@ -131,7 +143,7 @@
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">کد ملی </label>
-                                <input  class="form-control" id="nationCodeProfile" name="nationCodeProfile" value="{{$workerProfile->nationalCode}}">
+                                <input  class="form-control" id="nationCodeProfile" name="nationCodeProfile" value="{{$workerProfile->national_code}}">
                                 @if ($errors->has('nationCodeProfile'))
                                     <span class="help-danger">
                                         <strong>{{ $errors->first('nationCodeProfile') }}</strong>

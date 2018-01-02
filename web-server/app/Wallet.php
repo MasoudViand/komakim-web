@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 
-class Order extends Eloquent
+class Wallet extends Eloquent
 {
-    protected $collection ='orders';
+    //
 }

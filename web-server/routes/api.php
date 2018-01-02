@@ -38,6 +38,33 @@ Route::middleware('auth:api','profile')->prefix('service')->group(function (){
     Route::post('/', 'Api\ServiceController@listservice')->name('api.service.list');
     Route::post('/order', 'Api\ServiceController@registerOrder')->name('api.order.submit');
     Route::post('/order/accept', 'Api\ServiceController@acceptOrder')->name('api.accept.order');
+    Route::post('/order/start', 'Api\ServiceController@startOrder')->name('api.start.order');
+    Route::post('/order/finish', 'Api\ServiceController@claimFinishOrderByWorker')->name('api.finish.order');
+    Route::post('/order/pay', 'Api\ServiceController@payByClient')->name('api.pay.order');
+
+
+
+});
+Route::middleware('auth:api','profile')->prefix('order')->group(function (){
+    Route::post('/archive', 'Api\OrderController@listArchiveOrder')->name('api.order.list');
+    Route::post('/detail', 'Api\OrderController@detailOrder')->name('api.order.active.list');
+    Route::get('/active', 'Api\OrderController@listActiveOrder')->name('api.order.active.list');
+
+    Route::post('/archive/worker', 'Api\OrderController@listArchiveOrderWorker')->name('api.order.list');
+    Route::post('/detail/worker', 'Api\OrderController@detailOrderWorker')->name('api.order.active.list');
+    Route::get('/active/worker', 'Api\OrderController@listActiveOrderWorker')->name('api.order.active.list');
+
+});
+
+Route::middleware('auth:api','profile')->prefix('wallet')->group(function (){
+    Route::post('/charge', 'Api\WalletController@charge')->name('api.wallet.charge');
+    Route::post('/pay', 'Api\WalletController@payOrder')->name('api.wallet.pay');
+
+});
+
+Route::middleware('auth:api','profile')->prefix('review')->group(function (){
+    Route::post('/', 'Api\ReviewController@review')->name('api.review.submit');
+    Route::get('/reason', 'Api\ReviewController@listReason')->name('api.reasons');
 
 });
 

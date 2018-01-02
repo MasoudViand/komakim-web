@@ -103,7 +103,7 @@
 
                 if(stateID) {
                     $.ajax({
-                        url: '/admin/service/subcategory/'+stateID,
+                        url: 'subcategory/'+stateID,
                         type: "GET",
                         dataType: "json",
                         success:function(data) {

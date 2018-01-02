@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Category;
 use App\Jobs\CheckServiceAccepted;
 use App\Jobs\FindWorker;
+use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Order;
+use App\OrderPayment;
+use App\OrderStatusRevision;
 use App\Service;
 use App\ServiceQuestion;
 use App\Subcategory;
@@ -21,6 +24,7 @@ use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use MongoDB\BSON\ObjectID;
+use MongoDB\BSON\UTCDateTime;
 
 class ServiceController extends Controller
 {
@@ -75,37 +79,50 @@ class ServiceController extends Controller
 
         ];
         $model = Subcategory::raw()->aggregate($q);
+
         $subcategoriesArr=[];
         foreach ($model as $item)
         {
 
             $subcategory['_id']=(string)$item['_id'];
             $subcategory['name']=$item['name'];
-            $services =($item['service']);
             $serviceArr=[];
 
-            foreach ($services as $service){
+            foreach ($item['service'] as $service){
+
+
 
                 $tempservice=[];
                 $tempservice['_id']=(string)$service['_id'];
                 $tempservice['name']=(string)$service['name'];
                 $tempservice['price']=(string)$service['price'];
                 $tempservice['minimum_number']=(string)$service['minimum_number'];
-                $tempservice['description']=(string)$service['description'];
+
+                if (!empty($services['description']))
+                {
+                    $tempservice['description']=(string)$service['description'];
+
+                }
+
                 $servicequestions=ServiceQuestion::where('service_id',(string)$service['_id'])->get(['questions','id']);
 
                 $tempservice['questions']=$servicequestions;
 
 
+
+
                 array_push($serviceArr,$tempservice);
 
             }
+
             $subcategory['services']=$serviceArr;
+
+            $subcategoriesArr[]=$subcategory;
 
         }
 
 
-        return response()->json(['subcategory'=>$subcategory]);
+        return response()->json(['subcategories'=>$subcategoriesArr]);
     }
 
 
@@ -116,8 +133,8 @@ class ServiceController extends Controller
 
         $order = $request->getContent();
 
-        $order =(json_decode($order));
 
+        $order =(json_decode($order));
         if(!property_exists($order, 'address') )
             return response()->json(['error'=>'address is invalid'])->setStatusCode('417');
         if(!property_exists($order, 'services') || !is_array($order->services))
@@ -126,14 +143,23 @@ class ServiceController extends Controller
         if(!property_exists($order, 'total_price'))
             return response()->json(['error'=>'total_price is invalid'])->setStatusCode('417');
 
-        $order->status ='pending';
-        $order->user_id =$request->user()->id;
+        $order->status =OrderStatusRevision::WAITING_FOR_WORKER_STATUS;
+        $user = $request->user();
+        $order->user_id =$user->id;
+        $order->created_at=new UTCDateTime(time()*1000);
+        $prevOrder = Order::orderby('_id','desc')->first();
+        if (!$prevOrder)
+            $tracking_number =1000;
+        else
+            $tracking_number =$prevOrder->tracking_number+1;
 
+        $order->tracking_number=$tracking_number;
 
         $model = Order::raw()->insertOne($order);
 
         $order=Order::find((string)($model->getInsertedId()));
 
+        $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::WAITING_FOR_WORKER_STATUS,$user));
 
         if ($model){
             $this->dispatch(new FindWorker($order));
@@ -156,17 +182,18 @@ class ServiceController extends Controller
          $order =Order::find($request->input('order_id'));
 
 
-         if (!($order['status']=='pending'))
-             return response()->json(['error'=>'order accept from another worker'])->setStatusCode(423);
+         if (!($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS))
+             return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(423);
 
 
 
          $order->worker_id=$request->user()->id;
-         $order->status   ='accept';
+         $order->status   =OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS;
 
          if ($order->save())
          {
               $order =$this->_sendNotificationToClient($order->user_id,$order);
+              $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,$request->user()) );
 
               return response()->json(['order'=>$order]);
          }else
@@ -174,6 +201,55 @@ class ServiceController extends Controller
              return response()->json(['error'=>'internal error'])->setStatusCode(500);
          }
 
+
+    }
+
+
+    function startOrder(Request $request)
+    {
+        if (!$request->has('order_id')){
+            return response()->json(['error'=>'order id is require'])->setStatusCode(417);
+        }
+        $order = Order::find($request->input('order_id'));
+
+        $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
+
+        if ($order->save())
+        {
+            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,$request->user()) );
+
+            //$this->_sendNotificationToClient();
+
+            return response()->json(['order'=>$order]);
+
+        }else
+        {
+            return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+        }
+    }
+
+    function claimFinishOrderByWorker(Request $request)
+    {
+
+        if (!$request->has('order_id')){
+            return response()->json(['error'=>'order id is require'])->setStatusCode(417);
+        }
+        $order = Order::find($request->input('order_id'));
+
+        $order->status =OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS;
+
+        if ($order->save())
+        {
+            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
+
+            //$this->_sendNotificationToClient();
+
+            return response()->json(['order'=>$order]);
+
+        }else
+        {
+            return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+        }
 
     }
 

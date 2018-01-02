@@ -53,6 +53,9 @@
                 <a href="{{ route('admin.user.list') }}">
                     <i class="fa fa-th"></i> <span> کاربران </span>
                 </a>
+                <a href="{{ route('admin.order.list') }}">
+                    <i class="fa fa-th"></i> <span> سفارسات </span>
+                </a>
             </li>
 
         </ul>
