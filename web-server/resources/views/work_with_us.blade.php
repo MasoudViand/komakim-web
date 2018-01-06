@@ -156,10 +156,10 @@
 
                             <div class="col-md-6">
                                 <select class="form-control" id="field" name="field">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                    @foreach($categories as $category)
+                                        <option>{{$category->name}}</option>
+                                    @endforeach
+
                                 </select>
                                 @if ($errors->has('field'))
                                     <span class="help-block">

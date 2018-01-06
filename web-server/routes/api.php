@@ -30,8 +30,11 @@ Route::middleware('api')->prefix('number')->group(function (){
 Route::middleware('auth:api')->prefix('profile')->group(function (){
     Route::post('/', 'Api\ProfileController@addprofile')->name('api.profile.insert.submit');
 });
+Route::middleware('auth:api','profile')->get('profile/info' ,'Api\ProfileController@getprofileInfo');
 
 Route::middleware('auth:api','profile')->post('profile/fcm', 'Api\ProfileController@registerFcmToken')->name('api.fcm.insert.submit');
+
+
 
 Route::middleware('auth:api','profile')->prefix('service')->group(function (){
     Route::get('/category', 'Api\ServiceController@listcategory')->name('api.service.category.list');
@@ -42,13 +45,12 @@ Route::middleware('auth:api','profile')->prefix('service')->group(function (){
     Route::post('/order/finish', 'Api\ServiceController@claimFinishOrderByWorker')->name('api.finish.order');
     Route::post('/order/pay', 'Api\ServiceController@payByClient')->name('api.pay.order');
 
-
-
 });
 Route::middleware('auth:api','profile')->prefix('order')->group(function (){
     Route::post('/archive', 'Api\OrderController@listArchiveOrder')->name('api.order.list');
     Route::post('/detail', 'Api\OrderController@detailOrder')->name('api.order.active.list');
     Route::get('/active', 'Api\OrderController@listActiveOrder')->name('api.order.active.list');
+    Route::post('/edit', 'Api\OrderController@editOrder')->name('api.order.active.list');
 
     Route::post('/archive/worker', 'Api\OrderController@listArchiveOrderWorker')->name('api.order.list');
     Route::post('/detail/worker', 'Api\OrderController@detailOrderWorker')->name('api.order.active.list');

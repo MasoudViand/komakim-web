@@ -80,22 +80,14 @@ class UserController extends Controller
 
         if (isset($content->sort))
         {
-            $q[]=
-                [ '$lookup' => [
-                'from'         => 'reviews',
-                'localField'   => '_id',
-                'foreignField' => 'worker_id',
-                'as'           => 'review',],
-
-            ];
 
             if ($content->sort=='desc')
             {
-                $q[]=[ '$sort' => ['review.mean_score' => 1], ];
+                $q[]=[ '$sort' => ['profile.mean_score' => 1], ];
             }
             else{
 
-                $q[]=[ '$sort' => ['review.mean_score' => -1], ];
+                $q[]=[ '$sort' => ['profile.mean_score' => -1], ];
             }
 
         }
@@ -103,11 +95,12 @@ class UserController extends Controller
         $userArr=[];
         foreach ($model as $item)
         {
+            $item->_id=(string)$item->_id;
             array_push($userArr,$item);
         }
        // dd($userArr);
 
-       // return response()->json($userArr);
+        return response()->json($userArr);
 
         return json_encode($userArr,true);
 
@@ -308,6 +301,8 @@ class UserController extends Controller
             {
                 array_push($reasons ,DissatisfiedReason::find($reason));
             }
+
+
             $review['reasons']=$reasons;
             $review['desc'] =$item->desc;
             $review['order_id'] =(string)$item->order_id;

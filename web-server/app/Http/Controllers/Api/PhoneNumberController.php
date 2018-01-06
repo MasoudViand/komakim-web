@@ -7,6 +7,7 @@ use App\User;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use MongoDB\BSON\ObjectID;
 use Validator;
 use GuzzleHttp;
 
@@ -42,7 +43,7 @@ class PhoneNumberController extends Controller
 
             if ($user->role =='worker')
             {
-                $workerProfile = WorkerProfile::where('user_id' , $user->id)->first();
+                $workerProfile = WorkerProfile::where('user_id' , new ObjectID($user->id))->first();
 
                 if (!$workerProfile)
                 {

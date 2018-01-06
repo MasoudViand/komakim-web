@@ -10,6 +10,7 @@ use App\OrderStatusRevision;
 use App\Review;
 use App\Transaction;
 use App\Wallet;
+use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
@@ -61,7 +62,9 @@ class ReviewController extends Controller
             $review->mean_score = (($reviewModel->mean_score * $reviewModel->count) + $review->score) / ($reviewModel->count + 1);
             $review->count = $reviewModel->count + 1;
         }
-
+        $workerProfile = WorkerProfile::where('user_id',new ObjectID($review->worker_id))->first();
+        $workerProfile->mean_score=$review->mean_score;
+        $workerProfile->save();
         $model = Review::raw()->insertOne($review);
         $review = Review::find((string)($model->getInsertedId()));
 

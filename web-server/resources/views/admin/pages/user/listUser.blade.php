@@ -257,12 +257,13 @@
 
 
                             for (i = 0; i < data.length; i++) {
-                                console.log(data[i].name);
+                                console.log(data[i]._id);
 
                                 if (data[i].role=='worker')
                                     type = 'خدمه';
                                 else
                                     type ='مشتری';
+
                                 tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data[i].name+'</td>'+' <td class="sorting_1">'+data[i].family+'</td>'+' <td class="sorting_1">'+data[i].phone_number+'</td>'+' <td class="sorting_1">'+type+'</td>'+' <td>'+'<a href="/admin/user/update/'+data[i]._id+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>'+'</tr>')
 //                                    tablebody.append(' <td class="sorting_1">'+data[i].name+'</td>');
 //                                    tablebody.append(' <td class="sorting_1">'+data[i].family+'</td>');

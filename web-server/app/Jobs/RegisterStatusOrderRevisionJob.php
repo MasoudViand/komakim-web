@@ -45,11 +45,10 @@ class RegisterStatusOrderRevisionJob implements ShouldQueue
     {
         $revision = new \stdClass();
 
-        $revision->order_id=new ObjectID($this->order_id);
+        $revision->order_id=($this->order_id);
         $revision->created_at = new UTCDateTime(time()*1000);
         $revision->status=$this->status;
         $revision->whom =new ObjectID($this->user->id);
-
 
         $model = OrderStatusRevision::raw()->insertOne($revision);
     }

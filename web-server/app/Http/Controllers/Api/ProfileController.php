@@ -76,4 +76,13 @@ class ProfileController extends Controller
 
 
     }
+
+    function getprofileInfo(Request $request)
+    {
+
+        $user = User::find($request->user()->id);
+        unset($user->status);unset($user->isCompleted);unset($user->role);unset($user->updated_at);unset($user->created_at);unset($user->fcm_token);
+
+        return response()->json(['user'=>$user]);
+    }
 }

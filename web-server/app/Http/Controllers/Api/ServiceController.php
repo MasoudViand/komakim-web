@@ -151,9 +151,9 @@ class ServiceController extends Controller
         if (!$prevOrder)
             $tracking_number =1000;
         else
-            $tracking_number =$prevOrder->tracking_number+1;
+            $tracking_number =(int)$prevOrder->tracking_number+1;
 
-        $order->tracking_number=$tracking_number;
+        $order->tracking_number=(string)$tracking_number;
 
         $model = Order::raw()->insertOne($order);
 
@@ -179,7 +179,11 @@ class ServiceController extends Controller
 
         if(!$request->has('order_id'))
             return response()->json(['error'=>'order_id is required'])->setStatusCode(417);
-         $order =Order::find($request->input('order_id'));
+
+
+         $order = Order::find($request->input('order_id'));
+
+
 
 
          if (!($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS))
@@ -212,6 +216,7 @@ class ServiceController extends Controller
         }
         $order = Order::find($request->input('order_id'));
 
+
         $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
 
         if ($order->save())
@@ -235,7 +240,6 @@ class ServiceController extends Controller
             return response()->json(['error'=>'order id is require'])->setStatusCode(417);
         }
         $order = Order::find($request->input('order_id'));
-
         $order->status =OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS;
 
         if ($order->save())
@@ -253,46 +257,6 @@ class ServiceController extends Controller
 
     }
 
-
-    function searchWorker(Request $request)
-    {
-
-        $location = new  \stdClass();
-
-        $location->type ="point";
-        $location->coordinates =[-110.8571443, 32.4586858 ];
-
-
-
-
-     //  $user = DB::collection('worker_profiles')->where('user_id', new ObjectID('5a3a3571978ef406071f6e64'))->update(['location'=>$location], ['upsert' => true]);
-//
-   //    dd($user);
-
-        $users = WorkerProfile::where('location', 'near', [
-            '$geometry' => [
-                'type' => 'Point',
-                'coordinates' => [
-                    -73.9667, 40.78
-                ],
-            ],
-            '$maxDistance' => 5000,
-        ])->get();
-
-        dd($users);
-         $worker =WorkerProfile::where('field', "1")->where('user_id','werwerwerwer')->where('location', 'near', [
-             '$geometry' => [
-                 'type' => 'Point',
-                 'coordinates' => [
-                     -0.1367563,
-                     51.5100913,
-                 ],
-             ],
-             '$maxDistance' => 50,
-         ])->get();
-
-
-    }
 
     private function _sendNotificationToClient($user_id ,$order)
     {
