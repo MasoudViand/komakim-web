@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "~6.0",
         "jenssegers/mongodb": "^3.3",
         "kavenegar/php": "*",
+        "larabook/gateway": "^3.2",
         "laravel/framework": "5.5.*",
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",

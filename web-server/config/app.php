@@ -179,6 +179,10 @@ return [
         LaravelFCM\FCMServiceProvider::class,
 
 
+        Larabookir\Gateway\GatewayServiceProvider::class, // <-- add this line at the end of provider array
+
+
+
         /*
          * Package Service Providers...
          */
@@ -251,6 +255,10 @@ return [
         */
         'FCM'      => LaravelFCM\Facades\FCM::class,
 	    'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
+
+
+        'Gateway' => Larabookir\Gateway\Gateway::class, // <-- add this line at the end of aliases array
+
 
 
     ],

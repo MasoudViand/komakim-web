@@ -6,9 +6,13 @@ use App\OrderPayment;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Larabookir\Gateway\Gateway;
 use Mockery\Exception;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
+use GuzzleHttp;
+
 
 class PayController extends Controller
 {
@@ -20,7 +24,7 @@ class PayController extends Controller
         $data['order_id']=$order_id;
         $data['amount']=$amount;
 
-        return view('payment.pay')->with($data);
+        return view('payment.saman-redirector')->with($data);
     }
 
     function callback(Request $request)

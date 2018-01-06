@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a929d45f36e6fc2b06a3a1accb8d9af",
+    "content-hash": "3c69a742539ea7d46874ace6face7054",
     "packages": [
         {
             "name": "brozot/laravel-fcm",
@@ -898,6 +898,77 @@
                 "sms"
             ],
             "time": "2017-07-02T09:22:08+00:00"
+        },
+        {
+            "name": "larabook/gateway",
+            "version": "3.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/larabook/gateway.git",
+                "reference": "7b51287d3efe9e4226e27058c2598b2a47bb6e21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/larabook/gateway/zipball/7b51287d3efe9e4226e27058c2598b2a47bb6e21",
+                "reference": "7b51287d3efe9e4226e27058c2598b2a47bb6e21",
+                "shasum": ""
+            },
+            "require": {
+                "nesbot/carbon": "~1.20"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Larabookir\\Gateway\\": "src/",
+                    "Larabookir\\Gateway\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MohammadReza Honarkhah",
+                    "email": "m.honar@gmail.com"
+                },
+                {
+                    "name": "Hamed Pakdaman",
+                    "email": "pakdaman.it@gmail.com"
+                },
+                {
+                    "name": "Amir Khorsandi",
+                    "email": "Khorsandi@me.com"
+                }
+            ],
+            "description": "A Laravel package for connecting to all Iraninan payment  gateways",
+            "homepage": "https://github.com/larabook/gateway",
+            "keywords": [
+                "Bank",
+                "Meli",
+                "Payline",
+                "dargah",
+                "gateway",
+                "ipay",
+                "iran",
+                "iranian-banks",
+                "jahanpay",
+                "laravel",
+                "mellat",
+                "pardakht",
+                "parsian",
+                "pasargad",
+                "pay",
+                "payment",
+                "persian-banks",
+                "poolport",
+                "port",
+                "sadad",
+                "saman",
+                "shaparak",
+                "zarinpal"
+            ],
+            "time": "2017-04-25T19:09:20+00:00"
         },
         {
             "name": "laravel/framework",
