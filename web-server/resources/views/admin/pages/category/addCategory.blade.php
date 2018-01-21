@@ -3,7 +3,7 @@
 
 
 @section('content')
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {{--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 
@@ -26,7 +26,7 @@
     @endif
 
 
-    <form role="form" method="POST" action="{{ route('admin.category.insert.submit') }}">
+    <form role="form" method="POST" enctype="multipart/form-data" action="{{ route('admin.category.insert.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
 
@@ -63,6 +63,17 @@
                                     </span>
                 @endif
 
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">اپلود ایکون </label>
+                {{--<input  class="form-control" type="file" id="imageProfile" name="imageProfile" >--}}
+                {!! Form::file('imageّIcon', array('class' => 'image')) !!}
+                @if ($errors->has('imageّIcon'))
+                    <span class="help-danger">
+                                        <strong>{{ $errors->first('imageّIcon') }}</strong>
+                                    </span>
+                @endif
             </div>
 
 

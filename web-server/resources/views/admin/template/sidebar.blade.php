@@ -36,7 +36,7 @@
                     <i class="fa fa-th"></i> <span> سرویس</span>
                 </a>
                 <a href="{{ route('admin.category') }}">
-                    <i class="fa fa-th"></i> <span>دسته بندی</span>
+                    <i class="fa fa-star"></i> <span>دسته بندی</span>
                 </a>
                 <a href="{{ route('admin.subcategory') }}">
                     <i class="fa fa-th"></i> <span>زیر دسته بندی</span>
