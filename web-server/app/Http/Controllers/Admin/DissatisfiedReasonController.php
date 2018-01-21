@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DissatisfiedReason;
+use Defuse\Crypto\Exception\IOException;
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Mockery\Exception;
 
 class DissatisfiedReasonController extends Controller
 {
@@ -21,9 +24,12 @@ class DissatisfiedReasonController extends Controller
     function index()
     {
 
-        $dissatisfiedReasons = DissatisfiedReason::all();
+
+
+        $dissatisfiedReasons = DissatisfiedReason::paginate(15);
 
         $data['dissatisfiedReasons'] = $dissatisfiedReasons;
+        $data['total_count'] = DissatisfiedReason::count();
 
         return view('admin.pages.dissatisfied_reason.list_dissatisfied_reason')->with($data);
 

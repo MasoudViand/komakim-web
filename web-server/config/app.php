@@ -172,15 +172,15 @@ return [
         Jenssegers\Mongodb\MongodbQueueServiceProvider::class,
 
 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
+
+
         /*
          * google fcm
          */
 
         LaravelFCM\FCMServiceProvider::class,
-
-
-        Larabookir\Gateway\GatewayServiceProvider::class, // <-- add this line at the end of provider array
-
 
 
         /*
@@ -255,10 +255,6 @@ return [
         */
         'FCM'      => LaravelFCM\Facades\FCM::class,
 	    'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
-
-
-        'Gateway' => Larabookir\Gateway\Gateway::class, // <-- add this line at the end of aliases array
-
 
 
     ],

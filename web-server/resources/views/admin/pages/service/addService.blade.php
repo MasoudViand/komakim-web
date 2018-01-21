@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">قیمت سرویس</label>
-                <input  class="form-control" name="priceService" id="price" placeholder="قیمت سرویس">
+                <input  type="number" class="form-control" name="priceService" id="price" placeholder="قیمت سرویس">
                 @if ($errors->has('priceService'))
                     <span class="help-block">
                                         <strong>{{ $errors->first('priceService') }}</strong>
@@ -66,8 +66,18 @@
 
             </div>
             <div class="form-group">
+                <label for="exampleInputPassword1">واحد سرویس</label>
+                <input type="" class="form-control" name="unitService" id="unitService" placeholder="واحد سرویس">
+                @if ($errors->has('unitService'))
+                    <span class="help-block">
+                                        <strong>{{ $errors->first('unitService') }}</strong>
+                                    </span>
+                @endif
+
+            </div>
+            <div class="form-group">
                 <label for="exampleInputPassword1">حداقل سفارش</label>
-                <input type="" class="form-control" name="minOrderService" id="minOrder" placeholder="حداقل سفارش">
+                <input type="number" class="form-control" name="minOrderService" id="minOrder" placeholder="حداقل سفارش">
                 @if ($errors->has('minOrderService'))
                     <span class="help-block">
                                         <strong>{{ $errors->first('minOrderService') }}</strong>

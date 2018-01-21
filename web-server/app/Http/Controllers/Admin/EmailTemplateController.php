@@ -22,8 +22,10 @@ class EmailTemplateController extends Controller
 
     public function index()
     {
-        $mailsTemplate =MailTemplate::all();
+        $mailsTemplate =MailTemplate::paginate(15);
+
         $data['mailsTemplate'] = $mailsTemplate;
+        $data['total_count'] = MailTemplate::count();
 
         return view('admin.pages.email.listEmailTemplate')->with($data);
     }

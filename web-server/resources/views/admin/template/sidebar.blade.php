@@ -56,6 +56,32 @@
                 <a href="{{ route('admin.order.list') }}">
                     <i class="fa fa-th"></i> <span> سفارسات </span>
                 </a>
+                <a href="{{ route('admin.discount_code.list') }}">
+                    <i class="fa fa-th"></i> <span> کد تخفیف </span>
+                </a>
+
+
+                <a href="{{ route('admin.cancel.reason.list') }}">
+                    <i class="fa fa-th"></i> <span> دلایل لغو سفارش </span>
+                </a>
+                <a href="{{ route('admin.settle.dept.list') }}">
+                    <i class="fa fa-th"></i> <span>تسویه حساب </span>
+                </a>
+                <a href="{{ route('admin.financial') }}">
+                    <i class="fa fa-th"></i> <span> گزارشات مالی </span>
+                </a>
+                <a href="{{ route('admin.financial.remain_wallet') }}">
+                    <i class="fa fa-th"></i> <span> مقادیر کیف پول استفاده نشده </span>
+                </a>
+
+                <a href="{{ route('admin.transactions.list') }}">
+                    <i class="fa fa-th"></i> <span> تراکنش ها </span>
+                </a>
+                <a href="{{ route('admin.setting') }}">
+                    <i class="fa fa-th"></i> <span> تنظیمات </span>
+                </a>
+
+
             </li>
 
         </ul>

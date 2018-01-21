@@ -13,6 +13,7 @@ use App\User;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\HtmlString;
 use MongoDB\BSON\ObjectID;
 use Symfony\Component\Console\Question\Question;
 
@@ -31,19 +32,78 @@ class OrderController extends Controller
     }
 
 
-    function index()
+    function index( Request $request)
     {
+        $query=[];
+        $queryParam=[];
+        if ($request->has('page'))
+        {
+            $skip=((int)$request->input('page')-1)*10;
+        }
+        else
+        {
+            $skip=0;
+        }
+        if ($request->has('tracking_number'))
+        {
+            $query['tracking_number']=$request->input('tracking_number');
 
-        $orders=Order::paginate(15);
+            $queryParam['tracking_number']=$request->input('tracking_number');
+
+        }
+        if ($request->has('status'))
+        {
+            $query['status']=$request->input('status');
+            $queryParam['status']=$request->input('status');
+
+        }
+        if ($request->has('category_id'))
+        {
+            $query['category_id']=$request->input('category_id');
+            $queryParam['category_id']=$request->input('category_id');
+        }
+
+
+        $q = [
+            [ '$skip'  =>$skip ],
+            [ '$limit' => 10 ],
+
+        ];
+        $q_count=[];
+        if (count($query)>0)
+        {
+            $q = [
+                ['$match' => $query],
+                [ '$skip'  =>$skip ],
+                [ '$limit' => 10 ],
+
+            ];
+            $q_count=[['$match' => $query]];
+        }
+
+
+
+
+        $q_count[]=['$count'=>'count'];
+
+
+
+
+
+        $model = Order::raw()->aggregate($q);
+        $count = Order::raw()->aggregate($q_count);
+
+
+
+        $countArr=[];
+        foreach ($count as $item)
+        {
+            array_push($countArr,$item);
+        }
 
         $ordersArr=[];
-        foreach ($orders as $item)
+        foreach ($model as $item)
         {
-
-
-            $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($item->created_at));
-
-
             $order=[];
             $order['user']=User::find($item->user_id);
             $order['created_at'] = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($item->created_at));
@@ -71,14 +131,27 @@ class OrderController extends Controller
                     $order['status']='لغو توسط خدمه';
                     break;
 
+                case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
+                    $order['status']='لغو توسط ادمین';
+                    break;
+
             }
+
             $order['total_price']=$item->total_price;
-            $order['order_id']=$item->id;
+            $order['order_id']=$item->_id;
             array_push($ordersArr,$order);
         }
 
-        $data['orders']=$ordersArr;
-        $data['categories']=Category::all();
+        if (count($countArr)>0)
+            $data['count']=$countArr[0]['count'];
+        else
+            $data['count']=0;
+        $data['page']=(int)($data['count']/10)+1;
+        $data['queryParam']=$queryParam;
+        $data['orders']     =$ordersArr;
+        $data['categories'] =Category::all();
+
+       // dd($queryParam['category_id']);
 
 
         return view('admin.pages.order.list_order')->with($data);
@@ -114,7 +187,7 @@ class OrderController extends Controller
 
         ];
         $model = Order::raw()->aggregate($q);
-//
+
         $orderArr=[];
         $i=0;
         foreach ($model as $item)
@@ -142,9 +215,17 @@ class OrderController extends Controller
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                     $order['status']='لغو توسط مشتری';
+                    $order['cancel_reason']=$item['cancel_reason'];
+
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
                     $order['status']='لغو توسط خدمه';
+                    $order['cancel_reason']=$item['cancel_reason'];
+
+                    break;
+                case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
+                    $order['status']='لغو توسط ادمین';
+                    $order['cancel_reason']=$item['cancel_reason'];
                     break;
 
             }
@@ -177,10 +258,12 @@ class OrderController extends Controller
             $order['worker']=User::find($orderModel->worker_id);
         }
         $order['address'] =$orderModel->address;
+        $order['id'] =$orderModel->id;
         $order['category'] = Category::find($orderModel->category_id);
         $order['total_price'] =$orderModel->total_price;
         $order['tracking_number'] =$orderModel->tracking_number;
         $order['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($orderModel->created_at));
+
         switch ($orderModel->status)
         {
             case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
@@ -200,9 +283,15 @@ class OrderController extends Controller
                 break;
             case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                 $order['status']='لغو توسط مشتری';
+                $order['cancel_reason']=$orderModel->cancel_reason;
                 break;
             case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
                 $order['status']='لغو توسط خدمه';
+                $order['cancel_reason']=$orderModel->cancel_reason;
+                break;
+            case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
+                $order['status']='لغو توسط ادمین';
+                $order['cancel_reason']=$orderModel->cancel_reason;
                 break;
 
         }
@@ -234,25 +323,34 @@ class OrderController extends Controller
 
         $order['services']=$services;
         $order['services'][0]['entity'];
+
+
 //
         $data['order']=$order;
+        $data['review']=false;
         $reviewModel = Review::where('order_id',new ObjectID($order_id))->first();
 
-        $review['score']=$reviewModel->score;
-        $review['desc'] =$reviewModel->desc;
-        $reasons=[];
-        foreach ($reviewModel->reasons as $item)
+        if ($reviewModel)
         {
-            $reason=DissatisfiedReason::find($item)['reason'];
-            $reasons[]=$reason;
+            $review['score']=$reviewModel->score;
+            $review['desc'] =$reviewModel->desc;
+            $reasons=[];
+            foreach ($reviewModel->reasons as $item)
+            {
+                $reason=DissatisfiedReason::find($item)['reason'];
+                $reasons[]=$reason;
+            }
+            $review['reasons']=$reasons;
+
+            //  dd($review);
+
+            $data['review']=$review;
         }
-        $review['reasons']=$reasons;
 
-      //  dd($review);
 
-        $data['review']=$review;
+        $revisionModel =OrderStatusRevision::where('order_id',$order_id)->get();
 
-        $revisionModel =OrderStatusRevision::where('order_id',new ObjectID($order_id))->get();
+
 
         $revisions=[];
 
@@ -262,35 +360,46 @@ class OrderController extends Controller
             switch ($item->status)
             {
                 case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
-                    $order['status']='منتظر تایید خدمه';
+                    $revision['status']='منتظر تایید خدمه';
                     break;
                 case OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS:
-                    $order['status']='قبول درخواست توسط خدمه';
+                    $revision['status']='قبول درخواست توسط خدمه';
                     break;
                 case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                    $order['status']='شروع کار توسط خذمه';
+                    $revision['status']='شروع کار توسط خذمه';
                     break;
                 case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
-                    $order['status']='اتمام کار توسط خدمه';
+                    $revision['status']='اتمام کار توسط خدمه';
                     break;
                 case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                    $order['status']='پرداخت توسط خدمه';
+                    $revision['status']='پرداخت توسط خدمه';
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
-                    $order['status']='لغو توسط مشتری';
+                    $revision['status']='لغو توسط مشتری';
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
-                    $order['status']='لغو توسط خدمه';
+                    $revision['status']='لغو توسط خدمه';
+                    break;
+
+                case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
+                    $revision['status']='لغو توسط ادمین';
                     break;
 
             }
+
             $revision['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($item->created_at));
             $revision['whom']   =User::find($item->whom);
             $revisions[]=$revision;
 
+
         }
 
+
+
         $data['revisions']=$revisions;
+
+
+
 
 
 
@@ -299,4 +408,23 @@ class OrderController extends Controller
 
 
     }
+
+    function CancelOrderByAdmin(Request $request)
+    {
+
+        $order = Order::find($request->input('idOrder'));
+
+        if ($request->has('cancel_order_text'))
+        $order->cancel_reason=$request->input('cancel_order_text');
+        $order->status =OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
+        if ($order->save())
+            return redirect()->back();
+        else return redirect()->with(['error'=>'لغو نشد']);
+
+    }
+
+
+
 }
+
+

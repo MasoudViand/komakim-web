@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CancelReason;
 use App\Jobs\CheckServiceAccepted;
 use App\Jobs\FindWorker;
 use App\Jobs\RegisterStatusOrderRevisionJob;
+use App\Jobs\SendNotificationToSingleUserJobWithFcm;
 use App\Order;
 use App\OrderStatusRevision;
 use App\Review;
@@ -14,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Mockery\Tests\React_WritableStreamInterface;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
+use function PHPSTORM_META\type;
 
 
 class OrderController extends Controller
@@ -229,6 +232,57 @@ class OrderController extends Controller
 
 
         return response()->json(['order'=>$order]);
+
+    }
+    function cancelOrder(Request $request)
+    {
+        if (!$request->has('order_id'))
+            return response()->json(['error','order_id is require'])->setStatusCode(417);
+
+
+        $order = Order::find($request->input('order_id'));
+
+        if ($order->status == OrderStatusRevision::WAITING_FOR_WORKER_STATUS or $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS )
+        {
+            $user = $request->user();
+
+            if ($user->role ==User::WORKER_ROLE)
+            {
+                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
+                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
+
+
+               // $this->dispatch(new SendNotificationToSingleUserJobWithFcm(User::find($order->user_id),'سفارش توسط خدمه لغو شد','لغو سفارش',$order));
+            }
+            if ($user->role == User::CLIENT_ROLE)
+            {
+                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
+                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,$user));
+
+                //$this->dispatch(new SendNotificationToSingleUserJobWithFcm(User::find($order->worker_id),'سفارش توسط مشتری لغو شد','لغو سفارش',$order));
+
+            }
+            if ($request->has('cancel_reason'))
+                $order->cancel_reason=$request->input('cancel_reason');
+            if ($order->save())
+            {
+                return response()->json(['order'=>$order]);
+            }else
+                return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+        }
+        else
+            return response()->json(['error'=>'این سفارش دیگر قابل حذف کردن نیست لطفا در صورت بروز مشکل با پشتیبانی تماس حاصل فرمایید '])->setStatusCode(417);
+
+    }
+
+    function receiveCancelReason(Request $request)
+    {
+        $role =$request->user()->role;
+
+
+        $cancelReasons =CancelReason::where('type',$role)->get();
+
+        return response()->json(['cancelReasons'=>$cancelReasons]);
 
     }
 

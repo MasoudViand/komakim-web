@@ -16,4 +16,5 @@ class OrderStatusRevision extends Eloquent
     const PAID_ORDER_BY_CLIENT_STATUS       ='paidByClient';
     const CANCEL_ORDER_BY_CLIENT_STATUS     ='cancelByClient';
     const CANCEL_ORDER_BY_WORKER_STATUS     ='cancelByWorker';
+    const CANCEL_ORDER_BY_ADMIN_STATUS     ='cancelByAdmin';
 }

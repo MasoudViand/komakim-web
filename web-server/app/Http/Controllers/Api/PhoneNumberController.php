@@ -7,6 +7,7 @@ use App\User;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\URL;
 use MongoDB\BSON\ObjectID;
 use Validator;
 use GuzzleHttp;
@@ -241,11 +242,14 @@ class PhoneNumberController extends Controller
     {
         $http = new GuzzleHttp\Client;
 
-        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
+//        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
+        $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-                'client_id' => '5a34fe1a978ef455fd280094',
-                'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',
+//                'client_id' => '5a34fe1a978ef455fd280094', local
+                'client_id' => '5a6436cadcd4cd271b6ccb94',   //servertest
+//                'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT', local
+                'client_secret' => 'wjlWqn4ZCzCvuHy9JQLqSm24yjcpVx1dS60hfjIN', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',

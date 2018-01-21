@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\DissatisfiedReason;
 use App\Review;
 use App\User;
 use App\WorkerProfile;
+use bar\baz\source_with_namespace;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,10 +23,185 @@ class UserController extends Controller
         $this->middleware('auth:admin')->except('filterUser');
     }
 
-    function index(){
-        $users =User::paginate(15);
+    function index(Request $request){
 
-        $data['users']=$users;
+
+        $limit =1;
+        $query=[];
+        $queryParam=[];
+        $fields =Category::all();
+        $data['fields']=$fields;
+        if ($request->has('page'))
+            $skip =((int)$request->input('page')-1)*$limit;
+        else
+            $skip = 0;
+
+        if ($request->has('phone_number'))
+        {
+            $query['phone_number']=$request->input('phone_number');
+            $queryParam['phone_number']=$request->input('phone_number');
+
+        }
+
+        if ($request->has('role'))
+        {
+            $query['role']=$request->input('role');
+            $queryParam['role']=$request->input('role');
+
+
+        }
+
+
+        if ($request->has('email'))
+        {
+            $query['email']=$request->input('email');
+            $queryParam['email']=$request->input('email');
+
+
+
+
+        }
+
+        if ($request->has('status'))
+        {
+            $query['status']=$request->input('status');
+            $queryParam['status']=$request->input('status');
+
+
+        }
+
+        if ($request->has('national_code'))
+        {
+            $query['profile.national_code']=$request->input('national_code');
+            $queryParam['national_code']=$request->input('national_code');
+
+
+        }
+
+
+        if ($request->has('field'))
+        {
+            $query['profile.field']=$request->input('field');
+            $queryParam['field']=$request->input('field');
+
+
+        }
+
+        if ($request->has('gender'))
+        {
+            $query['profile.gender']=$request->input('gender');
+            $queryParam['gender']=$request->input('gender');
+
+
+        }
+
+        if ($request->has('admin_status'))
+        {
+            $query['profile.status']=$request->input('admin_status');
+            $queryParam['admin_status']=$request->input('admin_status');
+
+
+        }
+
+
+        if ($request->has('availability_status'))
+        {
+            $query['profile.availabilitystatus']=$request->input('availability_status');
+            $queryParam['availability_status']=$request->input('availability_status');
+
+
+        }
+
+
+
+        $q = [
+            [ '$skip' => $skip ],
+            [ '$limit' => $limit ],
+
+            [ '$lookup' => [
+                'from'         => 'worker_profiles',
+                'localField'   => '_id',
+                'foreignField' => 'user_id',
+                'as'           => 'profile',],
+
+            ],
+
+                ];
+
+        $q_count= [
+
+            [ '$lookup' => [
+                'from'         => 'worker_profiles',
+                'localField'   => '_id',
+                'foreignField' => 'user_id',
+                'as'           => 'profile',],
+
+            ],
+
+        ];
+
+
+        if (count($query)>0)
+        {
+//            array_unshift($q,['$match' => $query ]);
+            $q[]= ['$match' => $query ];
+            $q_count[]= ['$match' => $query ];
+        }
+
+
+
+        if ($request->has('sort')) {
+            $queryParam['sort']=$request->input('sort');
+
+            if ($request->input('sort') == 'desc') {
+                $q[] = ['$sort' => ['profile.mean_score' => 1],];
+            } else {
+
+                $q[] = ['$sort' => ['profile.mean_score' => -1],];
+            }
+        }
+
+
+
+        $q_count[]=['$count'=>'count'];
+
+
+        $model = User::raw()->aggregate($q);
+        $count = User::raw()->aggregate($q_count);
+
+
+        $userArr=[];
+        $countArr=[];
+        foreach ($model as $item)
+        {
+            array_push($userArr,$item);
+        }
+
+
+
+
+        foreach ($count as $item)
+        {
+            array_push($countArr,$item);
+        }
+
+
+        $data['users']=$userArr;
+        if (count($countArr)>0)
+            $data['count']=$countArr[0]['count'];
+        else
+            $data['count']=0;
+
+
+
+        $data['queryParam']=$queryParam;
+        $data['total_page']=(int)($data['count']/$limit)+1;
+
+//        dd((int)($data['count']/$limit));
+
+
+
+
 
         return view('admin.pages.user.listUser')->with($data);
     }
@@ -63,6 +240,7 @@ class UserController extends Controller
 
         $q = [
             [ '$limit' => 10 ],
+
 
             [ '$lookup' => [
                 'from'         => 'worker_profiles',

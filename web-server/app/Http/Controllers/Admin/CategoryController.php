@@ -20,8 +20,9 @@ class CategoryController extends Controller
     }
 
     public function index(){
-        $categories =Category::orderBy('order', 'desc')->get();
+        $categories =Category::orderBy('order', 'desc')->paginate(15);
         $data['categories']=$categories;
+        $data['total_count']=Category::count();
 
         return view('admin.pages.category.listCategory')->with($data);;
 

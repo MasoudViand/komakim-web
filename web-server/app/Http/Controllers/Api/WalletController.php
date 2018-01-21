@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DiscountCode;
+use App\DiscountCodeLog;
+use App\FinancialReport;
 use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
+use App\Service;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
@@ -42,6 +46,7 @@ class WalletController extends Controller
 
     function payOrder(Request $request)
     {
+
         if (!$request->has('order_id'))
             return response()->json(['error'=>'order_id is require'])->setStatusCode(417);
 
@@ -51,15 +56,45 @@ class WalletController extends Controller
         if (!$order)
             return response()->json(['error'=>'سفارشی پیدا نشد '])->setStatusCode(417);
 
-        $wallet = Wallet::where('user_id',$request->user()->id)->first();
+
+        $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
+
+
+
 
         $total_price=$order->total_price;
 
+
+
         if ($order->revisions)
         {
+
+
             $total_price=$order->revisions[0]['total_price'];
-            unset($order->revisions);
         }
+
+        if ($order->discount)
+        {
+
+
+            $total_price =$total_price-$order->discount;
+            $prevDisCountLog = DiscountCodeLog::where('discount_code_id',new ObjectID($order->discount_code_id))->orderby('_id','desc')->first();
+
+            if (!$prevDisCountLog)
+                $count =1;
+            else
+                $count=$prevDisCountLog->count+1;
+            $discountCodeLog= new \stdClass();
+
+            $discountCodeLog->user_id = new ObjectID($request->user()->id);
+            $discountCodeLog->order_id = new ObjectID($order->id);
+            $discountCodeLog->discount_code_id = $order->discount_code_id;
+            $discountCodeLog->count = $count;
+
+            $model= DiscountCodeLog::raw()->insertOne($discountCodeLog);
+
+        }
+
 
         if (!$wallet or $wallet->amount<$total_price)
         {
@@ -67,12 +102,19 @@ class WalletController extends Controller
         }
 
 
+
+
         $wallet->amount =$wallet->amount -$total_price;
         $wallet->updated_at =new UTCDateTime(time()*1000);
 
         //Todo implement transactional pattern
 
-        $wallet->save();
+
+        //$wallet->save();
+
+
+
+
 
         $clientTransaction = new \stdClass();
 
@@ -89,23 +131,26 @@ class WalletController extends Controller
 
         $workerWallet = Wallet::where('user_id',$order->worker_id)->first();
 
+        $fanantialReport= $this->_calculateCommission($order);
+
+
         if (!$workerWallet)
         {
             $workerWallet = new \stdClass();
-
             $workerWallet->user_id =$order->worker_id;
-            $workerWallet->amount = $total_price;
+            $workerWallet->amount = $fanantialReport->total_price -$fanantialReport->commission;
             $workerWallet->updated_at =new UTCDateTime(time()*1000);
             $model = Wallet::raw()->insertOne($workerWallet);
         }else
             {
-                $workerWallet->amount =$wallet->amount +$total_price;
+
+                $workerWallet->amount =$wallet->amount +$fanantialReport->total_price -$fanantialReport->commission;
                 $workerWallet->updated_at =new UTCDateTime(time()*1000);
                 $workerWallet->save();
         }
         $workerTransaction = new \stdClass();
 
-        $workerTransaction->amount= $total_price;
+        $workerTransaction->amount= $fanantialReport->total_price -$fanantialReport->commission;
         $workerTransaction->user_id =$order->worker_id;
         $workerTransaction->created_at =new UTCDateTime(time()*1000);
         $workerTransaction->type = Transaction::DONE_ORDER;
@@ -123,6 +168,103 @@ class WalletController extends Controller
 
         return response()->json(['wallet'=>$wallet,'order'=>$order]);
 
+    }
+
+    function validateDiscountCode(Request $request)
+    {
+        $order = Order::find($request->input('order_id'));
+
+        $discountCode = DiscountCode::where('name', $request->input('discount_code'))->first();
+
+        if (!$discountCode)
+        {
+            return response()->json(['error'=>'مقدار کد تخفیف وارد شده صحیح نیست'])->setStatusCode(417);
+        }
+        if (!$discountCode->status)
+            return response()->json(['error'=>'مقدار کد تخفیف غیر فعال شده'])->setStatusCode(417);
+
+
+
+        if ($order->discount_code_id and $order->discount_code_id == $discountCode->id)
+        {
+            return response()->json(['error' => 'این کد تخفیف قبلا برای این سفارش استفاده شده ']);
+        }
+
+
+
+        if ($discountCode->type=='percent')
+        {
+            $discount = $order->total_price*$discountCode->value;
+        }else
+        {
+            $discount = $discountCode->value;
+        }
+
+        $order->discount = $discount;
+        $order->discount_code_id = new ObjectID($discountCode->id);
+
+        $order->save();
+         return response()->json(['discount'=>$discount]);
+    }
+
+    private function _calculateCommission($order)
+    {
+        $services= $order->services;
+
+        if ($order->revisions)
+        {
+
+            $services=$order->revisions[0]['services'];
+        }
+
+        $fanantialReport =new FinancialReport();
+
+        $total_price =0;
+        $commission =0;
+
+        foreach ($services as $item)
+        {
+
+
+
+            $serviceModel=Service::find($item['service_id']);
+
+
+
+            $minimumNumber =(int)$serviceModel->minimum_number;
+
+
+            $price         =(int)$serviceModel->price;
+
+            $unit_count = $item['unit_count'];
+
+            if ($unit_count<$minimumNumber)
+                $unit_count = $minimumNumber;
+
+
+
+
+            $commission = $commission+ ((int)($unit_count/$minimumNumber))*5000;
+
+
+
+            $total_price=$total_price+ $unit_count*$price;
+
+
+
+        }
+        if($order->discount)
+            $total_price = $total_price- $order->discount;
+        $fanantialReport->total_price =$total_price;
+        $fanantialReport->commission = $commission;
+        $fanantialReport->created_at= new UTCDateTime(time()*1000);
+
+
+
+        if ($fanantialReport->save())
+            return $fanantialReport;
+        else
+            return false;
     }
 
 }

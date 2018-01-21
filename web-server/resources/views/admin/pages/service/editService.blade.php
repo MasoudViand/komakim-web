@@ -59,7 +59,7 @@
 
                             <div class="form-group" style="width:350px">
                                 <label for="exampleInputPassword1">قیمت سرویس</label>
-                                <input  class="form-control" name="priceService" id="price" value={{$service->price}}>
+                                <input  type="number" class="form-control" name="priceService" id="price" value={{$service->price}}>
                                 @if ($errors->has('priceService'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('priceService') }}</strong>
@@ -67,9 +67,19 @@
                                 @endif
 
                             </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">واحد سرویس</label>
+                                <input type="" class="form-control" name="unitService" id="unitService" placeholder="واحد سرویس">
+                                @if ($errors->has('unitService'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('unitService') }}</strong>
+                                    </span>
+                                @endif
+
+                            </div>
                             <div class="form-group" style="width:350px">
                                 <label for="exampleInputPassword1">حداقل سفارش</label>
-                                <input type="" class="form-control" name="minOrderService" id="minOrder" value={{$service->minimum_number}}>
+                                <input type="number" class="form-control" name="minOrderService" id="minOrder" value={{$service->minimum_number}}>
                                 @if ($errors->has('minOrderService'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('minOrderService') }}</strong>

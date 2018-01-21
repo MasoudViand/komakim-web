@@ -15,5 +15,12 @@ class VerifyCsrfToken extends Middleware
         '/admin/user/filter',
         '/admin/order/filter',
         'pay/callback',
+        'admin/financial/filter',
+        'admin/financial/weekly',
+        'admin/financial/daily',
+        '/admin/setting/radius/edit',
+        '/admin/setting/commission/edit',
+        '/admin/settle/done',
+        '/admin/settle/export/scv',
     ];
 }

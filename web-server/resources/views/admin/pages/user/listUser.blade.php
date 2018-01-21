@@ -24,13 +24,13 @@
 
                 <div class="col-sm-3">
                     <div id="example1_filter" class="dataTables_filter">
-                        <label>ایمیل<input type="search" id="email" class="form-control input-sm" placeholder="" aria-controls="example1">
+                        <label>ایمیل<input type="search" id="email" class="form-control input-sm" placeholder="" value="{{key_exists('email',$queryParam)?$queryParam['email']:''}}" aria-controls="example1">
                         </label>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div id="example1_filter" class="dataTables_filter">
-                        <label>تلفن همراه<input type="search"id="mobile" class="form-control input-sm" placeholder="" aria-controls="example1">
+                        <label>تلفن همراه<input type="search"id="mobile" class="form-control input-sm" value="{{key_exists('phone_number',$queryParam)?$queryParam['phone_number']:''}}" placeholder="" aria-controls="example1">
                         </label>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                             <select id ="status" name="status" class="form-control" style="">
-                                <option value="">--- انتخاب وضعیت ---</option>
+                                <option value="{{key_exists('status',$queryParam)?$queryParam['status']:''}}">{{key_exists('status',$queryParam)?($queryParam['status']=='active'?'فعال':'غیرفعال'):'--انتخاب وضعیت--'}}</option>
 
                                     <option value="active">فعال</option>
                                     <option value="inactive">غیرفعال</option>
@@ -51,8 +51,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="typeOfuser" id="typeOfuser" onchange="onhideWorker()" class="form-control" style="">
-                            <option value="">--- انتخاب نوع ---</option>
-
+                            <option value="{{key_exists('role',$queryParam)?$queryParam['role']:''}}">{{key_exists('role',$queryParam)?($queryParam['role']=='worker'?'خدمه':'مشتری'):'--انتخاب نوع--'}}</option>
                             <option value="client">مشتری</option>
                             <option value="worker">خدمه</option>
 
@@ -69,7 +68,7 @@
 
                 <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
-                        <label>کدملی<input type="search" id="nationalCode" name="nationalCode" class="form-control input-sm" placeholder="" aria-controls="example1">
+                        <label>کدملی<input type="search" id="nationalCode" name="nationalCode" class="form-control input-sm" value="{{key_exists('national_code',$queryParam)?$queryParam['national_code']:''}}" placeholder="" aria-controls="example1">
                         </label>
                     </div>
                 </div>
@@ -78,9 +77,11 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="field" id="field" class="form-control" style="">
-                            <option value="">--- انتخاب زمینه ---</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+
+                            <option value="{{key_exists('field',$queryParam)?$queryParam['field']:''}}">{{key_exists('field',$queryParam)?(\App\Category::where('name',$queryParam['field'])->first()->name):'--انتخاب زمینه--'}}</option>
+                            @foreach($fields as $field)
+                            <option value="{{$field->name}}">{{$field->name}}</option>
+                            @endforeach
 
                         </select>
 
@@ -90,7 +91,8 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="sort" id="sort" class="form-control" style="">
-                            <option value="">--- دسته بندی بر اساس امتیاز ---</option>
+                            <option value="{{key_exists('sort',$queryParam)?$queryParam['sort']:''}}">{{key_exists('sort',$queryParam)?($queryParam['sort']=='asc'?'بالا به پایین':'پایین به بال'):'--- دسته بندی بر اساس امتیاز ---'}}</option>
+
                             <option value="asc">بالا به پایین</option>
                             <option value="desc">پایین به بالا</option>
 
@@ -104,6 +106,8 @@
 
                         <select name="gender"id="gender" class="form-control" style="">
                             <option value="">- انتخاب جنسیت -</option>
+                            <option value="{{key_exists('gender',$queryParam)?$queryParam['gender']:''}}">{{key_exists('gender',$queryParam)?($queryParam['gender']=='male'?'مرد':'زن'):'- انتخاب جنسیت -'}}</option>
+
 
                             <option value="female">زن</option>
                             <option value="male">مرد</option>
@@ -116,7 +120,8 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="adminStatus" id="adminStatus" class="form-control" style="">
-                            <option value="">--- وضعیت تایید ادمین ---</option>
+                            <option value="{{key_exists('admin_status',$queryParam)?$queryParam['admin_status']:''}}">{{key_exists('admin_status',$queryParam)?($queryParam['admin_status']=='pending'?'منتظر تایید':($queryParam['admin_status']=='accept'?'تایید شده':'رد شده')):'--- وضعیت تایید ادمین ---'}}</option>
+
 
                             <option value="pending">منتظر تایید</option>
                             <option value="accept">تایید شده</option>
@@ -130,7 +135,8 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select id="availabilitystatus" name="availabilitystatus" class="form-control" style="">
-                            <option value="">--- وضعیت قابلیت ارایه سرویس ---</option>
+                            <option value="{{key_exists('availability_status',$queryParam)?$queryParam['availability_status']:''}}">{{key_exists('availability_status',$queryParam)?($queryParam['availability_status']=='available'?'اماده برای ارایه سرویس':'جارج از سرویس دهی'):'--- وضعیت قابلیت ارایه سرویس ---'}}</option>
+
 
                             <option value="available">اماده برای ارایه سرویس</option>
                             <option value="unavailable">جارج از سرویس دهی</option>
@@ -163,7 +169,7 @@
                                 <td class="sorting_1">{{$user->family}}</td>
                                 <td class="sorting_1">{{$user->phone_number}}</td>
                                 <td>{{ $user->role=='client' ?'عادی':'خدمه' }}</td>
-                                <td><a href="{{route('admin.user.update',['user_id' => $user->id])}}"><i class="fa fa-edit"></i></a></td>
+                                <td><a href="{{route('admin.user.update',['user_id' => $user->_id])}}"><i class="fa fa-edit"></i></a></td>
 
                             </tr>
 
@@ -181,14 +187,35 @@
                 <div class="col-sm-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
                         <ul class="pagination">
-                            <li class="paginate_button previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0">Previous</a></li>
-                            <li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0">2</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0">3</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0">4</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0">5</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0">6</a></li>
-                            <li class="paginate_button next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0">Next</a></li>
+
+                            @if($total_page>1)
+
+
+                            @if($total_page>8)
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">2</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">3</a></li>
+                                    <li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">.</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>$total_page-3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page-3}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>$total_page-2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -2}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>$total_page-1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -1}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>$total_page]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page }}</a></li>
+
+
+
+
+                                @else
+                                    @for($i=0;$i<$total_page ;$i++ )
+
+                                    <li class="paginate_button active"><a href="{{route("admin.user.list",array_merge($queryParam,['page'=>$i+1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$i+1}}</a></li>
+
+                                    @endfor
+
+
+                                @endif
+
+
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -214,27 +241,36 @@
                 var admin_status = $( "#adminStatus" ).val();
                 var availabilitystatus = $( "#availabilitystatus" ).val();
 
-                var data ={};
+
+                var params = [];
                 if(email)
-                    data['email']=email;
+                    params.push("email="+email)
                 if(mobile)
-                    data.mobile=mobile;
+                    params.push("phone_number="+mobile)
                 if(sort)
-                    data.sort=sort;
+                    params.push("sort="+sort)
                 if (status)
-                    data.status=status;
+                    params.push("status="+status)
                 if(role)
-                    data.role =role;
+                    params.push("role="+role)
                 if (national_code)
-                    data.national_code=national_code;
+                    params.push("national_code="+national_code)
                 if (field)
-                    data.field=field;
+                    params.push("field="+field)
                 if (gender)
-                    data.gender =gender;
+                    params.push("gender="+gender)
                 if (admin_status)
-                    data.admin_status=admin_status;
+                    params.push("admin_status="+admin_status)
                 if (availabilitystatus)
-                    data.availabilitystatus=availabilitystatus;
+                    params.push("availability_status="+availabilitystatus)
+
+                console.log(params)
+
+                window.location.href =
+                    "http://" +
+                    window.location.host +
+                    window.location.pathname +
+                    '?' + params.join('&');
 
 
                // var obj = { "name":"John", "age":30, "city":"New York"};
@@ -292,6 +328,26 @@
         });
     </script>
     <script type="text/javascript">
+        var x = document.getElementById("typeOfuser").value;
+
+        console.log(x)
+        if (x == "worker"){
+            console.log('ccccccc');
+            x =document.getElementById("worker_filter_field");
+
+            if (x.style.display="block")
+            {
+                console.log('sddd');
+            }
+
+        }else {
+            x =document.getElementById("worker_filter_field");
+
+            if (x.style.display="none")
+            {
+                console.log('sddd');
+            }
+        }
 
         function onhideWorker() {
             var x = document.getElementById("typeOfuser").value;
@@ -315,51 +371,7 @@
                 }
             }
         }
-        function search() {
-            var  email =document.getElementById("email").value;
-            var mobile = document.getElementById("mobile").value;
-            var status = document.getElementById("status").value;
-            var typeOfuser = document.getElementById("typeOfuser").value;
-            var queryUser={};
-            if (email)
-                queryUser.email=email;
-            if (mobile)
-                queryUser.phone_number=mobile;
-            if(status)
-                queryUser.status=status;
-            if (typeOfuser)
-                queryUser.role=typeOfuser;
 
-            var  nationalCode =document.getElementById("nationalCode").value;
-            var field = document.getElementById("field").value;
-            var gender = document.getElementById("gender").value;
-            var adminStatus = document.getElementById("adminStatus").value;
-            var availabilitystatus = document.getElementById("availabilitystatus").value;
-
-            var queryWorker={};
-            if (nationalCode)
-                queryWorker.nationalCode=nationalCode;
-            if (field)
-                queryUser.field=field;
-            if(gender)
-                queryUser.gender=gender;
-            if (adminStatus)
-                queryUser.status=status;
-
-
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("txtHint").innerHTML = this.responseText;
-                }
-            };
-            xmlhttp.open();
-            xmlhttp.send();
-
-
-
-
-        }
     </script>
 
 @endsection

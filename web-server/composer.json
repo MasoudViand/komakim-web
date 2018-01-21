@@ -17,7 +17,9 @@
         "laravel/passport": "^4.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
-        "morilog/jalali": "^2.3"
+        "morilog/jalali": "^2.3",
+        "maatwebsite/excel": "~2.1.0"
+
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",

@@ -23,7 +23,7 @@
                    <td class="sorting_1">{{$order['address']['plain_text']  }}</td>
                    <td class="sorting_1">{{$order['created_at']}}</td>
                    <td class="sorting_1">{{$order['total_price']}}</td>
-                   <td class="sorting_1">{{$order['status']}}</td>
+                   <td class="sorting_1">{{$order['status']}} @if(key_exists('cancel_reason',$order))<hr>دلیل:<div class="col-sm-6">{{$order['cancel_reason']}} </div>@endif</td>
 
                </tr>
                </tbody>
@@ -32,6 +32,8 @@
 
 
         </div><!-- /.col (LEFT) -->
+
+
 
         <div class="col-md-12">
             <table class="table table-bordered table-striped dataTable" role="grid" >
@@ -136,6 +138,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <strong> نظر سنجی از کاربران</strong>
+
+
                 @if($review)
 
                     <table class="table table-bordered table-striped dataTable" role="grid" >
@@ -199,11 +203,52 @@
 
         </div>
 
+        <div class="row" id="cancel_order_section">
+            <div class="col-sm-12">
+                 <button  class="btn btn-primary btn-danger" id="cancel_order">لغو سفارش</button>
+            </div>
+        </div>
+
+
+        <div class="row" id="cancel_orderform_section_" hidden>
+            <form action="{{route('admin.order.cancel')}}" method="post">
+                {{ csrf_field() }}                <div class="col-sm-6">
+                    <label> دلیل لغو</label>
+                    <button  class="btn btn-primary"  id="cancel_order">ثبت</button>
+                    <input  class="form-control" type="hidden" id="idOrder" name="idOrder" value="{{$order['id']}}">
+
+                </div>
+                <div class="col-sm-6">
+                    <input  type="text" name="cancel_order_text" id="cancel_order_text">
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+
 
     </div>
 
 
+
+
     </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $( "#cancel_order" ).click(function () {
+
+                $("#cancel_order_section").hide()
+                $("#cancel_orderform_section_").show()
+
+            })
+
+        });
+    </script>
 
 
 

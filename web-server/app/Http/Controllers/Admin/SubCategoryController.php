@@ -25,7 +25,7 @@ class SubCategoryController extends Controller
     public function index()
     {
 
-        $subcategories =Subcategory::orderBy('order', 'desc')->get();
+        $subcategories =Subcategory::orderBy('order', 'desc')->paginate(15);
         $subcategoryArr=[];
 
         foreach ($subcategories as $subcategory)
@@ -39,6 +39,8 @@ class SubCategoryController extends Controller
         }
 
         $data['subcategoryArr']=$subcategoryArr;
+        $data['subcategories']=$subcategories;
+        $data['total_count']=Subcategory::count();
 
         return view('admin.pages.subcategory.listsubCategory')->with($data);
 

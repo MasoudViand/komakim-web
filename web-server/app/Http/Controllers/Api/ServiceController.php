@@ -145,7 +145,7 @@ class ServiceController extends Controller
 
         $order->status =OrderStatusRevision::WAITING_FOR_WORKER_STATUS;
         $user = $request->user();
-        $order->user_id =$user->id;
+        $order->user_id =new ObjectID($user->id);
         $order->created_at=new UTCDateTime(time()*1000);
         $prevOrder = Order::orderby('_id','desc')->first();
         if (!$prevOrder)
@@ -191,7 +191,7 @@ class ServiceController extends Controller
 
 
 
-         $order->worker_id=$request->user()->id;
+         $order->worker_id=new ObjectID($request->user()->id);
          $order->status   =OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS;
 
          if ($order->save())

@@ -27,7 +27,8 @@ class ServiceController extends Controller
     {
 
 
-        $services = Service::paginate(15);
+        $services = Service::paginate(1);
+
 
         $serviceArr=[];
 
@@ -37,6 +38,7 @@ class ServiceController extends Controller
 
             $item['serviceName']=$service->name;
             $item['servicePrice'] =$service->price;
+            $item['serviceUnit'] =$service->unit;
             $item['serviceDescription'] =$service->description;
             $item['serviceMinimumNumber'] =$service->minimum_number;
             $item['id'] =$service->_id;
@@ -49,7 +51,12 @@ class ServiceController extends Controller
 
         }
         //dd($serviceArr);
+        $total_count=Service::count();
+
        $data['serviceArr']=$serviceArr;
+       $data['services']=$services;
+       $data['total_count']=$total_count;
+
 
 
 
@@ -85,7 +92,8 @@ class ServiceController extends Controller
             'nameService' => 'required',
             'subcategory' => 'required',
             'priceService' => 'required|numeric',
-            'minOrderService' => 'required|numeric'
+            'minOrderService' => 'required|numeric',
+            'unitService' => 'required'
         ]);
 
 
@@ -94,6 +102,7 @@ class ServiceController extends Controller
        $service->name=$request['nameService'];
        $service->subcategory_id=new ObjectID($request['subcategory']);
        $service->price=$request['priceService'];
+       $service->unit=$request['unitService'];
        $service->minimum_number=$request['minOrderService'];
        if (!is_null($request['descService']))
            $service->description = $request['descService'];
@@ -132,12 +141,12 @@ class ServiceController extends Controller
     public function editService(Request $request)
     {
 
-
         $this->validate($request,[
             'nameService' => 'required',
             'subcategory' => 'required',
             'priceService' => 'required|numeric',
-            'minOrderService' => 'required|numeric'
+            'minOrderService' => 'required|numeric',
+            'unitService' => 'required'
         ]);
 
         $service =Service::find($request['idService']);
@@ -146,6 +155,7 @@ class ServiceController extends Controller
         $service->minimum_number = $request['minOrderService'];
         $service->subcategory_id = $request['subcategory'];
         $service->description = $request['descService'];
+        $service->unit = $request['unitService'];
 
         if ($service->save())
         {

@@ -151,12 +151,12 @@ class PayController extends Controller
 
                 $model = Transaction::raw()->insertOne($transAction);
 
-                $wallet = Wallet::where('user_id',$request->user()->id)->first();
+                $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
                 if (!$wallet)
                 {
                     $wallet = new \stdClass();
 
-                    $wallet->user_id = $request->user()->id;
+                    $wallet->user_id = new ObjectID($request->user()->id);
                     $wallet->amount = $orderPeyment->amount;
                     $wallet->updated_at =new UTCDateTime(time()*1000);
                     $model = Wallet::raw()->insertOne($wallet);

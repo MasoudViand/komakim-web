@@ -45,6 +45,28 @@ Route::prefix('admin')->group(function (){
 
     });
 
+    Route::prefix('financial')->group(function (){
+        Route::get('/', 'Admin\FinancialController@index')->name('admin.financial');
+        Route::get('/remain/wallet/', 'Admin\FinancialController@showRemainWallet')->name('admin.financial.remain_wallet');
+        Route::post('/filter', 'Admin\FinancialController@filter')->name('admin.financial.daily');
+//        Route::post('/monthly', 'Admin\FinancialController@filterMonthly')->name('admin.financial.monthly');
+//        Route::post('/weekly', 'Admin\FinancialController@filterWeekly')->name('admin.financial.weekly');
+
+    });
+    Route::prefix('transactions')->group(function (){
+        Route::get('/', 'Admin\TransactionsController@index')->name('admin.transactions.list');
+        Route::get('/export', 'Admin\TransactionsController@export')->name('admin.transaction.list.export');
+
+    });
+
+    Route::prefix('discountcode')->group(function (){
+        Route::get('/', 'Admin\DiscountCodeController@index')->name('admin.discount_code.list');
+        Route::get('/insert', 'Admin\DiscountCodeController@insertForm')->name('admin.discount_code.insert');
+        Route::post('/insert', 'Admin\DiscountCodeController@insert')->name('admin.discount_code.insert.submit');
+        Route::get('/inactive/{discount_code_id}', 'Admin\DiscountCodeController@inactive')->name('admin.discount_code.inactive');
+
+    });
+
     Route::prefix('user')->group(function (){
         Route::get('/', 'Admin\UserController@index')->name('admin.user.list');
         Route::post('/filter/', 'Admin\UserController@filterUser')->name('admin.user.filter.submit');
@@ -58,8 +80,25 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\OrderController@index')->name('admin.order.list');
         Route::post('/filter/', 'Admin\OrderController@filterOrder')->name('admin.order.filter.submit');
         Route::get('/detail/{order_id}', 'Admin\OrderController@showDetailOrder')->name('admin.order.detail');
+        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 
     });
+    Route::prefix('setting')->group(function (){
+        Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
+        Route::post('/radius/edit', 'Admin\SettingController@editRadiusSearch')->name('admin.setting.radius_search');
+        Route::post('/commission/edit', 'Admin\SettingController@editCommission')->name('admin.setting.edit.commission');
+        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
+
+    });
+    Route::prefix('settle')->group(function (){
+        Route::get('/', 'Admin\SettleDeptController@index')->name('admin.settle.dept.list');
+        Route::post('/done/', 'Admin\SettleDeptController@settleWorker')->name('admin.settle.worker');
+        Route::get('/export/scv/', 'Admin\SettleDeptController@export')->name('admin.settle.export');
+
+    });
+
+
+
 
     Route::prefix('category')->group(function (){
         Route::get('/', 'Admin\CategoryController@index')->name('admin.category');
@@ -77,6 +116,16 @@ Route::prefix('admin')->group(function (){
         Route::get('/update/{category_id}', 'Admin\DissatisfiedReasonController@showEditDissatisfiedReasonForm')->name('admin.dissatisfied.reason.update');
         Route::post('/update/', 'Admin\DissatisfiedReasonController@editDissatisfiedReason')->name('admin.dissatisfied.reason.update.submit');
         Route::get('/delete/{category_id_id}', 'Admin\DissatisfiedReasonController@deleteDissatisfiedReason')->name('admin.dissatisfied.reason.delete');
+
+    });
+
+    Route::prefix('cancel/reason')->group(function (){
+        Route::get('/', 'Admin\CancelReasonController@index')->name('admin.cancel.reason.list');
+        Route::get('/insert/', 'Admin\CancelReasonController@addCancelReasonForm')->name('admin.cancel.reason.insert');
+        Route::post('/insert/', 'Admin\CancelReasonController@addCancelReason')->name('admin.cancel.reason.insert.submit');
+        Route::get('/update/{category_id}', 'Admin\CancelReasonController@showEditCancelReasonForm')->name('admin.cancel.reason.update');
+        Route::post('/update/', 'Admin\CancelReasonController@editCancelReason')->name('admin.cancel.reason.update.submit');
+        Route::get('/delete/{category_id_id}', 'Admin\CancelReasonController@deleteCancelReason')->name('admin.cancel.reason.delete');
 
     });
 
@@ -100,15 +149,6 @@ Route::prefix('admin')->group(function (){
 
     });
 
-
-
-
-
-//    Route::get('/listemailtemplate/', 'Admin\EmailTemplateController@index')->name('admin.list.email.template');
-//    Route::get('/editemailtemplate/{mail_template_id}', 'Admin\EmailTemplateController@showMialEditForm')->name('admin.mail.edit');
-//    Route::post('/editemailtemplate/', 'Admin\EmailTemplateController@eEditEmailTemplateForm')->name('admin.edit.email.template.submit');
-//    Route::get('/addemailtemplate/', 'Admin\EmailTemplateController@addEmailTemplateForm')->name('admin.create.email.template');
-//    Route::post('/addemailtemplate/', 'Admin\EmailTemplateController@addEmailTemplate')->name('admin.create.email.template.submit');
 
 
     Route::get('/listsurvey/{type?}', 'Admin\SurveyController@index')->name('admin.list.survey');
