@@ -27,7 +27,6 @@ class CancelReasonController extends Controller
         $cancelReasons = CancelReason::all();
         foreach ($cancelReasons as $item)
         {
-            //dd($item->type);
             $item->type=$item->type==User::WORKER_ROLE ?'خدمه':'مشتری';
 
         }

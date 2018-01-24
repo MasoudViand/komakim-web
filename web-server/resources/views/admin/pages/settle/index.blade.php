@@ -74,21 +74,21 @@
 
                             @if($count>count($wallets))
 
-                                @if($page>8)
+                                @if($total_page>8)
                                     <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li>
                                     <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">2</a></li>
                                     <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">3</a></li>
                                     <li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">.</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$page-3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page-3}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$page-2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page -2}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$page-1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page -1}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$page]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page }}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$total_page-3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page-3}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$total_page-2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -2}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$total_page-1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -1}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$total_page]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page }}</a></li>
 
 
 
 
                                 @else
-                                    @for($i=0;$i<$page ;$i++ )
+                                    @for($i=0;$i<$total_page ;$i++ )
 
                                         <li class="paginate_button active"><a href="{{route("admin.settle.dept.list",array_merge($queryParam,['page'=>$i+1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$i+1}}</a></li>
 
@@ -111,7 +111,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">نشان دادن {{ count($wallets)>0 ?((($queryParam['page']-1)*10)+1):0 }} تا {{((($queryParam['page']-1)*10))+count($wallets)}}از{{$count}}</div>
                 </div>
 
 

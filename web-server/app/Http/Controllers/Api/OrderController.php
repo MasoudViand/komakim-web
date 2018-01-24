@@ -26,7 +26,6 @@ class OrderController extends Controller
         function listActiveOrder(Request $request)
 
         {
-           // dd($request->user()->id);
             $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
             $orders = Order::whereIn('status',$activeStatus)->where('user_id',$request->user()->id)->get();
@@ -94,9 +93,13 @@ class OrderController extends Controller
             if(!property_exists($order, 'parent_id'))
                 return response()->json(['error'=>'parent_id is invalid'])->setStatusCode('417');
 
-           // dd($order->parent_id);
+
 
             $orderModel=Order::find($order->parent_id);
+
+            if (!$orderModel or $orderModel->status!=OrderStatusRevision::START_ORDER_BY_WORKER_STATUS)
+                return response()->json(['error'=>'سفارش وجود ندارد یا وضعیت  شروع به کار ندارد'])->setStatusCode('417');
+
 
             if (!$orderModel->revisions)
                 $revisions=[];
@@ -113,19 +116,20 @@ class OrderController extends Controller
             $orderModel->revisions=$revisions;
             $orderModel->status=OrderStatusRevision::EDIT_BY_WORKER_STATUS;
 
+
+
             if ($orderModel->save())
             {
+                $orderModel['services']=$orderModel['revisions'][0];
+                unset($orderModel['revisions']);
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
 
-                return response()->json(['order'=>$order]);
+
+
+                return response()->json(['order'=>$orderModel]);
             }
             else
-                return response()->json(['error'=>'internall server error']);
-
-
-
-
-
+                return response()->json(['error'=>'internal server error']);
 
 
         }
@@ -158,7 +162,7 @@ class OrderController extends Controller
         function listActiveOrderWorker(Request $request)
 
     {
-        $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS];
+        $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
         $orders = Order::whereIn('status',$activeStatus)->where('worker_id',$request->user()->id)->get();
 
@@ -277,6 +281,7 @@ class OrderController extends Controller
 
     function receiveCancelReason(Request $request)
     {
+        
         $role =$request->user()->role;
 
 

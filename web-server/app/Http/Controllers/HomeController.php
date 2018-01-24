@@ -44,6 +44,8 @@ class HomeController extends Controller
     {
 
 
+
+
         $this->validate($request,[
             'name' => 'required',
             'family' => 'required',
@@ -56,7 +58,10 @@ class HomeController extends Controller
 
 
 
+
+
         $user = User::where('phone_number',$request['mobileNumber'])->first();
+
 
         if ($user){
             $message['error'] = 'این شماره تلفن قبلا ثبت شده است ';
@@ -88,8 +93,8 @@ class HomeController extends Controller
         $workerProfile->national_code=$request['nationalCode'];
         $workerProfile->address =$request['address'];
         $workerProfile->home_phone_number = $request['phoneNumber'];
-        $workerProfile->birthDay =  \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request['birthday'].' 00:00:00');
-        $workerProfile->field = $request['field'];
+        $workerProfile->birthDay =   \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request['birthday'].' 00:00:00');
+        $workerProfile->fields = $request['fields'];
         $workerProfile->last_education = $request['lastEducation'];
         $workerProfile->marriage_status = $request['marriageStatus'];
         $workerProfile->gender = $request['gender'];

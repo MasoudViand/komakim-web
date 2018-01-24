@@ -2,15 +2,51 @@
 
 @section('header')
     <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">
+    <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 
 
-    <link rel="stylesheet" href="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.css") }}">
 
 @endsection
 
 
 
 @section('content')
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+        }
+        .rtl-col {
+            float: right;
+        }
+        #bd-next-date2, #bd-prev-date2 {
+            font-size: 20px;
+        }
+        .tooltip > .tooltip-inner {
+            font-size: 12px;
+            padding: 4px;
+            white-space: pre;
+            max-width: none;
+        }
+        #options-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #options-table td, #options-table th {
+            border: 1px solid #777;
+            text-align: left;
+            padding: 8px;
+        }
+        #options-table tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/style/kamadatepicker.css") }}">
+    <link rel="stylesheet" href="{{asset("bootstrap-select-1.12.4/dist/css/bootstrap-select.css") }}">
+    <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
+    <script src="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/src/kamadatepicker.js") }}"></script>
+    <script src="{{asset("bootstrap-select-1.12.4/dist/js/bootstrap-select.js") }}"></script>
 <div class="container">
     @if(Session::has('error'))
 
@@ -138,6 +174,7 @@
                                 @endif
                             </div>
                         </div>
+
                         <div class="form-group{{ $errors->has('birthday') ? ' has-error' : '' }}">
                             <label for="birthday" class="col-md-4 control-label">تاریخ تولد</label>
 
@@ -155,15 +192,15 @@
                             <label for="birthDay" class="col-md-4 control-label">حوزه های همکاری</label>
 
                             <div class="col-md-6">
-                                <select class="form-control" id="field" name="field">
+                                <select id="fields"  name="fields[]" class="selectpicker" multiple data-hide-disabled="true" >
                                     @foreach($categories as $category)
                                         <option>{{$category->name}}</option>
                                     @endforeach
-
                                 </select>
-                                @if ($errors->has('field'))
+
+                                @if ($errors->has('fields'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('field') }}</strong>
+                                        <strong>{{ $errors->first('fields') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -265,22 +302,29 @@
         </div>
     </div>
 </div>
+<script>
+    kamaDatepicker('birthday', { buttonsColor: "red" });
+    $(document).ready(function () {
+        var mySelect = $('#fields');
+
+
+        $('#special').on('click', function () {
+            console.log('34')
+            mySelect.find('option:selected').prop('disabled', true);
+            mySelect.selectpicker('refresh');
+        });
+
+        $('#special2').on('click', function () {
+            mySelect.find('option:disabled').prop('disabled', false);
+            mySelect.selectpicker('refresh');
+        });
+
+        $('#basic2').selectpicker({
+            liveSearch: true,
+            maxOptions: 1
+        });
+    });
+
+</script>
 @endsection
 
-@section('foot')
-
-    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>--}}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
-
-    {{--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>--}}
-
-
-    <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
-    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.min.js") }}"></script>
-    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.fa.min.js") }}"></script>
-
-    <script src="{{asset("js/test.js") }}">
-
-    </script>
-@endsection

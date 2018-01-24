@@ -31,6 +31,19 @@ class ServiceController extends Controller
     function listcategory()
     {
         $categories = Category::where('status',true)->get(['id','name'])->sortBy('order');
+        foreach ($categories as $category)
+        {
+            $filepath =  '/images/icons/service-icon-default.jpg';
+
+
+            if (file_exists((public_path('images/icons') . '/' . $category->id) . '.png')) $filepath = ('/images/icons') . '/' . $category->id . '.png';
+            if (file_exists((public_path('images/icons') . '/' . $category->id) . '.jpg')) $filepath = ('/images/icons') . '/' . $category->id . '.jpg';
+            if (file_exists((public_path('images/icons') . '/' . $category->id) . '.jpeg')) $filepath = ('/images/icons') . '/' . $category->id . '.jpeg';
+
+            $filepath=URL::to('/') .''.$filepath;
+
+            $category->filepath = $filepath;
+        }
 
 
 

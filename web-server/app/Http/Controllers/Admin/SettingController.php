@@ -23,8 +23,8 @@ class SettingController extends Controller
 
     public function index()
     {
-        $raduis =Setting::where('type','radius')->first();
-        $commission =Setting::where('type','commission')->first();
+        $raduis =       Setting::where('type','radius')->first();
+        $commission =   Setting::where('type','commission')->first();
         if ($raduis)
             $raduis=$raduis->value;
         else $raduis = 1000;

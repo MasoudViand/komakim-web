@@ -31,7 +31,7 @@ class SettleDeptController extends Controller
 
         if ($request->has('limit'))
         {
-            $limit=(int)$request->input('limit');
+                $limit=(int)$request->input('limit');
 
         }
         else
@@ -40,9 +40,15 @@ class SettleDeptController extends Controller
         if ($request->has('page'))
         {
             $skip=($request->input('page')-1)*$limit;
+            $queryParam['page']=(int)$request->input('page');
+
         }
         else
+        {
             $skip=0;
+            $queryParam['page']=1;
+        }
+
 
         $queryParam['limit']=$limit;
 
@@ -85,7 +91,8 @@ class SettleDeptController extends Controller
                     'amount'   =>[
                         '$gt' =>0
                     ],
-                ]            ],
+                    'user.role' => User::WORKER_ROLE,
+                ]         ],
             [
                 '$count'=>'count'
             ]
@@ -119,8 +126,12 @@ class SettleDeptController extends Controller
         else
             $data['count']=0;
 
-        $data['page']=(int)($data['count']/10)+1;
+
+
+        $data['total_page']=(int)($data['count']/10)+1;
         $data['queryParam']=$queryParam;
+        $data['page_title']='تسویه حساب';
+
 
 
         return view('admin.pages.settle.index')->with($data);
@@ -176,7 +187,6 @@ class SettleDeptController extends Controller
                 'as'           => 'user',],
 
             ],
-//
             [
                 '$match' => [
                     'amount'   =>[
@@ -198,12 +208,11 @@ class SettleDeptController extends Controller
             array_push($walletArr,$item);
         }
 
-       // dd($walletArr[0]['user'][0]['name']);
-        $scv_total =[];
+            $scv_total =[];
 
-        $scv_row=['نام ','نام خانوادگی','موبایل','اعتبار'];
-        $scv_total[]=$scv_row;
-        $scv_row=[];
+            $scv_row=['نام ','نام خانوادگی','موبایل','اعتبار'];
+            $scv_total[]=$scv_row;
+            $scv_row=[];
 
         foreach ($walletArr as $wallet)
         {
@@ -216,7 +225,6 @@ class SettleDeptController extends Controller
 
         }
 
-       // dd($scv_total);
         $file = fopen('php://output', 'w');
 
 

@@ -5,7 +5,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <meta charset="UTF-8">
-<title>AdminLTE 2 | Dashboard</title>
+<title>کمکیم - پنل مدیریت</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <!-- Bootstrap 3.3.4 -->
@@ -15,14 +15,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Ionicons 2.0.0 -->
 <link rel="stylesheet" href="{{asset("https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css") }}">
 <!-- Theme style -->
-<link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/AdminLTE.min.css") }}">
+<link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/AdminLTE.css") }}">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
      folder instead of downloading all of them to reduce the load. -->
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/skins/_all-skins.min.css") }}">
 <!-- iCheck -->
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/plugins/iCheck/flat/blue.css") }}">
 <!-- Morris chart -->
-<link rel="stylesheet" href="{{asset("AdminLTE-RTL/plugins/morris/morris.css") }}">
+{{--<link rel="stylesheet" href="{{asset("AdminLTE-RTL/plugins/morris/morris.css") }}">--}}
 <!-- jvectormap -->
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/plugins/jvectormap/jquery-jvectormap-1.2.2.css") }}">
 <!-- Date Picker -->
@@ -35,6 +35,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/fonts/fonts-fa.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/bootstrap-rtl.min.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/rtl.css") }}">
+<script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
+
 @yield('head')
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <![endif]-->
 </head>
 
-<body class="skin-blue">
+<body class="skin-green">
 <div class="wrapper">
 
     <!-- Header -->
@@ -62,11 +64,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 {{ $page_title or "Page Title" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
-            <!-- You can dynamically generate breadcrumbs here -->
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol>
         </section>
 
         <!-- Main content -->
@@ -89,11 +86,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script>
     $.widget.bridge('uibutton', $.ui.button);
 </script>
+<script>
+        var full_path = window.location.href;
+       // console.log(full_path);
+        $(".sidebar-menu a").each(function(){
+            var $this = $(this);
+            if($this.attr("href") === full_path) {
+               $this.closest('.treeview').addClass("menu-open active");
+               $this.closest('li').addClass("active");
+            }
+        });
+</script>
 <!-- Bootstrap 3.3.4 -->
 <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
 <!-- Morris.js charts -->
-<script src="{{asset("https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js") }}"></script>
-<script src="{{asset("AdminLTE-RTL/plugins/morris/morris.min.js") }}"></script>
+{{--<script src="{{asset("https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js") }}"></script>--}}
+{{--<script src="{{asset("AdminLTE-RTL/plugins/morris/morris.min.js") }}"></script>--}}
 <!-- Sparkline -->
 <script src="{{asset("AdminLTE-RTL/plugins/sparkline/jquery.sparkline.min.js") }}"></script>
 <!-- jvectormap -->
@@ -115,9 +123,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="{{asset("AdminLTE-RTL/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{asset("AdminLTE-RTL/dist/js/pages/dashboard.js") }}"></script>
+{{--<script src="{{asset("AdminLTE-RTL/dist/js/pages/dashboard.js") }}"></script>--}}
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset("AdminLTE-RTL/dist/js/demo.js") }}"></script>
+
 @yield('foot')
 
 </body>

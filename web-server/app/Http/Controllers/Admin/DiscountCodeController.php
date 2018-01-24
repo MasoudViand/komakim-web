@@ -26,12 +26,15 @@ class DiscountCodeController extends Controller
         $discountCodes =DiscountCode::paginate(15);
         $data['discountCodes']=$discountCodes;
         $data['total_count']=DiscountCode::count();
+        $data['page_title']='کد تخفیف';
+
 
         return view('admin.pages.discount_code.listDiscount_code')->with($data);;
 
     }
     public function insertForm()
     {
+
         return view('admin.pages.discount_code.addDiscount_code');
 
     }

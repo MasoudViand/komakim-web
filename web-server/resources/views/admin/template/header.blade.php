@@ -2,7 +2,7 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo"><b>Admin</b>LTE</a>
+    <a href="#" class="logo">کمکیم - پنل مدیریت</a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">

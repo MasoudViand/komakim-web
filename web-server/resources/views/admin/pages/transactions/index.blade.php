@@ -1,7 +1,41 @@
 @extends('admin.template.admin_template')
 
+
 @section('content')
-    {{--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+        }
+        .rtl-col {
+            float: right;
+        }
+        #bd-next-date2, #bd-prev-date2 {
+            font-size: 20px;
+        }
+        .tooltip > .tooltip-inner {
+            font-family: Vazir;
+            font-size: 12px;
+            padding: 4px;
+            white-space: pre;
+            max-width: none;
+        }
+        #options-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #options-table td, #options-table th {
+            border: 1px solid #777;
+            text-align: left;
+            padding: 8px;
+        }
+        #options-table tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/style/kamadatepicker.css") }}">
+    <script src="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/src/kamadatepicker.js") }}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <div class="box-body">
 
@@ -134,12 +168,21 @@
             </div>
 
         </div>
+            <script>
+                kamaDatepicker('from', { buttonsColor: "red" });
+                kamaDatepicker('to', { buttonsColor: "red" });
+
+            </script>
 
         <script>
+
+
             $(document).ready(function() {
                 $("#per_record_in_page_button").click(function () {
 
-                    console.log('asdasd');
+
+
+
 
                     var limit = $("#per_record_in_page").val()
                     console.log(limit);
@@ -189,13 +232,6 @@
             });
         </script>
     </div>
-
-
-
-
-
-
-
 
 @endsection
 

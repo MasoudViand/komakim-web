@@ -39,6 +39,8 @@ class SubCategoryController extends Controller
         }
 
         $data['subcategoryArr']=$subcategoryArr;
+        $data['page_title']='لیست زیر دسته بندی ها';
+
         $data['subcategories']=$subcategories;
         $data['total_count']=Subcategory::count();
 
@@ -50,6 +52,8 @@ class SubCategoryController extends Controller
     {
         $categories = Category::all();
         $data['categories']=$categories;
+        $data['page_title']='افزودن زیر دسته بندی ';
+
         return view('admin.pages.subcategory.addSubcategory')->with($data);
     }
     public function addSubCategory(Request $request)
@@ -66,10 +70,10 @@ class SubCategoryController extends Controller
             $message['error'] = 'این الویت نمایش  قبلا انتخاب شده ';
             return redirect()->back()->with($message);
         }
-        $subcategory = new Subcategory();
-        $subcategory->name =$request['nameSubCategory'];
-        $subcategory->category_id =$request['idSubCategory'];
-        $subcategory->order =(int)$request['orderSubCategory'];
+        $subcategory                = new Subcategory();
+        $subcategory->name          =$request['nameSubCategory'];
+        $subcategory->category_id   =$request['idSubCategory'];
+        $subcategory->order         =(int)$request['orderSubCategory'];
 
         if ($subcategory->save())
             $message['success'] = 'دسته بندی با موفقیت اضافه شد ';
@@ -81,11 +85,13 @@ class SubCategoryController extends Controller
     }
     function showEditSubCategoryForm($subCategory_id)
     {
-        $subCategory = Subcategory::find($subCategory_id);
-        $categories = Category::all();
+        $subCategory    = Subcategory::find($subCategory_id);
+        $categories     = Category::all();
 
-        $data['subCategory']=$subCategory;
-        $data['categories']=$categories;
+        $data['subCategory']    =$subCategory;
+        $data['categories']     =$categories;
+        $data['page_title']     ='ویرایش زیر دسته بندی';
+
 
         return view('admin.pages.subcategory.editsubcategory')->with($data);
 
@@ -94,8 +100,8 @@ class SubCategoryController extends Controller
     function editSubCategory(Request $request)
     {
         $this->validate($request,[
-            'nameSubCategory' => 'required',
-            'orderSubCategory' => 'required|numeric',
+            'nameSubCategory'   => 'required',
+            'orderSubCategory'  => 'required|numeric',
         ]);
 
         $subCategory = Subcategory::where('category_id',$request['idCategory'])->where('order',(int)$request['orderSubCategory'])->first();
@@ -104,15 +110,15 @@ class SubCategoryController extends Controller
         {
             if (!($subCategory->id ==$request['idSubCategory'])){
 
-                $message['error'] = 'این الویت نمایش وجود دارد ';
+                $message['error']   = 'این الویت نمایش وجود دارد ';
                 return redirect()->back()->with($message);
 
             }
         }
-            $subCategory = Subcategory::find($request['idSubCategory']);
-            $subCategory->category_id=$request['idCategory'];
-            $subCategory->name =$request['nameSubCategory'];
-            $subCategory->order =(int)$request['orderSubCategory'];
+            $subCategory                = Subcategory::find($request['idSubCategory']);
+            $subCategory->category_id   =$request['idCategory'];
+            $subCategory->name          =$request['nameSubCategory'];
+            $subCategory->order         =(int)$request['orderSubCategory'];
 
             if ($subCategory->save())
                 $message['success'] = 'دسته بندی با موفقیت ویرایش شد ';

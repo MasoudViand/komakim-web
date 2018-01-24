@@ -56,7 +56,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">الویت نمایش</label>
-                <input type="" class="form-control" name="orderCategory" id="orderCategory" placeholder="الویت نمایش">
+                <input type="" class="form-control" name="orderCategory" id="orderCategory" value="0" >
                 @if ($errors->has('orderCategory'))
                     <span class="help-block">
                                         <strong>{{ $errors->first('orderCategory') }}</strong>

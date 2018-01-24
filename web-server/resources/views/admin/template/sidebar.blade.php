@@ -10,79 +10,178 @@
                 <img src="{{ asset("AdminLTE-RTL/dist/img/user2-160x160.jpg") }}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
-                <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <p>مدیرکل</p>
+
             </div>
         </div>
 
-        <!-- search form (Optional) -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                <span class="input-group-btn">
-  <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-</span>
-            </div>
-        </form>
-        <!-- /.search form -->
-
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="active">
-                <a href="{{ route('admin.service') }}">
-                    <i class="fa fa-th"></i> <span> سرویس</span>
+
+		<li class="header">مدیریت</li>
+
+            <li >
+                <a href="{{ route('admin.order.list') }}" >
+                    <i class="fa fa-th "></i> <span> لیست سفارشات </span>
                 </a>
-                <a href="{{ route('admin.category') }}">
-                    <i class="fa fa-star"></i> <span>دسته بندی</span>
+            </li>
+
+		<li class="treeview">
+          <a href="">
+            <i class="fa fa-files-o"></i>
+            <span>سرویس ها</span>
+            <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+			<li>
+				<a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span> لیست سرویس ها</span></a>
+			</li>
+			<li>
+				<a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span>افزودن سرویس</span></a>
+			</li>
+          </ul>
+		</li>
+		<li class="treeview">
+          <a href="#">
+            <i class="fa fa-files-o"></i>
+            <span>دسته بندی ها</span>
+            <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+			<a href="{{ route('admin.category') }}">
+                    <i class="fa fa-star"></i> <span>لیست دسته بندی ها</span>
                 </a>
-                <a href="{{ route('admin.subcategory') }}">
-                    <i class="fa fa-th"></i> <span>زیر دسته بندی</span>
+				</li>
+				<li>
+				<a href="{{ route('admin.category.insert') }}">
+                    <i class="fa fa-th"></i> <span>افزودن دسته بندی</span>
                 </a>
-                <a href="{{ route('admin.emailtemplate') }}">
-                    <i class="fa fa-th"></i> <span> قالبهای ایمیل</span>
+				</li>
+          </ul>
+        </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>زیر دسته بندی ها</span>
+                    <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
                 </a>
-                <a href="{{ route('admin.list.survey') }}">
-                    <i class="fa fa-th"></i> <span> نظرات کاربران </span>
-                </a>
-                <a href="{{ route('admin.dissatisfied.reason.list') }}">
-                    <i class="fa fa-th"></i> <span> دلایل عدم رضایت </span>
-                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.subcategory') }}">
+                            <i class="fa fa-star"></i> <span>لیست زیر دسته بندی ها</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.subcategory.insert') }}">
+                            <i class="fa fa-th"></i> <span>افزودن زیر دسته بندی</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
                 <a href="{{ route('admin.user.list') }}">
                     <i class="fa fa-th"></i> <span> کاربران </span>
                 </a>
-                <a href="{{ route('admin.order.list') }}">
-                    <i class="fa fa-th"></i> <span> سفارسات </span>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>امور مالی</span>
+                    <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.financial') }}">
+                            <i class="fa fa-th"></i> <span> گزارشات مالی </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.transactions.list') }}">
+                            <i class="fa fa-th"></i> <span> تراکنش ها </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.financial.remain_wallet') }}">
+                            <i class="fa fa-th"></i> <span> مقادیر کیف پول استفاده نشده </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.settle.dept.list') }}">
+                            <i class="fa fa-th"></i> <span>تسویه حساب </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li>
                 <a href="{{ route('admin.discount_code.list') }}">
                     <i class="fa fa-th"></i> <span> کد تخفیف </span>
                 </a>
-
-
-                <a href="{{ route('admin.cancel.reason.list') }}">
-                    <i class="fa fa-th"></i> <span> دلایل لغو سفارش </span>
-                </a>
-                <a href="{{ route('admin.settle.dept.list') }}">
-                    <i class="fa fa-th"></i> <span>تسویه حساب </span>
-                </a>
-                <a href="{{ route('admin.financial') }}">
-                    <i class="fa fa-th"></i> <span> گزارشات مالی </span>
-                </a>
-                <a href="{{ route('admin.financial.remain_wallet') }}">
-                    <i class="fa fa-th"></i> <span> مقادیر کیف پول استفاده نشده </span>
-                </a>
-
-                <a href="{{ route('admin.transactions.list') }}">
-                    <i class="fa fa-th"></i> <span> تراکنش ها </span>
-                </a>
-                <a href="{{ route('admin.setting') }}">
-                    <i class="fa fa-th"></i> <span> تنظیمات </span>
-                </a>
-
-
             </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>نظرسنجی</span>
+                    <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.list.survey') }}">
+                            <i class="fa fa-th"></i> <span>لیست نظرسنجی ها </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.dissatisfied.reason.list') }}">
+                            <i class="fa fa-th"></i> <span> دلایل عدم رضایت </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>تنظیمات</span>
+                    <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.emailtemplate') }}">
+                            <i class="fa fa-th"></i> <span> قالبهای ایمیل</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.cancel.reason.list') }}">
+                            <i class="fa fa-th"></i> <span> دلایل لغو سفارش </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.setting') }}">
+                            <i class="fa fa-th"></i> <span> تنظیمات دیگر</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
 
         </ul>
         <!-- /.sidebar-menu -->

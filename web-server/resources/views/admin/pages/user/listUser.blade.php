@@ -3,6 +3,8 @@
 @section('content')
     {{--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{asset("bootstrap-select-1.12.4/dist/css/bootstrap-select.css") }}">
+    <script src="{{asset("bootstrap-select-1.12.4/dist/js/bootstrap-select.js") }}"></script>
     <div class="box-body">
 
         @if(Session::has('success'))
@@ -74,18 +76,30 @@
                 </div>
 
                 <div class="col-sm-2">
-                    <div id="example1_filter" class="dataTables_filter">
-
-                        <select name="field" id="field" class="form-control" style="">
-
-                            <option value="{{key_exists('field',$queryParam)?$queryParam['field']:''}}">{{key_exists('field',$queryParam)?(\App\Category::where('name',$queryParam['field'])->first()->name):'--انتخاب زمینه--'}}</option>
+                    <div class="form-group">
+                        <label for="title">حوزه های همکاری</label>
+                        <select id="fields"  name="fields[]"  class="selectpicker" multiple data-hide-disabled="true" >
                             @foreach($fields as $field)
-                            <option value="{{$field->name}}">{{$field->name}}</option>
+                                <option   <?php if(key_exists('fields',$queryParam)){ foreach ($queryParam['fields'] as $item){ if ($item==$field->name) echo 'selected';} }?> value="{{$field->name}}"  >{{$field->name}}</option>
                             @endforeach
 
                         </select>
 
                     </div>
+                    {{--<div id="example1_filter" class="dataTables_filter">--}}
+                        {{--<select name="field" id="field" class="form-control" style="">--}}
+
+                            {{--<option value="{{key_exists('field',$queryParam)?$queryParam['field']:''}}">{{key_exists('field',$queryParam)?(\App\Category::where('name',$queryParam['field'])->first()->name):'--انتخاب زمینه--'}}</option>--}}
+                            {{--<select id="fields"  name="fields[]"  class="selectpicker" multiple data-hide-disabled="true" >--}}
+                                {{--@foreach($fields as $field)--}}
+                                    {{--<option value="{{$field->id}}" >{{$field->name}}</option>--}}
+                                {{--@endforeach--}}
+
+                            {{--</select>--}}
+
+                        {{--</select>--}}
+
+                    {{--</div>--}}
                 </div>
                 <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
@@ -165,10 +179,10 @@
                         @foreach($users as $user)
 
                             <tr role="row" class="odd">
-                                <td class="sorting_1">{{$user->name}}</td>
-                                <td class="sorting_1">{{$user->family}}</td>
+                                <td class="sorting_1">{{key_exists('name',$user)?$user->name:'تکمیل نشده'}}</td>
+                                <td class="sorting_1">{{key_exists('family',$user)?$user->family:'تکمیل نشده'}}</td>
                                 <td class="sorting_1">{{$user->phone_number}}</td>
-                                <td>{{ $user->role=='client' ?'عادی':'خدمه' }}</td>
+                                <td>{{ $user->role=='client' ?'مشتری':'خدمه' }}</td>
                                 <td><a href="{{route('admin.user.update',['user_id' => $user->_id])}}"><i class="fa fa-edit"></i></a></td>
 
                             </tr>
@@ -182,7 +196,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">نشان دادن {{ count($users)>0 ?((($queryParam['page']-1)*10)+1):0 }} تا {{((($queryParam['page']-1)*10))+count($users)}}از{{$count}}</div>
                 </div>
                 <div class="col-sm-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
@@ -236,7 +250,7 @@
                 var role = $( "#typeOfuser" ).val();
                 var national_code = $( "#nationalCode" ).val();
                 var sort = $( "#sort" ).val();
-                var field = $( "#field" ).val();
+                var fields = $( "#fields" ).val();
                 var gender = $( "#gender" ).val();
                 var admin_status = $( "#adminStatus" ).val();
                 var availabilitystatus = $( "#availabilitystatus" ).val();
@@ -247,24 +261,37 @@
                     params.push("email="+email)
                 if(mobile)
                     params.push("phone_number="+mobile)
-                if(sort)
-                    params.push("sort="+sort)
+
                 if (status)
                     params.push("status="+status)
                 if(role)
+                {
                     params.push("role="+role)
-                if (national_code)
-                    params.push("national_code="+national_code)
-                if (field)
-                    params.push("field="+field)
-                if (gender)
-                    params.push("gender="+gender)
-                if (admin_status)
-                    params.push("admin_status="+admin_status)
-                if (availabilitystatus)
-                    params.push("availability_status="+availabilitystatus)
+                    console.log(role)
+                    if (role=='worker')
+                    {
 
-                console.log(params)
+                        if(sort)
+                            params.push("sort="+sort)
+                        if (national_code)
+                            params.push("national_code="+national_code)
+                        if (fields)
+                            params.push("fields="+fields)
+                        if (gender)
+                            params.push("gender="+gender)
+                        if (admin_status)
+                            params.push("admin_status="+admin_status)
+                        if (availabilitystatus)
+                            params.push("availability_status="+availabilitystatus)
+                    }
+
+                }
+
+
+
+
+
+
 
                 window.location.href =
                     "http://" +
@@ -273,66 +300,12 @@
                     '?' + params.join('&');
 
 
-               // var obj = { "name":"John", "age":30, "city":"New York"};
-                var myJSON = JSON.stringify(data);
-
-
-
-                console.log(myJSON);
-
-                if(data) {
-
-                    $.ajax({
-                        type: "POST",
-                        url: 'user/filter',
-                        data :myJSON,
-                        success:function(data) {
-                           var tablebody = $( "#tuserbody" );
-
-                            tablebody.empty();
-
-
-                            for (i = 0; i < data.length; i++) {
-                                console.log(data[i]._id);
-
-                                if (data[i].role=='worker')
-                                    type = 'خدمه';
-                                else
-                                    type ='مشتری';
-
-                                tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data[i].name+'</td>'+' <td class="sorting_1">'+data[i].family+'</td>'+' <td class="sorting_1">'+data[i].phone_number+'</td>'+' <td class="sorting_1">'+type+'</td>'+' <td>'+'<a href="/admin/user/update/'+data[i]._id+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>'+'</tr>')
-//                                    tablebody.append(' <td class="sorting_1">'+data[i].name+'</td>');
-//                                    tablebody.append(' <td class="sorting_1">'+data[i].family+'</td>');
-//                                    tablebody.append(' <td class="sorting_1">'+data[i].phone_number+'</td>');
-//                                    tablebody.append(' <td class="sorting_1">'+type+'</td>');
-//                                    tablebody.append(' <td>'+'<a href="/admin/user/update/'+data[i]._id+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>');
-
-                                    {{--<td class="sorting_1">{{$user->name}}</td>--}}
-                                    {{--<td class="sorting_1">{{$user->family}}</td>--}}
-                                    {{--<td class="sorting_1">{{$user->phone_number}}</td>--}}
-                                    {{--<td>{{ $user->role=='client' ?'عادی':'خدمه' }}</td>--}}
-{{--                                    <td><a href="{{rou/te('admin.user.update',['user_id' => $user->id])}}"><i class="fa fa-edit"></i></a></td>--}}
-
-//                               tablebody.append('</tr>');
-                            }
-
-
-                        },
-                        dataType: "json"
-                    });
-                }else{
-
-                }
-
             });
         });
     </script>
     <script type="text/javascript">
         var x = document.getElementById("typeOfuser").value;
-
-        console.log(x)
         if (x == "worker"){
-            console.log('ccccccc');
             x =document.getElementById("worker_filter_field");
 
             if (x.style.display="block")

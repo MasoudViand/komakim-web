@@ -26,15 +26,24 @@ class UserController extends Controller
     function index(Request $request){
 
 
-        $limit =1;
+        $limit =10;
         $query=[];
         $queryParam=[];
         $fields =Category::all();
         $data['fields']=$fields;
+
         if ($request->has('page'))
+        {
+            $queryParam['page']=(int)$request->input('page');
             $skip =((int)$request->input('page')-1)*$limit;
+
+        }
         else
+        {
             $skip = 0;
+            $queryParam['page']=1;
+
+        }
 
         if ($request->has('phone_number'))
         {
@@ -79,10 +88,12 @@ class UserController extends Controller
         }
 
 
-        if ($request->has('field'))
+        if ($request->has('fields'))
         {
-            $query['profile.field']=$request->input('field');
-            $queryParam['field']=$request->input('field');
+           $fields = explode(',',$request->input('fields'));
+
+            $query['profile.fields']= [ '$in' => $fields];
+            $queryParam['fields']=$fields;
 
 
         }
@@ -113,41 +124,38 @@ class UserController extends Controller
         }
 
 
-
         $q = [
-            [ '$skip' => $skip ],
-            [ '$limit' => $limit ],
+                [ '$skip' => $skip ],
+                [ '$limit' => $limit ],
 
-            [ '$lookup' => [
-                'from'         => 'worker_profiles',
-                'localField'   => '_id',
-                'foreignField' => 'user_id',
-                'as'           => 'profile',],
+                [ '$lookup' => [
+                    'from'         => 'worker_profiles',
+                    'localField'   => '_id',
+                    'foreignField' => 'user_id',
+                    'as'           => 'profile',],
 
-            ],
+                ],
 
-                ];
+        ];
 
         $q_count= [
 
-            [ '$lookup' => [
-                'from'         => 'worker_profiles',
-                'localField'   => '_id',
-                'foreignField' => 'user_id',
-                'as'           => 'profile',],
+                    [ '$lookup' => [
+                        'from'         => 'worker_profiles',
+                        'localField'   => '_id',
+                        'foreignField' => 'user_id',
+                        'as'           => 'profile',],
 
-            ],
+                    ],
 
         ];
 
 
         if (count($query)>0)
         {
-//            array_unshift($q,['$match' => $query ]);
             $q[]= ['$match' => $query ];
             $q_count[]= ['$match' => $query ];
         }
-
 
 
         if ($request->has('sort')) {
@@ -178,8 +186,6 @@ class UserController extends Controller
         }
 
 
-
-
         foreach ($count as $item)
         {
             array_push($countArr,$item);
@@ -195,11 +201,8 @@ class UserController extends Controller
 
 
         $data['queryParam']=$queryParam;
+        $data['page_title']='کاربران';
         $data['total_page']=(int)($data['count']/$limit)+1;
-
-//        dd((int)($data['count']/$limit));
-
-
 
 
 
@@ -309,10 +312,8 @@ class UserController extends Controller
                 $data['filepath']=URL::to('/').'/'.$filepath;
 
 
-                $date = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($workerProfile->birthDay['date']));
-                // $date=\Morilog\Jalali\jDateTime::convertNumbers($date);
+                $date = \Morilog\Jalali\jDateTime::strftime('Y/m/d', strtotime($workerProfile->birthDay['date']));
                 $data['date']=$date;
-                // dd($workerProfile->status);
                 if ($workerProfile->status=='pending')
                     $workerProfileStatus='منتظر تایید';
                 elseif ($workerProfile->status=='reject')
@@ -340,6 +341,12 @@ class UserController extends Controller
 
             }
         $data['workerProfile']=$workerProfile;
+        $data['page_title']='ویرایش کاربران';
+        $fields =Category::all();
+        $data['fields']=$fields;
+
+
+
 
 
 
@@ -436,7 +443,7 @@ class UserController extends Controller
         $workerProfile->nationalCode        =$request['nationCodeProfile'];
         $workerProfile->address             =$request['addressProfile'];
         $workerProfile->home_phone_number   =$request['phoneProfile'];
-        $workerProfile->field               =$request['field'];
+        $workerProfile->fields               =$request['fields'];
         $workerProfile->last_education      =$request['lastEducationProfile'];
         $workerProfile->gender              =$request['gender'];
         $workerProfile->status              =$request['statusProfile'];
@@ -444,7 +451,7 @@ class UserController extends Controller
         $workerProfile->another_capability  =$request['anotherCapabilityProfile'];
         $workerProfile->certificates        =$request['certificatesProfile'];
         $workerProfile->experience          =$request['experienceProfile'];
-        $workerProfile->birthDay            =\Morilog\Jalali\jDateTime::createDatetimeFromFormat('d/m/Y H:i:s', $request['birthdayProfile'].' 00:00:00');
+        $workerProfile->birthDay            =\Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request['birthdayProfile'].' 00:00:00');
 
         if ($workerProfile->save())
         {
@@ -453,10 +460,6 @@ class UserController extends Controller
             $message['error']='مجددا تلاش کنید';
 
         return redirect()->back()->with($message);
-
-
-
-
 
 
     }

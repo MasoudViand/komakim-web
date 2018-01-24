@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 
 
-Auth::routes();
+//Auth::routes();
 
 Route::post('/callback', 'HomeController@callback')->name('home');
 

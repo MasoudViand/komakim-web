@@ -2,23 +2,66 @@
 
 @section('content')
     <div class='row'>
-        <div class='col-md-6'>
-            <!-- Box -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Second Box</h3>
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    A separate section to add any kind of widget. Feel free
-                    to explore all of AdminLTE widgets by visiting the demo page
-                    on <a href="https://almsaeedstudio.com">Almsaeed Studio</a>.
-                </div><!-- /.box-body -->
-            </div><!-- /.box -->
-        </div><!-- /.col -->
+        <div class="col-sm-12">
+            <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد سفارشات امروز </th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد سفارشات دیروز</th>
+                </tr>
+                </thead>
+                <tbody>
 
-    </div><!-- /.row -->
+                    <tr role="row" class="odd">
+                        <td class="sorting_1">{{key_exists('today',$orders)?$orders['today']:0}}</td>
+                        <td class="sorting_1">{{key_exists('yesterday',$orders)?$orders['yesterday']:0}}</td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+            <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">درامد ناخالص امروز </th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">درامد ناخالص دیروز</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{key_exists('today',$financials)?$financials['today']:0}}</td>
+                    <td class="sorting_1">{{key_exists('yesterday',$financials)?$financials['yesterday']:0}}</td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+            <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                <thead>
+                <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد کابران جدید امروز </th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد کابران جدید دیروز</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{key_exists('today',$users)?$users['today']:0}}</td>
+                    <td class="sorting_1">{{key_exists('yesterday',$users)?$users['yesterday']:0}}</td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 @endsection

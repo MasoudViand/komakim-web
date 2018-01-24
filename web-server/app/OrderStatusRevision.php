@@ -11,7 +11,7 @@ class OrderStatusRevision extends Eloquent
     const WAITING_FOR_WORKER_STATUS         ='waitingForStatus';
     const ACCEPT_ORDER_BY_WORKER_STATUS     ='acceptByWorker';
     const START_ORDER_BY_WORKER_STATUS      ='startByWorker';
-    const EDIT_BY_WORKER_STATUS             ='ediByWorker';
+    const EDIT_BY_WORKER_STATUS             ='editByWorker';
     const FINISH_ORDER_BY_WORKER_STATUS     ='finishByWorker';
     const PAID_ORDER_BY_CLIENT_STATUS       ='paidByClient';
     const CANCEL_ORDER_BY_CLIENT_STATUS     ='cancelByClient';

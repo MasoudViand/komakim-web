@@ -36,13 +36,16 @@ class OrderController extends Controller
     {
         $query=[];
         $queryParam=[];
+
         if ($request->has('page'))
         {
             $skip=((int)$request->input('page')-1)*10;
+            $page = (int)$request->input('page');
         }
         else
         {
             $skip=0;
+            $page=1;
         }
         if ($request->has('tracking_number'))
         {
@@ -95,11 +98,14 @@ class OrderController extends Controller
 
 
 
+
+
         $countArr=[];
         foreach ($count as $item)
         {
             array_push($countArr,$item);
         }
+
 
         $ordersArr=[];
         foreach ($model as $item)
@@ -146,106 +152,21 @@ class OrderController extends Controller
             $data['count']=$countArr[0]['count'];
         else
             $data['count']=0;
-        $data['page']=(int)($data['count']/10)+1;
+
+        $data['total_page']=(int)($data['count']/10)+1;
         $data['queryParam']=$queryParam;
+        $data['page']= $page;
         $data['orders']     =$ordersArr;
         $data['categories'] =Category::all();
+        $data['page_title']='لیست سفارشات';
 
-       // dd($queryParam['category_id']);
 
 
         return view('admin.pages.order.list_order')->with($data);
 
     }
 
-    function filterOrder(Request $request)
-    {
-        $content = $request->getContent();
 
-        $content =(json_decode($content));
-
-
-        $query=[];
-
-        if (isset($content->tracking_number))
-            $query['tracking_number']=(int)$content->tracking_number;
-        if (isset($content->status))
-            $query['status']=$content->status;
-        if (isset($content->field))
-            $query['category_id'] =$content->field;
-        // dd($query);
-
-        $q = [
-            [ '$limit' => 10 ],
-            [ '$sort' => ['_id' => -1], ],
-
-
-            [
-                '$match' => $query
-            ]
-
-
-        ];
-        $model = Order::raw()->aggregate($q);
-
-        $orderArr=[];
-        $i=0;
-        foreach ($model as $item)
-        {
-
-            $order=[];
-            $order['user']=User::find($item['user_id']);
-            $order['created_at'] = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($item['created_at']));
-            switch ($item['status'])
-            {
-                case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
-                    $order['status']='منتظر تایید خدمه';
-                    break;
-                case OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS:
-                    $order['status']='قبول درخواست توسط خدمه';
-                    break;
-                case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                    $order['status']='شروع کار توسط خذمه';
-                    break;
-                case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
-                    $order['status']='اتمام کار توسط خدمه';
-                    break;
-                case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                    $order['status']='پرداخت توسط خدمه';
-                    break;
-                case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
-                    $order['status']='لغو توسط مشتری';
-                    $order['cancel_reason']=$item['cancel_reason'];
-
-                    break;
-                case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
-                    $order['status']='لغو توسط خدمه';
-                    $order['cancel_reason']=$item['cancel_reason'];
-
-                    break;
-                case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
-                    $order['status']='لغو توسط ادمین';
-                    $order['cancel_reason']=$item['cancel_reason'];
-                    break;
-
-            }
-            $order['total_price']=$item['total_price'];
-           // dd((string)$item['_id']);
-            $order['order_id']=(string)$item['_id'];
-            $i++;
-            //dd($order);
-            $orderArr[]=$order;
-
-            //array_push($ordersArr,1);
-        }
-
-     //   dd($i);
-
-
-
-
-        return json_encode($orderArr,true);
-    }
 
     function showDetailOrder($order_id)
     {
@@ -397,6 +318,8 @@ class OrderController extends Controller
 
 
         $data['revisions']=$revisions;
+        $data['page_title']='دیدن جزییات سفارش';
+
 
 
 
@@ -422,8 +345,6 @@ class OrderController extends Controller
         else return redirect()->with(['error'=>'لغو نشد']);
 
     }
-
-
 
 }
 

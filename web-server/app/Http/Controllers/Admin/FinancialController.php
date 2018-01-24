@@ -367,22 +367,22 @@ class FinancialController extends Controller
 
 
 
-        $data['x_axis']=$x_axis;
-        $data['y_total_price']=$y_total_price;
-        $data['total_price_sum']=$total_price_sum;
-        $data['y_commission']=$y_commission;
-        $data['commission_sum']=$commission_sum;
-        $data['y_count']=$y_count;
-        $data['count_sum']=$count_sum;
-        $data['queryparam']  =$queryParam;
-        $preQueryparam = $queryParam;
-        $nextQueryparam = $queryParam;
-        $preQueryparam['page']=$page-1;
-        $nextQueryparam['page']=$page+1;
-        $data['preQueryparam']  =$preQueryparam;
-        $data['nextQueryparam']  =$nextQueryparam;
+        $data['x_axis']=            $x_axis;
+        $data['y_total_price']=     $y_total_price;
+        $data['total_price_sum']=   $total_price_sum;
+        $data['y_commission']=      $y_commission;
+        $data['commission_sum']=    $commission_sum;
+        $data['y_count']=           $y_count;
+        $data['count_sum']=         $count_sum;
+        $data['queryparam']  =      $queryParam;
+        $preQueryparam =            $queryParam;
+        $nextQueryparam =           $queryParam;
+        $preQueryparam['page']=     $page-1;
+        $nextQueryparam['page']=    $page+1;
+        $data['preQueryparam']  =   $preQueryparam;
+        $data['nextQueryparam']  =  $nextQueryparam;
+        $data['page_title']=        'گزارش مالی';
 
-//        dd(key_exists('mode',$queryParam));
 
         return view('admin.pages.financial.index')->with($data);
     }
@@ -392,13 +392,15 @@ class FinancialController extends Controller
         $content = $request->getContent();
 
         $content =(json_decode($content));
+
         $from =new \DateTime('- 6 months');
         $to   = new \DateTime();
 
 
         if (isset($content->from))
         {
-            $requestFrom =\DateTime::createFromFormat('d/m/Y', $content->from);
+
+            $requestFrom = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $content->from.' 00:00:00');
             if ($requestFrom<$from)
             {
                 dd('wrong datetime');
@@ -410,7 +412,8 @@ class FinancialController extends Controller
 
         if (isset($content->to))
         {
-            $requestTo = \DateTime::createFromFormat('d/m/Y', $content->to);
+            $requestTo = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $content->to.' 00:00:00');
+
             if ($requestTo>$to)
                 dd('wrong gto time');
             $to = $requestTo;
@@ -521,9 +524,6 @@ class FinancialController extends Controller
 
         $model = FinancialReport::raw()->aggregate($q);
 
-
-
-
         $reportArr=[];
 
         foreach ($model as $item)
@@ -554,242 +554,8 @@ class FinancialController extends Controller
 
 
 
-        $date = new \DateTime($date);
-
-
-        $current_date = new \DateTime();
-
-        $diffTime=date_diff($current_date,$date);
-
-        $skip =$diffTime->format('%a' );
-
-        $labels =[];
-        for ($i=0;$i<10;$i++)
-            {
-            $temp=$date->modify('-1 day');
-            $labels[]=$temp->format('Y-m-d');
-            }
-
-
-        $q = [
-            [ '$limit' => 10 ],
-            [
-                '$group' =>
-                    [
-                        '_id' =>[
-                            'year' =>[
-                                '$year' =>'$created_at'
-                            ],
-                            'mouth' =>[
-                                '$month' =>'$created_at'
-                            ]
-
-                        ],
-                        'total_price' => [
-                            '$sum' =>'$total_price'
-                        ],
-                        'commission' => [
-                            '$sum' =>'$commission'
-                        ],
-                        'count' => [
-                            '$sum' =>1
-                        ],
-
-                    ]
-            ],
-
-
-        ];
-
-
-        $model = FinancialReport::raw()->aggregate($q);
-
-        $reports=[];
-
-        foreach ($model as $item)
-        {
-            $day =$item['_id']['day'];
-            $month =$item['_id']['month'];
-            if ($day<10)
-                $day='0'.$day;
-            if ($month<10)
-                $month='0'.$month;
-            $item->datetime=$item['_id']['year'].'-'.$month.'-'.$day;
-            array_push($reports,$item);
-
-
-        }
-
-
-
-
-
-        foreach ($labels as $item)
-        {
-            foreach ($reports as $report)
-            {
-                if ($item==$report['datetime'])
-                {
-                    $tempArr[$item]=['commission'=>$report['commission'],'total_price'=>$report['total_price']];
-                }
-                else
-                    $tempArr[$item]=['commission'=>0,'total_price'=>0];
-
-
-
-            }
-        }
-
-
-
-        $commissions=[];
-        $total_prices =[];
-
-        foreach (array_values($tempArr) as $item)
-        {
-            $commissions[] = $item['commission'];
-            $total_prices[] = $item['total_price'];
-        }
-
-        $data['labels']=array_keys($tempArr);
-        $data['commissions']=$commissions;
-        $data['total_prices']=$total_prices;
-
-
-        $model = FinancialReport::raw()->aggregate($q);
-        $reportArr=[];
-        $commissonArr=[];
-        $totalPriceArr=[];
-        foreach ($model as $item)
-        {
-            array_push($commissonArr,$item['commission']);
-            array_push($totalPriceArr,$item['total_price']);
-            array_push($reportArr,$item);
-        }
-      //  dd($reportArr);
-
-
-
-
-
-
-       // $data['report']=$reportArr;
-        $data['commissions']=$commissonArr;
-        $data['total_prices']=$totalPriceArr;
-        return response()->json($data);
-    }
-    public function filterMonthly()
-    {
-        $q = [
-            [ '$limit' => 10 ],
-            [
-                '$group' =>
-                    [
-                        '_id' =>[
-                            'year' =>[
-                                '$year' =>'$created_at'
-                            ],
-                            'mouth' =>[
-                                '$month' =>'$created_at'
-                            ]
-
-                        ],
-                        'total_price' => [
-                            '$sum' =>'$total_price'
-                        ],
-                        'commission' => [
-                            '$sum' =>'$commission'
-                        ],
-                        'count' => [
-                            '$sum' =>1
-                        ],
-
-                    ]
-            ],
-
-
-        ];
-
-
-        $model = FinancialReport::raw()->aggregate($q);
-        $reportArr=[];
-        $commissonArr=[];
-        $totalPriceArr=[];
-        foreach ($model as $item)
-        {
-            array_push($commissonArr,$item['commission']);
-            array_push($totalPriceArr,$item['total_price']);
-            array_push($reportArr,$item);
-        }
-        //  dd($reportArr);
-
-
-
-
-
-
-        // $data['report']=$reportArr;
-        $data['commissions']=$commissonArr;
-        $data['total_prices']=$totalPriceArr;
-        return response()->json($data);
     }
 
-    public function filterWeekly()
-    {
-
-        $q = [
-            [ '$limit' => 10 ],
-            [
-                '$group' =>
-                    [
-                        '_id' =>[
-                            'year' =>[
-                                '$year' =>'$created_at'
-                            ],
-                            'mouth' =>[
-                                '$month' =>'$created_at'
-                            ],
-                            'week' =>[
-                                '$week' =>'$created_at'
-                            ]
-                        ],
-                        'total_price' => [
-                            '$sum' =>'$total_price'
-                        ],
-                        'commission' => [
-                            '$sum' =>'$commission'
-                        ],
-                        'count' => [
-                            '$sum' =>1
-                        ],
-
-                    ]
-            ],
-
-
-        ];
-
-
-        $model = FinancialReport::raw()->aggregate($q);
-        $reportArr=[];
-        $commissonArr=[];
-        $totalPriceArr=[];
-        foreach ($model as $item)
-        {
-            array_push($commissonArr,$item['commission']);
-            array_push($totalPriceArr,$item['total_price']);
-            array_push($reportArr,$item);
-        }
-
-        dd($reportArr);
-
-
-        // $data['report']=$reportArr;
-        $data['commissions']=$commissonArr;
-        $data['total_prices']=$totalPriceArr;
-        return response()->json($data);
-
-    }
 
 
 
@@ -838,6 +604,8 @@ class FinancialController extends Controller
 
 
         $data['amount']=$amount;
+        $data['page_title']='مقادیر کیف پول استفاده نشده';
+
 
         return view('admin.pages.financial.remain')->with($data);
     }

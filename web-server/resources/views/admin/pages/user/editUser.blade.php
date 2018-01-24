@@ -1,12 +1,45 @@
 @extends('admin.template.admin_template')
 
-@section('head')
 
-    <link rel="stylesheet" href="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.css") }}">
-
-@endsection
 
 @section('content')
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+        }
+        .rtl-col {
+            float: right;
+        }
+        #bd-next-date2, #bd-prev-date2 {
+            font-size: 20px;
+        }
+        .tooltip > .tooltip-inner {
+            font-family: Vazir;
+            font-size: 12px;
+            padding: 4px;
+            white-space: pre;
+            max-width: none;
+        }
+        #options-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #options-table td, #options-table th {
+            border: 1px solid #777;
+            text-align: left;
+            padding: 8px;
+        }
+        #options-table tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/style/kamadatepicker.css") }}">
+    <script src="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/src/kamadatepicker.js") }}"></script>
+    <link rel="stylesheet" href="{{asset("bootstrap-select-1.12.4/dist/css/bootstrap-select.css") }}">
+    <script src="{{asset("bootstrap-select-1.12.4/dist/js/bootstrap-select.js") }}"></script>
+
 
 
 
@@ -87,7 +120,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">نوع کاربر </label>
-                                <label  class="form-control" id="roleUser"  >{{ $user->role=='client' ?'عادی':'خدمه' }}</label>
+                                <label  class="form-control" id="roleUser"  >{{ $user->role=='client' ?'مشتری':'خدمه' }}</label>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">ایمیل </label>
@@ -179,15 +212,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="title">حوزه های همکاری</label>
-                                <select name="field" class="form-control" style="width:350px">
-                                    <option value="{{$workerProfile->field}}">--- {{$workerProfile->field}} ---</option>
-
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
+                                <select id="fields"  name="fields[]"  class="selectpicker" multiple data-hide-disabled="true" >
+                                    @foreach($fields as $field)
+                                        <option @foreach($workerProfile->fields as $item) @if( $item==$field->name) selected @endif  @endforeach >{{$field->name}}</option>
+                                    @endforeach
 
                                 </select>
+
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">اخرین مدرک تحضیلی  </label>
@@ -291,28 +322,12 @@
 
         </div>
     </div>
+    <script>
+        kamaDatepicker('birthdayProfile', { buttonsColor: "red" });
 
 
 
-
-
+    </script>
 
 @endsection
 
-@section('foot')
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.min.js") }}"></script>
-    <script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.fa.min.js") }}"></script>
-
-    <script>
-        $(document).ready(function() {
-
-
-            $("#birthday").datepicker({
-                isRTL: true,
-                dateFormat: "d/m/yy"
-            });
-        });
-    </script>
-    @endsection

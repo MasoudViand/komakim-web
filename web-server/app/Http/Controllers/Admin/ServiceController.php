@@ -27,7 +27,7 @@ class ServiceController extends Controller
     {
 
 
-        $services = Service::paginate(1);
+        $services = Service::paginate(15);
 
 
         $serviceArr=[];
@@ -50,12 +50,14 @@ class ServiceController extends Controller
             array_push($serviceArr,$item);
 
         }
-        //dd($serviceArr);
+
         $total_count=Service::count();
 
-       $data['serviceArr']=$serviceArr;
-       $data['services']=$services;
-       $data['total_count']=$total_count;
+        $data['serviceArr']=$serviceArr;
+        $data['services']=$services;
+        $data['total_count']=$total_count;
+        $data['page_title']='لیست سرویس ها';
+
 
 
 
@@ -66,6 +68,8 @@ class ServiceController extends Controller
     {
         $categoris =Category::all();
         $data['categoris']=$categoris;
+        $data['page_title']='افزودن سرویس';
+
         return view('admin.pages.service.addService')->with($data);
     }
 
@@ -127,12 +131,15 @@ class ServiceController extends Controller
 
         $subcategories = Subcategory::where('category_id',$category->id)->get();
 
-        $data['service']=$service;
-        $data['subcategory']=$subcategory;
-        $data['category']=$category;
-        $data['subcategories']=$subcategories;
-        $data['categories']=$categories;
-        $data['questions']=$questions;
+        $data['service']=       $service;
+        $data['subcategory']=   $subcategory;
+        $data['category']=      $category;
+        $data['subcategories']= $subcategories;
+        $data['categories']=    $categories;
+        $data['questions']=     $questions;
+        $data['page_title']=    'ویرایش سرویس';
+
+
 
         return view('admin.pages.service.editService')->with($data);
 
@@ -150,12 +157,12 @@ class ServiceController extends Controller
         ]);
 
         $service =Service::find($request['idService']);
-        $service->name = $request['nameService'];
-        $service->price = $request['priceService'];
-        $service->minimum_number = $request['minOrderService'];
-        $service->subcategory_id = $request['subcategory'];
-        $service->description = $request['descService'];
-        $service->unit = $request['unitService'];
+        $service->name =            $request['nameService'];
+        $service->price =           $request['priceService'];
+        $service->minimum_number =  $request['minOrderService'];
+        $service->subcategory_id =  $request['subcategory'];
+        $service->description =     $request['descService'];
+        $service->unit =            $request['unitService'];
 
         if ($service->save())
         {
@@ -164,7 +171,6 @@ class ServiceController extends Controller
             return redirect()->route('admin.service')->with($message);
         }else{
             $message['error'] = 'مجددا تلاش کنید';
-
             return redirect()->back()->with($message);
 
         }
@@ -186,8 +192,8 @@ class ServiceController extends Controller
         ]);
 
         $servicQuestion = new ServiceQuestion();
-        $servicQuestion->service_id =$request['idService'];
-        $servicQuestion->questions = $request['questionService'];
+        $servicQuestion->service_id =   $request['idService'];
+        $servicQuestion->questions  =   $request['questionService'];
 
         if ($servicQuestion->save())
         {

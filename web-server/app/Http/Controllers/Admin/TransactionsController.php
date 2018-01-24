@@ -67,9 +67,10 @@ class TransactionsController extends Controller
         if ($request->has('from'))
         {
             $queryParam['from']=$request->input('from');
+           $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('from').' 00:00:00');
 
-            $from = \DateTime::createFromFormat('d/m/Y', $request->input('from'));
-            $from = Carbon::instance($from);
+            $from = Carbon::instance($date);
+
         }
 
         //until which date query should be executed
@@ -77,8 +78,9 @@ class TransactionsController extends Controller
         if ($request->has('to'))
         {
             $queryParam['to']=$request->input('to');
-            $to = \DateTime::createFromFormat('d/m/Y', $request->input('to'));
-            $to = Carbon::instance($to);
+            $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('to').' 00:00:00');
+
+            $to = Carbon::instance($date);
         }
 
         $from = new UTCDateTime($from);
@@ -153,6 +155,8 @@ class TransactionsController extends Controller
         $data['total_count']=$transactionsCount;
         $data['total_page']=((int)($data['total_count']/$limit))+1;
         $data['queryParam']=$queryParam;
+        $data['page_title']='تراکنش ها';
+
 
 
 
@@ -183,20 +187,25 @@ class TransactionsController extends Controller
         if ($request->has('from'))
         {
 
-            $from = \DateTime::createFromFormat('d/m/Y', $request->input('from'));
-            $from = Carbon::instance($from);
+            $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('from').' 00:00:00');
+
+            $from = Carbon::instance($date);
         }
 
         //until which date query should be executed
 
         if ($request->has('to'))
         {
-            $to = \DateTime::createFromFormat('d/m/Y', $request->input('to'));
-            $to = Carbon::instance($to);
+            $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('to').' 00:00:00');
+
+
+            $to = Carbon::instance($date);
         }
 
         $from = new UTCDateTime($from);
         $to = new UTCDateTime($to);
+
+
 
         $transactionsQuery = new Transaction();
         $transactionsQuery = $transactionsQuery->newQuery();
@@ -292,12 +301,7 @@ class TransactionsController extends Controller
       //  fputcsv($file, ['نام ','نام خانوادگی','موبایل','اعتبار']);
         foreach ($scv_total as $item)
         {
-//            $scv_row[]=$wallet['user'][0]['name'];
-//            $scv_row[]=$wallet['user'][0]['family'];
-//            $scv_row[]=$wallet['user'][0]['phone_number'];
-//            $scv_row[]=$wallet['amount'];
             fputcsv($file, $item);
-
 
         }
 
@@ -306,18 +310,6 @@ class TransactionsController extends Controller
 
     }
 
-    function filterTransActions(Request $request)
-    {
-        $transactions = DB::collection('transactions');
-
-        if ($request->has('type'))
-            $transactions->where('type',$request->input('type'));
-
-
-        $transactions =$transactions->paginate(10);
-        dd($transactions);
-
-    }
 
 
 

@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::orderBy('order', 'desc')->paginate(15);
+        $categories = Category::orderBy('order', 'asc')->paginate(15);
 
 
         foreach ($categories as $category) {
@@ -42,14 +42,18 @@ class CategoryController extends Controller
 
             $data['categories'] = $categories;
             $data['total_count'] = Category::count();
+            $data['page_title']='لیست دسته بندی ها';
 
-            return view('admin.pages.category.listCategory')->with($data);;
+
+        return view('admin.pages.category.listCategory')->with($data);;
 
         }
-        public
+
         function addCategoryForm()
         {
-            return view('admin.pages.category.addCategory');
+            $data['page_title']='افزودن دسته بندی';
+
+            return view('admin.pages.category.addCategory')->with($data);
 
         }
 
@@ -58,13 +62,6 @@ class CategoryController extends Controller
 
             // dd($request['imageّIcon']);
             $this->validate($request, ['nameCategory' => 'required', 'statusCategory' => 'required', 'orderCategory' => 'required|numeric', 'imageّIcon' => 'required|image|mimes:jpeg,png,jpg|max:512',]);
-
-
-            if (Category::where('order', (int)$request['orderCategory'])->first()) {
-                $message['error'] = 'این الویت نمایش وجود دارد ';
-                return redirect()->back()->with($message);
-            }
-
 
             $category = new Category();
             $category->name = $request['nameCategory'];
@@ -105,6 +102,8 @@ class CategoryController extends Controller
 
             $category->filepath = $filepath;
             $data['category'] = $category;
+            $data['page_title']='ویرایش دسته بندی ';
+
             return view('admin.pages.category.editCategory')->with($data);
         }
 
@@ -114,17 +113,7 @@ class CategoryController extends Controller
                 'nameCategory' => 'required',
                 'statusCategory' => 'required',
                 'orderCategory' => 'required|numeric']);
-//                'imageّIcon' => 'required|image|mimes:jpeg,png,jpg|max:512']);
 
-
-            $category = Category::where('order', (int)$request['orderCategory'])->first();
-
-            if ($category) {
-                if (!($category->id == $request['idCategory'])) {
-                    $message['error'] = 'این الویت نمایش وجود دارد ';
-                    return redirect()->back()->with($message);
-                }
-            }
 
 
             $category = Category::find($request['idCategory']);

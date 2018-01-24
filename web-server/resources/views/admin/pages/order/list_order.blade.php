@@ -108,7 +108,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">نشان دادن {{ count($orders)>0 ?((($page-1)*10)+1):0 }} تا {{((($page-1)*10))+count($orders)}}از{{$count}}</div>
+
                 </div>
                 <div class="col-sm-7">
                     <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
@@ -121,16 +122,16 @@
                                     <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">2</a></li>
                                     <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">3</a></li>
                                     <li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">.</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$page-3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page-3}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$page-2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page -2}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$page-1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page -1}}</a></li>
-                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$page]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$page }}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$total_page-3]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page-3}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$total_page-2]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -2}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$total_page-1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page -1}}</a></li>
+                                    <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$total_page]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$total_page }}</a></li>
 
 
 
 
                                 @else
-                                    @for($i=0;$i<$page ;$i++ )
+                                    @for($i=0;$i<$total_page ;$i++ )
 
                                         <li class="paginate_button active"><a href="{{route("admin.order.list",array_merge($queryParam,['page'=>$i+1]))}}" aria-controls="example1" data-dt-idx="1" tabindex="0">{{$i+1}}</a></li>
 
@@ -201,16 +202,7 @@
 
 
                                 tablebody.append(' <tr role="row" class="odd"><td class="sorting_1">'+data[i]['user']['name']+' '+data[i]['user']['family']+'</td>'+'<td class="sorting_1">'+data[i]['created_at']+'</td>'+'<td class="sorting_1">'+data[i]['status']+'</td>'+'<td>'+'<a href="/admin/order/detail/'+data[i]['order_id']+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>'+'</tr> ' )
-                                   // tablebody.append(' <td class="sorting_1">'+data[i]['user']['name']+'  '+  data[i]['user']['family']+'</td>');
-                                  //  tablebody.append(' <td class="sorting_1">'+data[i]['created_at']+'</td>');
-                                    //tablebody.append(' <td class="sorting_1">'+data[i]['status']+'</td>');
-                                                                                                                                                                                                                                                      //  tablebody.append(' <td>'+'<a href="/admin/order/detail/'+data[i]['order_id']+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>');
 
-                                    {{--<td class="sorting_1">{{$user->name}}</td>--}}
-                                    {{--<td class="sorting_1">{{$user->family}}</td>--}}
-                                    {{--<td class="sorting_1">{{$user->phone_number}}</td>--}}
-                                    {{--<td>{{ $user->role=='client' ?'عادی':'خدمه' }}</td>--}}
-{{--                                    <td><a href="{{rou/te('admin.user.update',['user_id' => $user->id])}}"><i class="fa fa-edit"></i></a></td>--}}
 
                                tablebody.append('</tr>');
                             }

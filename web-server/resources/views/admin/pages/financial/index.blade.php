@@ -1,8 +1,45 @@
 @extends('admin.template.admin_template')
 
 @section('content')
-    {{--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+        }
+        .rtl-col {
+            float: right;
+        }
+        #bd-next-date2, #bd-prev-date2 {
+            font-size: 20px;
+        }
+        .tooltip > .tooltip-inner {
+            font-family: Vazir;
+            font-size: 12px;
+            padding: 4px;
+            white-space: pre;
+            max-width: none;
+        }
+        #options-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #options-table td, #options-table th {
+            border: 1px solid #777;
+            text-align: left;
+            padding: 8px;
+        }
+        #options-table tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/style/kamadatepicker.css") }}">
+    <script src="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/src/kamadatepicker.js") }}"></script>
+
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+
     <div class="box-body">
 
 
@@ -104,123 +141,18 @@
             <div class="col-sm-6"><a href="{{route('admin.financial',$nextQueryparam)}}"> <button class="btn-primary btn"> بعدی </button></a></div>
         </div>
     </div>
-
-
-
-
-
-
     <script>
-       $(document).ready(function() {
-            {{--modesearch = {{key_exists('mode',$queryparam)?$queryparam['mode']:'daily'}}--}}
-            {{--modesearch = {{json_encode(key_exists('mode',$queryparam)?$queryparam['mode']:'daily')}}--}}
-
-            $("#btn_date_search").click(function () {
-                console.log('asdasd');
-
-
-
-                from =$("#from").val();
-                to_value=$("#to").val();
-                mode =$("#mode").val()
-
-
-                var data={};
-                if(from)
-                    data.from =from;
-                if (to_value)
-                    data.to =to_value;
-                if (mode)
-                    data.mode = mode;
-
-
-
-
-                var myJSON = JSON.stringify(data);
-
-                if(data) {
-
-                    $.ajax({
-                        type: "POST",
-                        url: 'financial/filter',
-                        data :myJSON,
-                        success:function(data) {
-
-                            console.log(data.total_commission)
-                            var tablebody = $( "#tuserbody" );
-
-                            tablebody.empty();
-                            tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data.total_count+'</td>'+' <td class="sorting_1">'+data.total_prices+'</td>'+' <td class="sorting_1">'+data.total_commission+'</td>'+' <td class="sorting_1">'+mode+'</td>'+'</tr>')
-
-
-
-                            {{--for (i = 0; i < data.length; i++) {--}}
-                                {{--console.log(data[i]._id);--}}
-
-                                {{--if (data[i].role=='worker')--}}
-                                    {{--type = 'خدمه';--}}
-                                {{--else--}}
-                                    {{--type ='مشتری';--}}
-
-                                {{--tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data.total_commission+'</td>'+' <td class="sorting_1">'+data[i].family+'</td>'+' <td class="sorting_1">'+data[i].phone_number+'</td>'+' <td class="sorting_1">'+type+'</td>'+' <td>'+'<a href="/admin/user/update/'+data[i]._id+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>'+'</tr>')--}}
-{{--//                                    tablebody.append(' <td class="sorting_1">'+data[i].name+'</td>');--}}
-{{--//                                    tablebody.append(' <td class="sorting_1">'+data[i].family+'</td>');--}}
-{{--//                                    tablebody.append(' <td class="sorting_1">'+data[i].phone_number+'</td>');--}}
-{{--//                                    tablebody.append(' <td class="sorting_1">'+type+'</td>');--}}
-{{--//                                    tablebody.append(' <td>'+'<a href="/admin/user/update/'+data[i]._id+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>');--}}
-
-                                {{--<td class="sorting_1">{{$user->name}}</td>--}}
-                                {{--<td class="sorting_1">{{$user->family}}</td>--}}
-                                {{--<td class="sorting_1">{{$user->phone_number}}</td>--}}
-                                {{--<td>{{ $user->role=='client' ?'عادی':'خدمه' }}</td>--}}
-                                {{--                                    <td><a href="{{rou/te('admin.user.update',['user_id' => $user->id])}}"><i class="fa fa-edit"></i></a></td>--}}
-
-                                {{--//                               tablebody.append('</tr>');--}}
-                            {{--}--}}
-
-
-                        },
-                        dataType: "json"
-                    });
-                }else{
-
-                }
-
-
-            })
-            $("#search_filter").click(function () {
-
-               limit = $("#limit").val()
-                mode = $("#mode").val();
-
-
-                console.log(limit);
-
-                var params = [];
-
-                if(mode)
-                    params.push("mode="+mode)
-                if (limit)
-                    params.push("limit="+limit)
-
-                console.log(params);
-
-
-                window.location.href =
-                    "http://" +
-                    window.location.host +
-                    window.location.pathname +
-                    '?' + params.join('&');
-
-
-            })
-
-
-
-
-        });
+        kamaDatepicker('from', { buttonsColor: "red" });
+        kamaDatepicker('to', { buttonsColor: "red" });
 
     </script>
+
+
+
+
+
+
+
 
 
 
@@ -235,20 +167,97 @@
 
 @section('foot')
 
+    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>--}}
+    {{--<script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.min.js") }}"></script>--}}
+    {{--<script src="{{asset("bootstrap-jalali-datepicker-master/bootstrap-datepicker.fa.min.js") }}"></script>--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+
+
+
     <script>
+        $("#btn_date_search").click(function () {
+
+
+
+            from =$("#from").val();
+            to_value=$("#to").val();
+            mode =$("#mode").val()
+
+
+            var data={};
+            if(from)
+                data.from =from;
+            if (to_value)
+                data.to =to_value;
+            if (mode)
+                data.mode = mode;
+
+
+            var myJSON = JSON.stringify(data);
+
+
+            if(data) {
+
+                $.ajax({
+                    type: "POST",
+                    url: 'financial/filter',
+                    data :myJSON,
+                    success:function(data) {
+
+                        var tablebody = $( "#tuserbody" );
+
+                        tablebody.empty();
+                        tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data.total_count+'</td>'+' <td class="sorting_1">'+data.total_prices+'</td>'+' <td class="sorting_1">'+data.total_commission+'</td>'+' <td class="sorting_1">'+mode+'</td>'+'</tr>')
+
+
+
+
+                    },
+                    dataType: "json"
+                });
+            }else{
+
+            }
+
+
+        })
+        $("#search_filter").click(function () {
+
+            limit = $("#limit").val()
+            mode = $("#mode").val();
+
+
+            console.log(limit);
+
+            var params = [];
+
+            if(mode)
+                params.push("mode="+mode)
+            if (limit)
+                params.push("limit="+limit)
+
+            console.log(params);
+
+
+            window.location.href =
+                "http://" +
+                window.location.host +
+                window.location.pathname +
+                '?' + params.join('&');
+
+
+        })
+
         var labels= ("{{ json_encode($x_axis) }}");
         labels =JSON.parse(labels.replace(/&quot;/g,'"'));
 
 
         var commissions= ("{{ json_encode($y_commission) }}");
 
-        console.log(commissions);
         commissions =JSON.parse(commissions.replace(/&quot;/g,'"'));
-        console.log(commissions);
         var total_prices= ("{{ json_encode($y_total_price) }}");
         total_prices =JSON.parse(total_prices.replace(/&quot;/g,'"'));
-        console.log(total_prices);
 
         new Chart(document.getElementById("line-chart"), {
             type: 'line',
@@ -277,9 +286,6 @@
     </script>
 
 
-
-
-
-
 @endsection
+
 
