@@ -260,9 +260,9 @@ class PhoneNumberController extends Controller
             'form_params' => [
                 'grant_type' => 'password',
             //    'client_id' => '5a34fe1a978ef455fd280094',// local
-                'client_id' => '5a6c155ddcd4cd6a4046c474',   //servertest
+                'client_id' => '5a6ee1bddcd4cd7baa71fde4',   //servertest
       //          'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
-                'client_secret' => 'gcdKD42NBGxwu68Pi8nCMFa8iCR6Ei7aFpVSBYZK', //server test
+                'client_secret' => 'XzAStSZgBrwoPVjvxr66WYLnpdrg5a8DCKjSKxCw', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',
