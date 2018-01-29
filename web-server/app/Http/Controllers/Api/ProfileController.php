@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use MongoDB\BSON\ObjectID;
 use Validator;
 
 
@@ -23,8 +25,7 @@ class ProfileController extends Controller
         }
 
          $user =$request->user();
-       /// dd($user);
-        //$user =User::find('5a361040978ef42248205f97');
+
 
         if ($user->isCompleted)
             return response()->json(['errors'=>"profile previously completed"])->setStatusCode(417);
@@ -84,5 +85,26 @@ class ProfileController extends Controller
         unset($user->status);unset($user->isCompleted);unset($user->role);unset($user->updated_at);unset($user->created_at);unset($user->fcm_token);
 
         return response()->json(['user'=>$user]);
+    }
+    function addAcounNumberToWorkerProfile(Request $request)
+    {
+
+
+        if (!$request->has('account_number'))
+        {
+            return response()->json(['error' =>'account_number must be send'])->setStatusCode(417);
+
+        }
+        $workerProfile = WorkerProfile::where('user_id',new ObjectID($request->user()->id))->first();
+
+        $workerProfile->account_number = $request->input('account_number');
+
+
+        if ($workerProfile->save())
+            return response()->json(['workerProfile',$workerProfile]);
+        else
+            return response(['error' =>'internal server error'])->setStatusCode(500);
+
+
     }
 }

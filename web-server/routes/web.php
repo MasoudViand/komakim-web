@@ -20,6 +20,7 @@ Route::get('/', function () {
 //Auth::routes();
 
 Route::post('/callback', 'HomeController@callback')->name('home');
+Route::get('/test', 'HomeController@notif')->name('home');
 
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -87,7 +88,7 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
         Route::post('/radius/edit', 'Admin\SettingController@editRadiusSearch')->name('admin.setting.radius_search');
         Route::post('/commission/edit', 'Admin\SettingController@editCommission')->name('admin.setting.edit.commission');
-        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
+//        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 
     });
     Route::prefix('settle')->group(function (){

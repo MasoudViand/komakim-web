@@ -33,7 +33,6 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">امتیاز</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">دلایل عدم رضایت</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">توضیحات</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">جزییات بیشتر سفارش</th>
                         </tr>
                         </thead>
                         <tbody id="tuserbody">
@@ -43,14 +42,13 @@
                                 <td class="sorting_1">{{$review['user']->name.'  '.$review['user']->family}}</td>
                                 <td class="sorting_1">{{$review['score']}}</td>
 {{--                                <td class="sorting_1">{{$review['reasons'][0]['reason']}}</td>--}}
-                                <td class="sorting_1"><select name="field" id="field" class="form-control" style="">
+                                <td class="sorting_1">
                                         @foreach($review['reasons'] as $item)
-                                        <option value="1">{{$item->reason}}</option>
+                                       {{$item->reason}}{{" ُ"}}
                                        @endforeach
 
-                                    </select></td>
+                                  </td>
                                 <td class="sorting_1">{{$review['desc']}}</td>
-                                <td><a href="{{route('admin.user.update',['user_id' => $review['order_id']])}}"><i class="fa fa-edit"></i></a></td>
 
                             </tr>
 
@@ -63,21 +61,9 @@
             </div>
             <div class="row">
                 <div class="col-sm-5">
-                    <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
                 </div>
                 <div class="col-sm-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                        <ul class="pagination">
-                            <li class="paginate_button previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0">Previous</a></li>
-                            <li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0">2</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0">3</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0">4</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0">5</a></li>
-                            <li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0">6</a></li>
-                            <li class="paginate_button next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0">Next</a></li>
-                        </ul>
-                    </div>
+                    <div class="row-lg-1 row-centered"> {{ $reviewModel->links() }}</div>
                 </div>
 
 

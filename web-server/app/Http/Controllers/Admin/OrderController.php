@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\DissatisfiedReason;
+use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Order;
 use App\OrderStatusRevision;
 use App\Review;
@@ -317,6 +318,8 @@ class OrderController extends Controller
 
 
 
+
+
         $data['revisions']=$revisions;
         $data['page_title']='دیدن جزییات سفارش';
 
@@ -335,13 +338,19 @@ class OrderController extends Controller
     function CancelOrderByAdmin(Request $request)
     {
 
+
         $order = Order::find($request->input('idOrder'));
 
         if ($request->has('cancel_order_text'))
         $order->cancel_reason=$request->input('cancel_order_text');
         $order->status =OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
         if ($order->save())
+        {
+            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$request->user()));
             return redirect()->back();
+
+
+        }
         else return redirect()->with(['error'=>'لغو نشد']);
 
     }

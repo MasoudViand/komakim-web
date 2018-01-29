@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\TempToken;
 use App\User;
+use App\Wallet;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
 use MongoDB\BSON\ObjectID;
+use MongoDB\BSON\UTCDateTime;
 use Validator;
 use GuzzleHttp;
 
@@ -18,6 +20,16 @@ class PhoneNumberController extends Controller
 
     function receiveCode(Request $request)
     {
+
+
+//        $wallet = new \stdClass();
+//
+//        $wallet->user_id = new ObjectID('5a6c1391dcd4cd61690dd2e2');
+//        $wallet->amount = 12500;
+//        $wallet->updated_at =new UTCDateTime(time()*1000);
+//        $model = Wallet::raw()->insertOne($wallet);
+//
+//        dd(1);
 
         $validator = Validator::make($request->all(), [
             'phoneNumber' => 'required',
@@ -243,14 +255,14 @@ class PhoneNumberController extends Controller
         $http = new GuzzleHttp\Client;
 //        dd(URL::to('/').'/oauth/token');
 
-        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
-//        $response = $http->post(URL::to('/').'/oauth/token', [
+      //  $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
+        $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-                'client_id' => '5a34fe1a978ef455fd280094',// local
-  //              'client_id' => '5a6436cadcd4cd271b6ccb94',   //servertest
-                'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
-//                'client_secret' => 'wjlWqn4ZCzCvuHy9JQLqSm24yjcpVx1dS60hfjIN', //server test
+            //    'client_id' => '5a34fe1a978ef455fd280094',// local
+                'client_id' => '5a6c155ddcd4cd6a4046c474',   //servertest
+      //          'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
+                'client_secret' => 'gcdKD42NBGxwu68Pi8nCMFa8iCR6Ei7aFpVSBYZK', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',

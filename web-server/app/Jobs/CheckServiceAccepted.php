@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Order;
+use App\OrderStatusRevision;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -39,11 +40,14 @@ class CheckServiceAccepted implements ShouldQueue
     public function handle()
     {
 
+
+
         $order =Order::find($this->order_id);
-        if ($order['status']=='pending'){
+        if ($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS){
             $user_id=$order['user_id'];
             $user=User::find($user_id);
             $token=$user['fcm_token'];
+
             $this->_sendNotification($token ,$order);
         }
 
@@ -58,35 +62,63 @@ class CheckServiceAccepted implements ShouldQueue
 
     private function _sendNotification($token,$order)
     {
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
 
-        $notificationBuilder = new PayloadNotificationBuilder('خدمه یافت نشد');
-        $notificationBuilder->setBody('')
-            ->setSound('default');
 
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['data'=>$order]);
+        $content = array(
+            "en" => 'خدمه یافت نشد'
+        );
+        $fields = array(
+            'app_id' => "5cf31f6e-0526-4083-841b-03d789183ab8",
+            'include_player_ids' => [$token],
+            'data' => $order,
+            'contents' => $content
+        );
+        $fields = json_encode($fields);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+            'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-//        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+
+
+//        $optionBuilder = new OptionsBuilder();
+//        $optionBuilder->setTimeToLive(60*20);
 //
-//        $downstreamResponse->numberSuccess();
-//        $downstreamResponse->numberFailure();
-//        $downstreamResponse->numberModification();
+//        $notificationBuilder = new PayloadNotificationBuilder('خدمه یافت نشد');
+//        $notificationBuilder->setBody('')
+//            ->setSound('default');
 //
-////return Array - you must remove all this tokens in your database
-//        $downstreamResponse->tokensToDelete();
+//        $dataBuilder = new PayloadDataBuilder();
+//        $dataBuilder->addData(['data'=>$order]);
 //
-////return Array (key : oldToken, value : new token - you must change the token in your database )
-//        $downstreamResponse->tokensToModify();
+//        $option = $optionBuilder->build();
+//        $notification = $notificationBuilder->build();
+//        $data = $dataBuilder->build();
 //
-////return Array - you should try to resend the message to the tokens in the array
-//        $downstreamResponse->tokensToRetry();
-
-// return Array (key:token, value:errror) - in production you should remove from your database the tokens
+////        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+////
+////        $downstreamResponse->numberSuccess();
+////        $downstreamResponse->numberFailure();
+////        $downstreamResponse->numberModification();
+////
+//////return Array - you must remove all this tokens in your database
+////        $downstreamResponse->tokensToDelete();
+////
+//////return Array (key : oldToken, value : new token - you must change the token in your database )
+////        $downstreamResponse->tokensToModify();
+////
+//////return Array - you should try to resend the message to the tokens in the array
+////        $downstreamResponse->tokensToRetry();
+//
+//// return Array (key:token, value:errror) - in production you should remove from your database the tokens
     }
 }

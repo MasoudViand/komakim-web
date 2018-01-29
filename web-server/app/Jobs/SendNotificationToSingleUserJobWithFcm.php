@@ -26,24 +26,24 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $user;
+    protected $user_id;
     protected $data;
     protected $message;
     protected $title;
 
     /**
      * Create a new job instance.
-     * @param $user
+     * @param $user_id
      * @param $message
      * @param $title
      * @param $data
      *
      * @return void
      */
-    public function __construct(User $user, $message = null, $title = null, $data = null)
+    public function __construct( $user_id, $message = null, $title = null, $data = null)
     {
 
-        $this->user = $user;
+        $this->user_id = $user_id;
         $this->message = $message;
         $this->title = $title;
         $this->data = $data;
@@ -58,36 +58,65 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
     public function handle()
     {
 
+        $user=User::find($this->user_id);
 
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60 * 20);
 
-        $notificationBuilder = new PayloadNotificationBuilder($this->title);
-        $notificationBuilder->setBody($this->message)->setSound('default');
 
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['data' => $this->data]);
+        $fcm_token = $user->fcm_token;
+//        dd($fcm_token);
 
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
+        $content = array(
+            "en" => $this->message
+        );
+        $fields = array(
+            'app_id' => "5cf31f6e-0526-4083-841b-03d789183ab8",
+            'include_player_ids' => array($fcm_token),
+            'data' => $this->data,
+            'contents' => $content
+        );
+        $fields = json_encode($fields);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+            'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
-        $token = $this->user->fcm_token;
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
-        $downstreamResponse->numberSuccess();
-        $downstreamResponse->numberFailure();
-        $downstreamResponse->numberModification();
-
-//return Array - you must remove all this tokens in your database
-        $downstreamResponse->tokensToDelete();
-
-//return Array (key : oldToken, value : new token - you must change the token in your database )
-        $downstreamResponse->tokensToModify();
-
-//return Array - you should try to resend the message to the tokens in the array
-        $downstreamResponse->tokensToRetry();
+//        $optionBuilder = new OptionsBuilder();
+//        $optionBuilder->setTimeToLive(60 * 20);
+//
+//        $notificationBuilder = new PayloadNotificationBuilder($this->title);
+//        $notificationBuilder->setBody($this->message)->setSound('default');
+//
+//        $dataBuilder = new PayloadDataBuilder();
+//        $dataBuilder->addData(['data' => $this->data]);
+//
+//        $option = $optionBuilder->build();
+//        $notification = $notificationBuilder->build();
+//        $data = $dataBuilder->build();
+//
+//        $token = $this->user->fcm_token;
+//
+//        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+//
+//        $downstreamResponse->numberSuccess();
+//        $downstreamResponse->numberFailure();
+//        $downstreamResponse->numberModification();
+//
+////return Array - you must remove all this tokens in your database
+//        $downstreamResponse->tokensToDelete();
+//
+////return Array (key : oldToken, value : new token - you must change the token in your database )
+//        $downstreamResponse->tokensToModify();
+//
+////return Array - you should try to resend the message to the tokens in the array
+//        $downstreamResponse->tokensToRetry();
 
 
     }

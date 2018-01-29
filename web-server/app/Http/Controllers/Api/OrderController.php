@@ -123,7 +123,7 @@ class OrderController extends Controller
                 $orderModel['services']=$orderModel['revisions'][0];
                 unset($orderModel['revisions']);
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
-
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'ادیت کار خدمه','',$order));
 
 
                 return response()->json(['order'=>$orderModel]);

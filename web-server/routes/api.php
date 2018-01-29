@@ -31,6 +31,7 @@ Route::middleware('auth:api')->prefix('profile')->group(function (){
     Route::post('/', 'Api\ProfileController@addprofile')->name('api.profile.insert.submit');
 });
 Route::middleware('auth:api','profile')->get('profile/info' ,'Api\ProfileController@getprofileInfo');
+Route::middleware('auth:api','profile')->post('profile/account_number' ,'Api\ProfileController@addAcounNumberToWorkerProfile');
 
 Route::middleware('auth:api','profile')->post('profile/fcm', 'Api\ProfileController@registerFcmToken')->name('api.fcm.insert.submit');
 

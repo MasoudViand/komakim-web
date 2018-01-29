@@ -51,12 +51,19 @@ class FindWorker implements ShouldQueue
     {
 
 
+
         $category_id =$this->order['category_id'];
         $latitude =$this->order['address']['latitude'];
         $longitude =$this->order['address']['longitude'];
 
+        $category=Category::find($category_id);
 
-        $workersIds = WorkerProfile::where('location', 'near', [
+
+       // dd($category->name);
+
+
+        $workersIds = WorkerProfile::
+        where('location', 'near', [
             '$geometry' => [
                 'type' => 'Point',
                 'coordinates' => [
@@ -64,8 +71,11 @@ class FindWorker implements ShouldQueue
                 ],
             ],
             '$maxDistance' => 5000,
-        ])->where('field' ,$category_id)->where('availability_status', 'available')->get(['user_id']);
+        ])->
+        where('fields' ,$category->name)->
+        where('availability_status', 'available')->get(['user_id']);
         //dd($category_id);
+
 
 
         if (count($workersIds)>0)
@@ -89,6 +99,12 @@ class FindWorker implements ShouldQueue
                     array_push($tokens,$item['fcm_token']);
 
             }
+
+
+            $this->_sendNotifications($tokens,$this->order);
+
+
+
 
 
 
@@ -116,43 +132,32 @@ class FindWorker implements ShouldQueue
 
     }
 
-    private function _sendNotifications($tokens)
+    private function _sendNotifications($tokens,$order)
     {
+        $content = array(
+            "en" => 'dfgd'
+        );
+        $fields = array(
+            'app_id' => "5cf31f6e-0526-4083-841b-03d789183ab8",
+            'include_player_ids' => $tokens,
+            'data' => $order,
+            'contents' => $content
+        );
+        $fields = json_encode($fields);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+            'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-
-        $notificationBuilder = new PayloadNotificationBuilder('شفارش جدید');
-        $notificationBuilder->setBody('')
-            ->setSound('default');
-
-        $dataBuilder = new PayloadDataBuilder();
-        $order=$this->order;
-        $category=Category::find($order['category_id']);
-        $order['category']=$category;
-        unset($category['order']);unset($category['status']);unset($category['updated_at']);unset($category['created_at']);
-
-        unset($order['category_id']);
-        $dataBuilder->addData(['data' => $order]);
-
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
+        $response = curl_exec($ch);
+        curl_close($ch);
 
 
-        $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
-
-        $downstreamResponse->numberSuccess();
-        $downstreamResponse->numberFailure();
-        $downstreamResponse->numberModification();
-
-        $downstreamResponse->tokensToDelete();
-
-        $downstreamResponse->tokensToModify();
-
-        $downstreamResponse->tokensToRetry();
-
-        $downstreamResponse->tokensWithError();
     }
 
     private function _sendFailFindWorkerNotificationToClient($clientToken)
@@ -189,23 +194,6 @@ class FindWorker implements ShouldQueue
 
 
 
-
-//        $downstreamResponse = FCM::sendTo($clientToken, $option, $notification, $data);
-//
-//        $downstreamResponse->numberSuccess();
-//        $downstreamResponse->numberFailure();
-//        $downstreamResponse->numberModification();
-//
-////return Array - you must remove all this tokens in your database
-//        $downstreamResponse->tokensToDelete();
-//
-////return Array (key : oldToken, value : new token - you must change the token in your database )
-//        $downstreamResponse->tokensToModify();
-//
-////return Array - you should try to resend the message to the tokens in the array
-//        $downstreamResponse->tokensToRetry();
-
-// return Array (key:token, value:errror) - in production you should remove from your database the
     }
 
 

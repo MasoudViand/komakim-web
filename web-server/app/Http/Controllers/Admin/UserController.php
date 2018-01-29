@@ -493,6 +493,8 @@ class UserController extends Controller
         }
 
         $data['reviews']=$reviewArr;
+        $data['reviewModel'] =$reviewModel;
+
         return view('admin.pages.user.list_review')->with($data);
 
 

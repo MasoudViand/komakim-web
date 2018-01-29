@@ -203,9 +203,13 @@
 
         </div>
 
+
         <div class="row" id="cancel_order_section">
             <div class="col-sm-12">
-                 <button  class="btn btn-primary btn-danger" id="cancel_order">لغو سفارش</button>
+                <div <?php  if($order['status']=='لغو توسط ادمین'){ echo 'hidden';}   ?> >
+                    <button  hidden class="btn btn-primary btn-danger" id="cancel_order">لغو سفارش</button>
+
+                </div>
             </div>
         </div>
 

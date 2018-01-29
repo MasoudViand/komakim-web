@@ -19,12 +19,18 @@
         <ul class="sidebar-menu" data-widget="tree">
 
 		<li class="header">مدیریت</li>
+            <li >
+                <a href="{{ route('admin.dashboard') }}" >
+                    <i class="fa fa-dashboard "></i> <span> داشبورد </span>
+                </a>
+            </li>
 
             <li >
                 <a href="{{ route('admin.order.list') }}" >
                     <i class="fa fa-th "></i> <span> لیست سفارشات </span>
                 </a>
             </li>
+
 
 		<li class="treeview">
           <a href="">

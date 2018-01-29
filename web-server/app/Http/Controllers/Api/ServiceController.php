@@ -6,6 +6,7 @@ use App\Category;
 use App\Jobs\CheckServiceAccepted;
 use App\Jobs\FindWorker;
 use App\Jobs\RegisterStatusOrderRevisionJob;
+use App\Jobs\SendNotificationToSingleUserJobWithFcm;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
@@ -178,7 +179,7 @@ class ServiceController extends Controller
             $this->dispatch(new FindWorker($order));
 
 
-            $job = (new CheckServiceAccepted((string)$order['_id']))->delay(60);
+            $job = (new CheckServiceAccepted((string)$order['_id']))->delay(6000);
             $this->dispatch($job);
             return response()->json(['order'=>$order]);
 
@@ -209,7 +210,8 @@ class ServiceController extends Controller
 
          if ($order->save())
          {
-              $order =$this->_sendNotificationToClient($order->user_id,$order);
+              //$order =$this->_sendNotificationToClient($order->user_id,$order);
+              $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'تایید خدمه','',$order));
               $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,$request->user()) );
 
               return response()->json(['order'=>$order]);
@@ -235,6 +237,8 @@ class ServiceController extends Controller
         if ($order->save())
         {
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,$request->user()) );
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'شروع به کار خدمه','',$order));
+
 
             //$this->_sendNotificationToClient();
 
@@ -258,8 +262,7 @@ class ServiceController extends Controller
         if ($order->save())
         {
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
-
-            //$this->_sendNotificationToClient();
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order));
 
             return response()->json(['order'=>$order]);
 
@@ -271,80 +274,6 @@ class ServiceController extends Controller
     }
 
 
-    private function _sendNotificationToClient($user_id ,$order)
-    {
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-
-        $notificationBuilder = new PayloadNotificationBuilder('خدمه یافت شد');
-        $notificationBuilder->setBody('')
-            ->setSound('default');
-
-
-
-        $dataBuilder = new PayloadDataBuilder();
-
-        $category=Category::find($order['category_id']);
-        $order['category']=$category;
-        unset($category['order']);unset($category['status']);unset($category['updated_at']);unset($category['created_at']);
-
-        unset($order['category_id']);
-
-        $workerProfile = User::find($order->worker_id);
-
-        $profile =[];
-        $filepath=null;
-
-        $profile['name']=$workerProfile['name'];
-        $profile['family']=$workerProfile['family'];
-        $profile['mobile_number']=$workerProfile['phone_number'];
-        if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.png'))
-            $filepath=('images/workers').'/'.$workerProfile->id.'.png';
-        if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpg'))
-            $filepath=('images/workers').'/'.$workerProfile->id.'.jpg';
-        if (file_exists((public_path('images/workers').'/'.$workerProfile->id).'.jpeg'))
-            $filepath=('images/workers').'/'.$workerProfile->id.'.jpeg';
-
-        $profile['picture_profile_url']=URL::to('/').'/'.$filepath;
-
-        $order['profile']=$profile;
-
-        //dd($profile['picture_profile_url']);
-
-        return $order;
-
-
-
-        $dataBuilder->addData(['order'=>$order]);
-
-
-
-
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
-
-
-
-
-
-//        $downstreamResponse = FCM::sendTo($clientToken, $option, $notification, $data);
-//
-//        $downstreamResponse->numberSuccess();
-//        $downstreamResponse->numberFailure();
-//        $downstreamResponse->numberModification();
-//
-////return Array - you must remove all this tokens in your database
-//        $downstreamResponse->tokensToDelete();
-//
-////return Array (key : oldToken, value : new token - you must change the token in your database )
-//        $downstreamResponse->tokensToModify();
-//
-////return Array - you should try to resend the message to the tokens in the array
-//        $downstreamResponse->tokensToRetry();
-
-// return Array (key:token, value:errror) - in production you should remove from your database the
-    }
 
 
 }

@@ -28,7 +28,7 @@ class RegisterStatusOrderRevisionJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct( $order_id,  $status,User $user)
+    public function __construct( $order_id,  $status, $user)
     {
         $this->user     =$user;
         $this->status   =$status;
@@ -43,6 +43,7 @@ class RegisterStatusOrderRevisionJob implements ShouldQueue
      */
     public function handle()
     {
+
         $revision = new \stdClass();
 
         $revision->order_id=($this->order_id);
