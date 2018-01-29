@@ -4,4 +4,4 @@ git checkout .
 
 git pull
 
-composer update 
+#composer update 
