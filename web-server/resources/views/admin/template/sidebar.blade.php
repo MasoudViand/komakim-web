@@ -27,7 +27,7 @@
 
             <li >
                 <a href="{{ route('admin.order.list') }}" >
-                    <i class="fa fa-th "></i> <span> لیست سفارشات </span>
+                    <i class="fa fa-shopping-cart"></i> <span> لیست سفارشات </span>
                 </a>
             </li>
 
@@ -51,7 +51,7 @@
 		</li>
 		<li class="treeview">
           <a href="#">
-            <i class="fa fa-files-o"></i>
+            <i class="fa fa-bars"></i>
             <span>دسته بندی ها</span>
             <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
@@ -60,7 +60,7 @@
           <ul class="treeview-menu">
             <li>
 			<a href="{{ route('admin.category') }}">
-                    <i class="fa fa-star"></i> <span>لیست دسته بندی ها</span>
+                    <i class="fa fa-th"></i> <span>لیست دسته بندی ها</span>
                 </a>
 				</li>
 				<li>
@@ -73,7 +73,7 @@
 
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-list"></i>
                     <span>زیر دسته بندی ها</span>
                     <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
@@ -95,13 +95,13 @@
 
             <li>
                 <a href="{{ route('admin.user.list') }}">
-                    <i class="fa fa-th"></i> <span> کاربران </span>
+                    <i class="fa fa-users"></i> <span> کاربران </span>
                 </a>
             </li>
 
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-credit-card"></i>
                     <span>امور مالی</span>
                     <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
@@ -110,22 +110,22 @@
                 <ul class="treeview-menu">
                     <li>
                         <a href="{{ route('admin.financial') }}">
-                            <i class="fa fa-th"></i> <span> گزارشات مالی </span>
+                            <i class="fa fa-bar-chart"></i> <span> گزارشات مالی </span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.transactions.list') }}">
-                            <i class="fa fa-th"></i> <span> تراکنش ها </span>
+                            <i class="fa fa-exchange"></i> <span> تراکنش ها </span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.financial.remain_wallet') }}">
-                            <i class="fa fa-th"></i> <span> مقادیر کیف پول استفاده نشده </span>
+                            <i class="fa fa-usd"></i> <span> مقادیر کیف پول استفاده نشده </span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.settle.dept.list') }}">
-                            <i class="fa fa-th"></i> <span>تسویه حساب </span>
+                            <i class="fa fa-money"></i> <span>تسویه حساب </span>
                         </a>
                     </li>
 
@@ -134,13 +134,13 @@
 
             <li>
                 <a href="{{ route('admin.discount_code.list') }}">
-                    <i class="fa fa-th"></i> <span> کد تخفیف </span>
+                    <i class="fa fa-tags"></i> <span> کد تخفیف </span>
                 </a>
             </li>
 
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-check-square-o"></i>
                     <span>نظرسنجی</span>
                     <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
@@ -162,7 +162,7 @@
 
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-files-o"></i>
+                    <i class="fa fa-cogs"></i>
                     <span>تنظیمات</span>
                     <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
