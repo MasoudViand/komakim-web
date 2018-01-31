@@ -97,6 +97,7 @@ class OrderController extends Controller
 
             $orderModel=Order::find($order->parent_id);
 
+
             if (!$orderModel or $orderModel->status!=OrderStatusRevision::START_ORDER_BY_WORKER_STATUS)
                 return response()->json(['error'=>'سفارش وجود ندارد یا وضعیت  شروع به کار ندارد'])->setStatusCode('417');
 
@@ -106,11 +107,15 @@ class OrderController extends Controller
             else
                 $revisions=$orderModel->revisions;
 
+
+
             $revision['services']=$order->services;
             $revision['total_price']=$order->total_price;
             $revision['created_at']=new UTCDateTime(time()*1000);
             $revision['tracking_number']=$orderModel->tracking_number.'.'.(count($revisions)+1);
             array_unshift($revisions,$revision);
+
+
 
 
             $orderModel->revisions=$revisions;
@@ -121,9 +126,10 @@ class OrderController extends Controller
             if ($orderModel->save())
             {
                 $orderModel['services']=$orderModel['revisions'][0];
+                $orderModel->tracking_number = $revision['tracking_number'];
                 unset($orderModel['revisions']);
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'ادیت کار خدمه','',$order));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','',$order));
 
 
                 return response()->json(['order'=>$orderModel]);
@@ -132,6 +138,31 @@ class OrderController extends Controller
                 return response()->json(['error'=>'internal server error']);
 
 
+        }
+        function approveEditOrder(Request $request)
+        {
+            if (!$request->has('order_id')){
+                return response()->json(['error'=>'order id is require'])->setStatusCode(417);
+            }
+            $order = Order::find($request->input('order_id'));
+
+
+            $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
+
+            if ($order->save())
+            {
+                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::APPROVE_EDIT_BY_CLIENT_STATUS,$request->user()) );
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'تایید ادامه کار','',$order));
+
+
+                //$this->_sendNotificationToClient();
+
+                return response()->json(['order'=>$order]);
+
+            }else
+            {
+                return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+            }
         }
 
         function detailOrder(Request $request)
@@ -256,14 +287,15 @@ class OrderController extends Controller
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
 
 
-               // $this->dispatch(new SendNotificationToSingleUserJobWithFcm(User::find($order->user_id),'سفارش توسط خدمه لغو شد','لغو سفارش',$order));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order));
+
             }
             if ($user->role == User::CLIENT_ROLE)
             {
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,$user));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری لغو شد','',$order));
 
-                //$this->dispatch(new SendNotificationToSingleUserJobWithFcm(User::find($order->worker_id),'سفارش توسط مشتری لغو شد','لغو سفارش',$order));
 
             }
             if ($request->has('cancel_reason'))

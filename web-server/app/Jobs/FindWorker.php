@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Category;
 use App\Order;
 use App\Service;
+use App\Setting;
 use App\User;
 use App\WorkerProfile;
 use function GuzzleHttp\Psr7\str;
@@ -58,6 +59,12 @@ class FindWorker implements ShouldQueue
 
         $category=Category::find($category_id);
 
+        $distanc =Setting::where('type','radius')->first();
+        if ($distanc)
+            $distanc =(int)$distanc->value;
+        else
+            $distanc = 9000;
+
 
        // dd($category->name);
 
@@ -70,11 +77,17 @@ class FindWorker implements ShouldQueue
                     $latitude, $longitude
                 ],
             ],
-            '$maxDistance' => 5000,
+            '$maxDistance' => $distanc,
         ])->
         where('fields' ,$category->name)->
         where('availability_status', 'available')->get(['user_id']);
-        //dd($category_id);
+
+
+
+
+
+
+
 
 
 
@@ -101,6 +114,7 @@ class FindWorker implements ShouldQueue
             }
 
 
+
             $this->_sendNotifications($tokens,$this->order);
 
 
@@ -109,19 +123,6 @@ class FindWorker implements ShouldQueue
 
 
 
-        }else
-        {
-
-            $clientUserId=$this->order['user_id'];
-
-            $clientUser=User::find($clientUserId);
-
-
-            $clientToken=$clientUser['fcm_token'];
-
-            $this->_sendFailFindWorkerNotificationToClient($clientToken);
-
-            //Todo send data notification to user
         }
 
 
@@ -135,7 +136,7 @@ class FindWorker implements ShouldQueue
     private function _sendNotifications($tokens,$order)
     {
         $content = array(
-            "en" => 'dfgd'
+            "en" => 'سفارش جدید'
         );
         $fields = array(
             'app_id' => "5cf31f6e-0526-4083-841b-03d789183ab8",
@@ -155,46 +156,12 @@ class FindWorker implements ShouldQueue
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
         $response = curl_exec($ch);
+
         curl_close($ch);
 
 
     }
 
-    private function _sendFailFindWorkerNotificationToClient($clientToken)
-    {
-
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-
-        $notificationBuilder = new PayloadNotificationBuilder('خدمه یافت نشد');
-        $notificationBuilder->setBody('')
-            ->setSound('default');
-
-
-
-        $dataBuilder = new PayloadDataBuilder();
-        $order=$this->order;
-        $category=Category::find($order['category_id']);
-        $order['category']=$category;
-        unset($category['order']);unset($category['status']);unset($category['updated_at']);unset($category['created_at']);
-
-        unset($order['category_id']);
-
-
-
-        $dataBuilder->addData(['order'=>$order]);
-
-
-
-
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
-
-
-
-
-    }
 
 
 }

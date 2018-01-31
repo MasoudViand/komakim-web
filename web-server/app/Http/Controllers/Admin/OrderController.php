@@ -137,6 +137,9 @@ class OrderController extends Controller
                 case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
                     $order['status']='لغو توسط خدمه';
                     break;
+                case OrderStatusRevision::EDIT_BY_WORKER_STATUS:
+                    $order['status'] ='ویرایش توسط خدمه';
+                    break;
 
                 case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
                     $order['status']='لغو توسط ادمین';
@@ -160,6 +163,8 @@ class OrderController extends Controller
         $data['orders']     =$ordersArr;
         $data['categories'] =Category::all();
         $data['page_title']='لیست سفارشات';
+
+
 
 
 
@@ -210,6 +215,9 @@ class OrderController extends Controller
             case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
                 $order['status']='لغو توسط خدمه';
                 $order['cancel_reason']=$orderModel->cancel_reason;
+                break;
+            case OrderStatusRevision::EDIT_BY_WORKER_STATUS:
+                $order['status'] ='ویرایش توسط خدمه';
                 break;
             case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
                 $order['status']='لغو توسط ادمین';
@@ -274,6 +282,7 @@ class OrderController extends Controller
 
 
 
+
         $revisions=[];
 
         foreach ($revisionModel as $item)
@@ -302,6 +311,12 @@ class OrderController extends Controller
                 case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
                     $revision['status']='لغو توسط خدمه';
                     break;
+                case OrderStatusRevision::EDIT_BY_WORKER_STATUS:
+                    $revision['status'] ='ویرایش توسط خدمه';
+                    break;
+                case OrderStatusRevision::APPROVE_EDIT_BY_CLIENT_STATUS:
+                    $revision['status'] ='قبول ویرایش توسط مشتری';
+                    break;
 
                 case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
                     $revision['status']='لغو توسط ادمین';
@@ -316,12 +331,11 @@ class OrderController extends Controller
 
         }
 
-
-
-
+      
 
         $data['revisions']=$revisions;
         $data['page_title']='دیدن جزییات سفارش';
+
 
 
 

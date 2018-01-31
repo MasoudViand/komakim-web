@@ -10,11 +10,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use LaravelFCM\Facades\FCM;
-use LaravelFCM\Message\OptionsBuilder;
-use LaravelFCM\Message\PayloadDataBuilder;
-use LaravelFCM\Message\PayloadNotificationBuilder;
-
 class CheckServiceAccepted implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -43,6 +38,7 @@ class CheckServiceAccepted implements ShouldQueue
 
 
         $order =Order::find($this->order_id);
+
         if ($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS){
             $user_id=$order['user_id'];
             $user=User::find($user_id);

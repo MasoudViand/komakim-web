@@ -34,6 +34,8 @@ class HomeController extends Controller
     }
 
     function getworkwithusForm(){
+
+
         $categories =Category::all();
         $data['categories']=$categories;
 

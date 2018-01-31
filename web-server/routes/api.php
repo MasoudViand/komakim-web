@@ -52,6 +52,7 @@ Route::middleware('auth:api','profile')->prefix('order')->group(function (){
     Route::post('/detail', 'Api\OrderController@detailOrder')->name('api.order.active.list');
     Route::get('/active', 'Api\OrderController@listActiveOrder')->name('api.order.active.list');
     Route::post('/edit', 'Api\OrderController@editOrder')->name('api.order.active.list');
+    Route::post('/edit/approve', 'Api\OrderController@approveEditOrder')->name('api.order.active.list');
     Route::post('/cancel', 'Api\OrderController@cancelOrder')->name('api.order.cancel');
     Route::get('/cancel/reason', 'Api\OrderController@receiveCancelReason')->name('api.order.cancel');
 

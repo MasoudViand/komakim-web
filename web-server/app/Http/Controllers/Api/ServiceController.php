@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\URL;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -169,6 +170,9 @@ class ServiceController extends Controller
 
         $order->tracking_number=(string)$tracking_number;
 
+
+
+
         $model = Order::raw()->insertOne($order);
 
         $order=Order::find((string)($model->getInsertedId()));
@@ -178,8 +182,7 @@ class ServiceController extends Controller
         if ($model){
             $this->dispatch(new FindWorker($order));
 
-
-            $job = (new CheckServiceAccepted((string)$order['_id']))->delay(6000);
+            $job = (new CheckServiceAccepted((string)$order['_id']))->delay(60);
             $this->dispatch($job);
             return response()->json(['order'=>$order]);
 
