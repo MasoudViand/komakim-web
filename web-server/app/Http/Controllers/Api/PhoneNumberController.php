@@ -253,16 +253,16 @@ class PhoneNumberController extends Controller
     function _getAccessToken($phoneNumber)
     {
         $http = new GuzzleHttp\Client;
-//        dd(URL::to('/').'/oauth/token');
+       // dd(URL::to('/').'/oauth/token');
 
-        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
-      //  $response = $http->post(URL::to('/').'/oauth/token', [
+//        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
+        $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-                'client_id' => '5a34fe1a978ef455fd280094',// local
-            //    'client_id' => '5a6ee1bddcd4cd7baa71fde4',   //servertest
-                'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
-            //    'client_secret' => 'XzAStSZgBrwoPVjvxr66WYLnpdrg5a8DCKjSKxCw', //server test
+              //  'client_id' => '5a34fe1a978ef455fd280094',// local
+                'client_id' => '5a6ee1bddcd4cd7baa71fde4',   //servertest
+              //  'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
+                'client_secret' => 'XzAStSZgBrwoPVjvxr66WYLnpdrg5a8DCKjSKxCw', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',
