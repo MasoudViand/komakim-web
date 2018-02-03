@@ -150,7 +150,7 @@ class PhoneNumberController extends Controller
 
 
                 $response =$this->_getAccessToken($phoneNumber);
-        $profile =false;
+        $profile =null;
 
         if ($user->isCompleted)
         {

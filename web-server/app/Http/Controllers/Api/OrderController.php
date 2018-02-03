@@ -277,6 +277,7 @@ class OrderController extends Controller
 
         $order = Order::find($request->input('order_id'));
 
+
         if ($order->status == OrderStatusRevision::WAITING_FOR_WORKER_STATUS or $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS )
         {
             $user = $request->user();

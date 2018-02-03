@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\DissatisfiedReason;
-use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
@@ -39,12 +38,14 @@ class ReviewController extends Controller
         $order = Order::find($review->order_id);
 
 
-
-
         if (!$order) {
             return response()->json(['error' => 'سفارسی با این نام وجود ندارد'])->setStatusCode('417');
 
         }
+
+        if (!$order->worker_id)
+            return response()->json(['error' => 'هنوز خدمه برای این سفارش تعیین نشده'])->setStatusCode('417');
+
 
 
 
