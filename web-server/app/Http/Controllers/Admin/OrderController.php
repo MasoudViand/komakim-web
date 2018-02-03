@@ -111,9 +111,11 @@ class OrderController extends Controller
         $ordersArr=[];
         foreach ($model as $item)
         {
+
             $order=[];
             $order['user']=User::find($item->user_id);
-            $order['created_at'] = \Morilog\Jalali\jDateTime::strftime('d/m/Y', strtotime($item->created_at));
+            $order['created_at'] = \Morilog\Jalali\jDateTime::strftime('d/m/Y', $item['created_at']->toDateTime());
+            $order['created_at_hour']=\Morilog\Jalali\jDateTime::strftime('H:m', $item['created_at']->toDateTime());
             switch ($item->status)
             {
                 case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:

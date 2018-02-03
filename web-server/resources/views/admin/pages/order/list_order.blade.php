@@ -84,6 +84,7 @@
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام و نام خانوادگی</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">تاریخ در خواست</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">زمان ثبت سفارش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">وضعیت درخواست	</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">جزییات سفارش</th>
                         </tr>
@@ -94,6 +95,7 @@
                             <tr role="row" class="odd">
                                 <td class="sorting_1">{{$order['user']->name.'  '.$order['user']->family}}</td>
                                 <td class="sorting_1">{{$order['created_at']}}</td>
+                                <td class="sorting_1">{{$order['created_at_hour']}}</td>
                                 <td class="sorting_1">{{$order['status']}}</td>
                                 <td><a href="{{route('admin.order.detail',['order_id' => $order['order_id']])}}"><i class="fa fa-edit"></i></a></td>
 
@@ -160,7 +162,6 @@
                 var status = $( "#status" ).val();
                 var field = $( "#field" ).val();
 
-                console.log(field);
 
                 var params = [];
 
@@ -191,14 +192,12 @@
                         data :myJSON,
                         success:function(data) {
 
-                            console.log('sdd');
                            var tablebody = $( "#tuserbody" );
 
                             tablebody.empty();
 
 
                             for (i = 0; i < data.length; i++) {
-                              //  console.log(data[i]['user']['name']);
 
 
                                 tablebody.append(' <tr role="row" class="odd"><td class="sorting_1">'+data[i]['user']['name']+' '+data[i]['user']['family']+'</td>'+'<td class="sorting_1">'+data[i]['created_at']+'</td>'+'<td class="sorting_1">'+data[i]['status']+'</td>'+'<td>'+'<a href="/admin/order/detail/'+data[i]['order_id']+'">'+'<i class="fa fa-edit">'+'</i>'+'</td>'+'</tr> ' )
@@ -223,14 +222,11 @@
         function onhideWorker() {
             var x = document.getElementById("typeOfuser").value;
 
-            console.log(x)
             if (x == "worker"){
-                console.log('ccccccc');
                 x =document.getElementById("worker_filter_field");
 
                 if (x.style.display="block")
                 {
-                    console.log('sddd');
                 }
 
             }else {
@@ -238,7 +234,6 @@
 
                 if (x.style.display="none")
                 {
-                    console.log('sddd');
                 }
             }
         }

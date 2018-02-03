@@ -255,8 +255,8 @@ class PhoneNumberController extends Controller
         $http = new GuzzleHttp\Client;
        // dd(URL::to('/').'/oauth/token');
 
-//        $response = $http->post('http://127.0.0.1/web-server/public/oauth/token', [
-        $response = $http->post(URL::to('/').'/oauth/token', [
+        $response = $http->post('http://127.0.0.1/oauth/token', [
+        //$response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
               //  'client_id' => '5a34fe1a978ef455fd280094',// local

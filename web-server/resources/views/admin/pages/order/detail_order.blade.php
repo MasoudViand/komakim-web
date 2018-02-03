@@ -155,12 +155,18 @@
                         <tr role="row" class="odd">
                             <td class="sorting_1">{{$review['score']  }}</td>
                             <td class="sorting_1">{{$review['desc']  }}</td>
-                            <td class="sorting_1"><select name="field" id="field" class="form-control" style="">
-                                    @foreach($review['reasons'] as $item)
-                                        <option value="1">{{$item}}</option>
-                                    @endforeach
+                            <td class="sorting_1">
+                                @foreach($review['reasons'] as $item)
+                                    {{$item}}{{" ُ"}}
+                                @endforeach
 
-                                </select></td>
+                            </td>
+                            {{--<td class="sorting_1"><select name="field" id="field" class="form-control" style="">--}}
+                                    {{--@foreach($review['reasons'] as $item)--}}
+                                        {{--<option value="1">{{$item}}</option>--}}
+                                    {{--@endforeach--}}
+
+                                {{--</select></td>--}}
 
                         </tr>
                         </tbody>
