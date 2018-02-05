@@ -22,15 +22,6 @@ class PhoneNumberController extends Controller
     {
 
 
-//        $wallet = new \stdClass();
-//
-//        $wallet->user_id = new ObjectID('5a6c1391dcd4cd61690dd2e2');
-//        $wallet->amount = 12500;
-//        $wallet->updated_at =new UTCDateTime(time()*1000);
-//        $model = Wallet::raw()->insertOne($wallet);
-//
-//        dd(1);
-
         $validator = Validator::make($request->all(), [
             'phoneNumber' => 'required',
         ]);

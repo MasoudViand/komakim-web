@@ -67,6 +67,14 @@ Route::prefix('admin')->group(function (){
         Route::get('/inactive/{discount_code_id}', 'Admin\DiscountCodeController@inactive')->name('admin.discount_code.inactive');
 
     });
+    Route::prefix('notification')->group(function (){
+        Route::get('/', 'Admin\NotificationController@index')->name('admin.notification');
+        Route::get('/sms', 'Admin\NotificationController@showsmsform')->name('admin.sms');
+        Route::post('/send', 'Admin\NotificationController@sendNotification')->name('admin.notification.send.submit');
+        Route::post('/sms', 'Admin\NotificationController@sendSms')->name('admin.sms.send.submit');
+
+
+    });
 
     Route::prefix('user')->group(function (){
         Route::get('/', 'Admin\UserController@index')->name('admin.user.list');
@@ -97,10 +105,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/export/scv/', 'Admin\SettleDeptController@export')->name('admin.settle.export');
 
     });
-
-
-
-
     Route::prefix('category')->group(function (){
         Route::get('/', 'Admin\CategoryController@index')->name('admin.category');
         Route::get('/insert/', 'Admin\CategoryController@addCategoryForm')->name('admin.category.insert');
@@ -119,7 +123,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/delete/{category_id_id}', 'Admin\DissatisfiedReasonController@deleteDissatisfiedReason')->name('admin.dissatisfied.reason.delete');
 
     });
-
     Route::prefix('cancel/reason')->group(function (){
         Route::get('/', 'Admin\CancelReasonController@index')->name('admin.cancel.reason.list');
         Route::get('/insert/', 'Admin\CancelReasonController@addCancelReasonForm')->name('admin.cancel.reason.insert');
@@ -129,7 +132,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/delete/{category_id_id}', 'Admin\CancelReasonController@deleteCancelReason')->name('admin.cancel.reason.delete');
 
     });
-
     Route::prefix('subcategory')->group(function (){
         Route::get('/', 'Admin\SubCategoryController@index')->name('admin.subcategory');
         Route::get('/insert/', 'Admin\SubCategoryController@addSubCategoryForm')->name('admin.subcategory.insert');
@@ -139,7 +141,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/delete/{subcategory_id}', 'Admin\SubCategoryController@deleteSubCategory')->name('admin.subcategory.delete');
 
     });
-
     Route::prefix('emailtemplate')->group(function (){
         Route::get('/', 'Admin\EmailTemplateController@index')->name('admin.emailtemplate');
         Route::get('/insert/', 'Admin\EmailTemplateController@addEmailTemplateForm')->name('admin.emailtemplate.insert');
@@ -149,9 +150,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/delete/{emailtemplate_id}', 'Admin\SubCategoryController@deleteSubCategory')->name('admin.emailtemplate.delete');
 
     });
-
-
-
     Route::get('/listsurvey/{type?}', 'Admin\SurveyController@index')->name('admin.list.survey');
 
 

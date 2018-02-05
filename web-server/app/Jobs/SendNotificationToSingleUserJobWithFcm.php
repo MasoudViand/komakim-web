@@ -37,8 +37,6 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
      * @param $message
      * @param $title
      * @param $data
-     *
-     * @return void
      */
     public function __construct( $user_id, $message = null, $title = null, $data = null)
     {
@@ -60,6 +58,20 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
 
         $user=User::find($this->user_id);
 
+        if ($user->role==User::WORKER_ROLE)
+        {
+            $app_id ='5cf31f6e-0526-4083-841b-03d789183ab8';
+            $authorization = 'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi';
+
+        }
+        else
+        {
+            $app_id= '5cf31f6e-0526-4083-841b-03d789183ab8';
+            $authorization = 'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi';
+
+
+        }
+
 
 
         $fcm_token = $user->fcm_token;
@@ -69,7 +81,7 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
             "en" => $this->message
         );
         $fields = array(
-            'app_id' => "5cf31f6e-0526-4083-841b-03d789183ab8",
+            'app_id' => $app_id,
             'include_player_ids' => array($fcm_token),
             'data' => $this->data,
             'contents' => $content
@@ -78,7 +90,7 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-            'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi'));
+            $authorization));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_POST, TRUE);
@@ -87,37 +99,6 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
 
         $response = curl_exec($ch);
         curl_close($ch);
-
-//        $optionBuilder = new OptionsBuilder();
-//        $optionBuilder->setTimeToLive(60 * 20);
-//
-//        $notificationBuilder = new PayloadNotificationBuilder($this->title);
-//        $notificationBuilder->setBody($this->message)->setSound('default');
-//
-//        $dataBuilder = new PayloadDataBuilder();
-//        $dataBuilder->addData(['data' => $this->data]);
-//
-//        $option = $optionBuilder->build();
-//        $notification = $notificationBuilder->build();
-//        $data = $dataBuilder->build();
-//
-//        $token = $this->user->fcm_token;
-//
-//        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-//
-//        $downstreamResponse->numberSuccess();
-//        $downstreamResponse->numberFailure();
-//        $downstreamResponse->numberModification();
-//
-////return Array - you must remove all this tokens in your database
-//        $downstreamResponse->tokensToDelete();
-//
-////return Array (key : oldToken, value : new token - you must change the token in your database )
-//        $downstreamResponse->tokensToModify();
-//
-////return Array - you should try to resend the message to the tokens in the array
-//        $downstreamResponse->tokensToRetry();
-
 
     }
 }

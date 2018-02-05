@@ -70,7 +70,6 @@
 				</li>
           </ul>
         </li>
-
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-list"></i>
@@ -186,6 +185,16 @@
                     </li>
 
                 </ul>
+            </li>
+            <li >
+                <a href="{{ route('admin.notification') }}" >
+                    <i class="fa fa-dashboard "></i> <span> ناتیفیکیشن </span>
+                </a>
+            </li>
+            <li >
+                <a href="{{ route('admin.sms') }}" >
+                    <i class="fa fa-dashboard "></i> <span> پیام کوتاه </span>
+                </a>
             </li>
 
 
