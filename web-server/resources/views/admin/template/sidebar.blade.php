@@ -72,6 +72,28 @@
         </li>
             <li class="treeview">
                 <a href="#">
+                    <i class="fa fa-bars"></i>
+                    <span>کاربران ادمین</span>
+                    <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.user_admin') }}">
+                            <i class="fa fa-th"></i> <span>لیست کاربران ادمین</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.user_admin.insert') }}">
+                            <i class="fa fa-th"></i> <span>افزودن کاربر ادمین</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
                     <i class="fa fa-list"></i>
                     <span>زیر دسته بندی ها</span>
                     <span class="pull-left-container">

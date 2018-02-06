@@ -95,7 +95,8 @@ Route::prefix('admin')->group(function (){
     Route::prefix('setting')->group(function (){
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
         Route::post('/radius/edit', 'Admin\SettingController@editRadiusSearch')->name('admin.setting.radius_search');
-        Route::post('/commission/edit', 'Admin\SettingController@editCommission')->name('admin.setting.edit.commission');
+        Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
+
 //        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 
     });
@@ -112,6 +113,15 @@ Route::prefix('admin')->group(function (){
         Route::get('/update/{category_id}', 'Admin\CategoryController@showEditCategoryForm')->name('admin.category.update');
         Route::post('/update/', 'Admin\CategoryController@editCategory')->name('admin.category.update.submit');
         Route::get('/delete/{category_id_id}', 'Admin\CategoryController@deleteCategory')->name('admin.category.delete');
+
+    });
+    Route::prefix('user_admin')->group(function (){
+        Route::get('/', 'Admin\UserAdminController@index')->name('admin.user_admin');
+        Route::get('/insert/', 'Admin\UserAdminController@addForm')->name('admin.user_admin.insert');
+        Route::post('/insert/', 'Admin\UserAdminController@add')->name('admin.user_admin.insert.submit');
+        Route::get('/update/{admin_user_id}', 'Admin\UserAdminController@showEditForm')->name('admin.user_admin.update');
+        Route::post('/update/', 'Admin\UserAdminController@edit')->name('admin.user_admin.update.submit');
+        Route::get('/delete/{admin_user_id}', 'Admin\UserAdminController@delete')->name('admin.user_admin.delete');
 
     });
     Route::prefix('dissatisfied/reason')->group(function (){
