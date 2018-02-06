@@ -42,7 +42,7 @@
                             <tr role="row" class="odd">
                                 <td class="sorting_1">{{$userAdmin->name}}</td>
                                 <td>{{$userAdmin->email}}</td>
-                                <td>{{$userAdmin->role}}</td>
+                                <td>{{$userAdmin->role=='admin'?'مدیرکل':($userAdmin->role=='operator'?"اپراتور":'مالی')}}</td>
                                 <td><a href="{{route('admin.user_admin.update',['user_admin_id' => $userAdmin->id])}}"><i class="fa fa-edit"></i></a></td>
                                 <td><a href="{{route('admin.user_admin.delete',['user_admin_id' => $userAdmin->id])}}"  onclick="return confirm('ایا از حذف کاربر ادمین اطمینان دارید')"><i class="fa fa-remove"></i></a></td>
 
