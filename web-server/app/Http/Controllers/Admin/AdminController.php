@@ -10,6 +10,7 @@ use App\Subcategory;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use MongoDB\BSON\UTCDateTime;
 
 class AdminController extends Controller
@@ -215,4 +216,31 @@ class AdminController extends Controller
 
         return view('admin.pages.dashboard')->with($q);
     }
+
+    function showChangePassForm()
+    {
+        return view('admin.pages.change_pass');
+    }
+    function changePass(Request $request)
+    {
+        $this->validate($request, [
+            'currentPassword' =>'required',
+            'password' => 'required|string|min:6|confirmed',]);
+
+
+        $user =$request->user();
+
+        if(Hash::check($request->input('currentPassword'), $user->password))
+        {
+            $user->password =bcrypt($request->input('password'));
+            $user->save();
+            $message['success']='گذر واژه با موفقیت تغییر یافت';
+        }
+        else{
+            $message['error']='گذر واژه فعلی اشتباه میباشد';
+        }
+        return redirect()->route('admin.dashboard')->with($message);
+
+    }
+
 }

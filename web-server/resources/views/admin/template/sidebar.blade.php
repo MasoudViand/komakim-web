@@ -18,7 +18,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
 
-		<li class="header">مدیریت</li>
+		<li class="header">{{Auth::user()->role==\App\Admin::ADMIN_ROLE ? ' ادمین':(Auth::user()->role==\App\Admin::OPERATOR_ROLE?'اپراتور':'مالی')}}</li>
             <li >
                 <a href="{{ route('admin.dashboard') }}" >
                     <i class="fa fa-dashboard "></i> <span> داشبورد </span>
