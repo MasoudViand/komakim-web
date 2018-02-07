@@ -37,7 +37,7 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\ServiceController@index')->name('admin.service');
         Route::get('/insert/', 'Admin\ServiceController@addServiceForm')->name('admin.service.insert');
         Route::post('/insert/', 'Admin\ServiceController@addService')->name('admin.service.insert.submit');
-        Route::get('/subcategory/{category_id}', 'Admin\ServiceController@getSubCategory')->name('admin.service.subcategory');
+        Route::get('subcategory/{category_id}', 'Admin\ServiceController@getSubCategory')->name('admin.service.subcategory');
         Route::get('/update/{service_id}', 'Admin\ServiceController@showEditServiceForm')->name('admin.service.update');
         Route::post('/update/', 'Admin\ServiceController@editService')->name('admin.service.update.submit');
         Route::get('/delete/{service_id}', 'Admin\ServiceController@deleteService')->name('admin.service.delete');

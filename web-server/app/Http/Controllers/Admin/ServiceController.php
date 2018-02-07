@@ -160,7 +160,7 @@ class ServiceController extends Controller
         $service->name =            $request['nameService'];
         $service->price =           $request['priceService'];
         $service->minimum_number =  $request['minOrderService'];
-        $service->subcategory_id =  $request['subcategory'];
+        $service->subcategory_id = new ObjectID( $request['subcategory']);
         $service->description =     $request['descService'];
         $service->unit =            $request['unitService'];
 

@@ -42,6 +42,11 @@
                                     @endforeach
 
                                 </select>
+                                @if ($errors->has('subcategory'))
+                                    <span class="help-danger">
+                                        <strong>{{ $errors->first('subcategory') }}</strong>
+                                    </span>
+                                @endif
                             </div>
 
                             {{$service->name}}
@@ -66,10 +71,11 @@
                                     </span>
                                 @endif
 
+
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">واحد سرویس</label>
-                                <input type="" class="form-control" name="unitService" id="unitService" placeholder="واحد سرویس">
+                                <input type="" class="form-control" name="unitService" id="unitService" value="{{$service->unit}}">
                                 @if ($errors->has('unitService'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('unitService') }}</strong>
@@ -159,12 +165,12 @@
 
                 if(stateID) {
                     $.ajax({
-                        url: '/admin/getsubcategory/'+stateID,
+                        url: "{{URL::to('/')}}"+"/admin/service/subcategory/"+stateID,
                         type: "GET",
                         dataType: "json",
                         success:function(data) {
 
-                            console.log(data[0])
+
 
 
                             $('select[name="subcategory"]').empty();

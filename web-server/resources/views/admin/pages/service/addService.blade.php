@@ -118,10 +118,10 @@
                         dataType: "json",
                         success:function(data) {
 
-                            console.log(data[0])
 
 
-                            $('select[name="city"]').empty();
+
+                            $('select[name="subcategory"]').empty();
                             $.each(data, function(key, value) {
                                 $('select[name="subcategory"]').append('<option value="'+ value._id +'">'+ value.name +'</option>');
                             });
