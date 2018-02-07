@@ -96,8 +96,11 @@ class ServiceController extends Controller
         $model = Subcategory::raw()->aggregate($q);
 
         $subcategoriesArr=[];
+
         foreach ($model as $item)
         {
+
+            dd($item);
 
             $subcategory['_id']=(string)$item['_id'];
             $subcategory['name']=$item['name'];
@@ -112,12 +115,18 @@ class ServiceController extends Controller
                 $tempservice['name']=(string)$service['name'];
                 $tempservice['price']=(string)$service['price'];
                 $tempservice['minimum_number']=(string)$service['minimum_number'];
+                $tempservice['unit']=(string)$service['unit'];
 
-                if (!empty($services['description']))
+
+                if (!empty($service['description']))
                 {
                     $tempservice['description']=(string)$service['description'];
 
+                }else
+                {
+                    $tempservice['description']=null;
                 }
+
 
                 $servicequestions=ServiceQuestion::where('service_id',(string)$service['_id'])->get(['questions','id']);
 
