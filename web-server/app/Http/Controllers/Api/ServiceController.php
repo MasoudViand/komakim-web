@@ -99,9 +99,7 @@ class ServiceController extends Controller
 
         foreach ($model as $item)
         {
-
-            dd($item);
-
+            
             $subcategory['_id']=(string)$item['_id'];
             $subcategory['name']=$item['name'];
             $serviceArr=[];
