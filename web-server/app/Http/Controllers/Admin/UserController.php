@@ -20,7 +20,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin')->except('filterUser');
+        $this->middleware(['auth:admin','operator'])->except('filterUser');
     }
 
     function index(Request $request){

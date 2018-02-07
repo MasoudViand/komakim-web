@@ -16,7 +16,7 @@ class SettingController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin')->except(['editRadiusSearch','editCommission']);
+        $this->middleware(['auth:admin','admin'])->except(['editRadiusSearch','editCommission']);
     }
 
 

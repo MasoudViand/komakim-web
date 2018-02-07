@@ -24,6 +24,7 @@
                     <i class="fa fa-dashboard "></i> <span> داشبورد </span>
                 </a>
             </li>
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::OPERATOR_ROLE  )
 
             <li >
                 <a href="{{ route('admin.order.list') }}" >
@@ -31,6 +32,9 @@
                 </a>
             </li>
 
+            @endif
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE  )
 
 		<li class="treeview">
           <a href="">
@@ -114,11 +118,21 @@
                 </ul>
             </li>
 
+            @endif
+
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::OPERATOR_ROLE  )
+
             <li>
                 <a href="{{ route('admin.user.list') }}">
                     <i class="fa fa-users"></i> <span> کاربران </span>
                 </a>
             </li>
+
+            @endif
+
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::FINANCIAL_ROLE  )
 
             <li class="treeview">
                 <a href="#">
@@ -153,11 +167,24 @@
                 </ul>
             </li>
 
+            @endif
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE   )
+
+
             <li>
                 <a href="{{ route('admin.discount_code.list') }}">
                     <i class="fa fa-tags"></i> <span> کد تخفیف </span>
                 </a>
             </li>
+
+            @endif
+
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::OPERATOR_ROLE  )
+
+
+
 
             <li class="treeview">
                 <a href="#">
@@ -180,6 +207,13 @@
                     </li>
                 </ul>
             </li>
+
+            @endif
+
+
+
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE  )
+
 
             <li class="treeview">
                 <a href="#">
@@ -218,6 +252,9 @@
                     <i class="fa fa-dashboard "></i> <span> پیام کوتاه </span>
                 </a>
             </li>
+
+
+            @endif
 
 
         </ul>

@@ -23,7 +23,7 @@ class SettleDeptController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin')->except(['settleWorker','export']);
+        $this->middleware(['auth:admin','financial'])->except(['settleWorker','export']);
     }
 
     function index(Request $request){

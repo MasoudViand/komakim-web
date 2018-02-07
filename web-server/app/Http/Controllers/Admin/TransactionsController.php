@@ -28,7 +28,7 @@ class TransactionsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin')->except(['filterDaily','filterMonthly','filterWeekly']);
+        $this->middleware(['auth:admin','financial'])->except(['filterDaily','filterMonthly','filterWeekly']);
     }
 
      function index(Request $request)

@@ -10,6 +10,11 @@ class Admin extends Authenticatable
     use Notifiable;
 
 
+    const ADMIN_ROLE ='admin';
+    const OPERATOR_ROLE ='operator';
+    const FINANCIAL_ROLE ='financial';
+
+
     protected $guard = 'admin';
 
 

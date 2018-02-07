@@ -50,8 +50,6 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\FinancialController@index')->name('admin.financial');
         Route::get('/remain/wallet/', 'Admin\FinancialController@showRemainWallet')->name('admin.financial.remain_wallet');
         Route::post('/filter', 'Admin\FinancialController@filter')->name('admin.financial.daily');
-//        Route::post('/monthly', 'Admin\FinancialController@filterMonthly')->name('admin.financial.monthly');
-//        Route::post('/weekly', 'Admin\FinancialController@filterWeekly')->name('admin.financial.weekly');
 
     });
     Route::prefix('transactions')->group(function (){

@@ -25,7 +25,7 @@ class FinancialController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin')->except(['filter']);
+        $this->middleware(['auth:admin','financial'])->except(['filter']);
     }
 
     public function index(Request $request)

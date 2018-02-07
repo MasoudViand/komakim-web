@@ -29,7 +29,7 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin')->except('filterOrder');
+        $this->middleware(['auth:admin','operator'])->except('filterOrder');
     }
 
 
