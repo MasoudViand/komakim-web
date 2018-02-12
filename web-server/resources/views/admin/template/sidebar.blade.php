@@ -24,6 +24,12 @@
                     <i class="fa fa-dashboard "></i> <span> داشبورد </span>
                 </a>
             </li>
+
+            <li >
+                <a href="{{ route('admin.map') }}" >
+                    <i class="fa fa-dashboard "></i> <span> نقشه </span>
+                </a>
+            </li>
             @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::OPERATOR_ROLE  )
 
             <li >

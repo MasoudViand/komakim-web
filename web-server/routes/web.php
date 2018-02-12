@@ -48,6 +48,11 @@ Route::prefix('admin')->group(function (){
         Route::get('/question/delete/{question_id}', 'Admin\ServiceController@deleteQuestionService')->name('admin.service.question.delete');
 
     });
+    Route::prefix('map')->group(function (){
+        Route::get('/', 'Admin\MapController@index')->name('admin.map');
+
+    });
+
 
     Route::prefix('financial')->group(function (){
         Route::get('/', 'Admin\FinancialController@index')->name('admin.financial');
