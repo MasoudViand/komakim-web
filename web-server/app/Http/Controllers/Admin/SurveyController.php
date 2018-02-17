@@ -145,6 +145,7 @@ class SurveyController extends Controller
                         'score' =>1
                     ]
                 ];
+                array_unshift($q,$ql);
             }elseif($request->input('sort')=='asc')
             {
                 $ql=[
@@ -152,10 +153,12 @@ class SurveyController extends Controller
                         'score' =>-1
                     ]
                 ];
+                array_unshift($q,$ql);
             }
+
         }
 
-        array_unshift($q,$ql);
+
 
 
 
