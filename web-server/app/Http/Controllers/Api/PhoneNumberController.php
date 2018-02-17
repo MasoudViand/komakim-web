@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Node;
 use App\TempToken;
 use App\User;
 use App\Wallet;
@@ -17,6 +18,18 @@ use GuzzleHttp;
 
 class PhoneNumberController extends Controller
 {
+    function test(Request $request)
+    {
+        $order = $request->getContent();
+
+
+        $order =(json_decode($order));
+
+        $model = Node::raw()->insertOne($order);
+
+       return 1;
+
+    }
 
     function receiveCode(Request $request)
     {
@@ -251,9 +264,9 @@ class PhoneNumberController extends Controller
             'form_params' => [
                 'grant_type' => 'password',
               //  'client_id' => '5a34fe1a978ef455fd280094',// local
-                'client_id' => '5a6ee1bddcd4cd7baa71fde4',   //servertest
+                'client_id' => '5a8439cc71d2f705d3295c54',   //servertest
               //  'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
-                'client_secret' => 'XzAStSZgBrwoPVjvxr66WYLnpdrg5a8DCKjSKxCw', //server test
+                'client_secret' => 'rNKcfk4CJw46mlf4HwzitYbxEcEgf6v41gt01SbT', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',
@@ -261,5 +274,6 @@ class PhoneNumberController extends Controller
         ]);
 
         return $response;
+
     }
 }
