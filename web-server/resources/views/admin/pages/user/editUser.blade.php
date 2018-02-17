@@ -111,7 +111,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">شماره همراه </label>
-                                <input  class="form-control" id="mobileUser" name="mobileUser" value="{{$user->phone_number}}">
+                                <input  class="form-control" id="mobileUser" name="mobileUser" readonly value="{{$user->phone_number}}">
                                 @if ($errors->has('mobileUser'))
                                     <span class="help-danger">
                                         <strong>{{ $errors->first('mobileUser') }}</strong>
