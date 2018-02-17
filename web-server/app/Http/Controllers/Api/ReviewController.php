@@ -32,7 +32,7 @@ class ReviewController extends Controller
 
         if (!property_exists($review, 'order_id')) return response()->json(['error' => 'order_id is invalid'])->setStatusCode('417');
 
-        if (!property_exists($review, 'reasons') || !is_array($review->reasons)) return response()->json(['error' => 'review is invalid'])->setStatusCode('417');
+        if (property_exists($review, 'reasons') and !is_array($review->reasons)) return response()->json(['error' => 'review is invalid'])->setStatusCode('417');
 
 
         $order = Order::find($review->order_id);
@@ -49,11 +49,23 @@ class ReviewController extends Controller
 
 
 
+        if (property_exists($review,'reasons'))
+        {
+
+            $reasons=[];
+            foreach ($review->reasons as $item)
+                $reasons[] = new ObjectID($item);
+            $review->reasons=$reasons;
+        }
+
+
+
+
+
         $review->worker_id = new ObjectID($order->worker_id);
         $review->user_id = new ObjectID($request->user()->id);
         $review->order_id = new ObjectID($review->order_id);
         $review->created_at = new UTCDateTime(time() * 1000);
-
 
         $reviewModel = Review::where('worker_id', new ObjectID($order->worker_id))->orderBy('_id', 'desc')->first();
 

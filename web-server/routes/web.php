@@ -166,7 +166,7 @@ Route::prefix('admin')->group(function (){
         Route::get('/delete/{emailtemplate_id}', 'Admin\SubCategoryController@deleteSubCategory')->name('admin.emailtemplate.delete');
 
     });
-    Route::get('/listsurvey/{type?}', 'Admin\SurveyController@index')->name('admin.list.survey');
+    Route::get('/listsurvey/', 'Admin\SurveyController@index')->name('admin.list.survey');
 
 
 

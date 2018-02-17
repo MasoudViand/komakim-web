@@ -159,6 +159,45 @@ class OrderController extends Controller
         else
             $data['count']=0;
 
+
+        if (isset($queryParam['status']))
+        {
+            switch ($queryParam['status'])
+            {
+                case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
+                    $queryParam['status_plain_text']='منتظر تایید خدمه';
+                    break;
+                case OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS:
+                    $queryParam['status_plain_text']='قبول درخواست توسط خدمه';
+                    break;
+                case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
+                    $queryParam['status_plain_text']='شروع کار توسط خذمه';
+                    break;
+                case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
+                    $queryParam['status_plain_text']='اتمام کار توسط خدمه';
+                    break;
+                case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
+                    $queryParam['status_plain_text']='پرداخت توسط خدمه';
+                    break;
+                case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
+                    $queryParam['status_plain_text']='لغو توسط مشتری';
+                    break;
+                case OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS:
+                    $queryParam['status_plain_text']='لغو توسط خدمه';
+                    break;
+                case OrderStatusRevision::EDIT_BY_WORKER_STATUS:
+                    $queryParam['status_plain_text'] ='ویرایش توسط خدمه';
+                    break;
+
+                case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
+                    $queryParam['status_plain_text']='لغو توسط ادمین';
+                    break;
+
+
+            }
+        }
+
+
         $data['total_page']=(int)($data['count']/10)+1;
         $data['queryParam']=$queryParam;
         $data['page']= $page;

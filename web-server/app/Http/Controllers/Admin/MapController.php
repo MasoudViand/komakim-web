@@ -34,8 +34,9 @@ class MapController extends Controller
         $queryParam=[];
         $fields =Category::all();
         $data['fields']=$fields;
+        $data['page_title']='نقشه';
 
-        if (!$request->has('phone_number')and !$request->has('national_code') and !$request->has('fields') and !$request->has('fields')){
+        if (!$request->has('phone_number')and !$request->has('national_code') and !$request->has('fields') and !$request->has('fields') and !$request->has('gender')){
             $locations=[];
             $data['locations']=$locations;
             $data['queryParam']=$queryParam;
@@ -124,6 +125,9 @@ class MapController extends Controller
 
         $data['locations']=$locations;
         $data['queryParam']=$queryParam;
+
+
+
 
 
         //dd($locations);

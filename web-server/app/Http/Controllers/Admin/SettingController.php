@@ -35,7 +35,9 @@ class SettingController extends Controller
         else $commission = 5000;
         $data['commission']=$commission;
 
-       return view('admin.pages.setting.index')->with($data);
+        $data['page_title']='تنظیمات دیگر';
+
+        return view('admin.pages.setting.index')->with($data);
     }
     public function editRadiusSearch( Request $request)
     {

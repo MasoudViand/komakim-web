@@ -32,6 +32,7 @@ class CancelReasonController extends Controller
         }
 
         $data['cancelReasons'] = $cancelReasons;
+        $data['page_title']='دلایل لغو سفارش';
 
         return view('admin.pages.cancel_reason.list_cancel_reason')->with($data);
 
@@ -40,8 +41,9 @@ class CancelReasonController extends Controller
 
     function addCancelReasonForm(){
 
+        $data['page_title']='افزودن دلیل لغو سفارش';
 
-        return view('admin.pages.cancel_reason.addCancelReason');
+        return view('admin.pages.cancel_reason.addCancelReason')->with($data);
 
     }
 
@@ -67,9 +69,13 @@ class CancelReasonController extends Controller
 
     function showEditCancelReasonForm($cancelReason_id)
     {
+
         $cancelReason = CancelReason::find($cancelReason_id);
 
         $data['cancelReason']= $cancelReason;
+        $data['page_title']='ویرایش دلیل لغو سفارش';
+
+
 
         return view('admin.pages.cancel_reason.editCancelReason')->with($data);
 

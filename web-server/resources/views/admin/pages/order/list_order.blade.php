@@ -33,7 +33,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                             <select id ="status" name="status" class="form-control" style="">
-                                <option value="{{key_exists('status',$queryParam) ? $queryParam['status']:''}}">{{key_exists('status',$queryParam) ? $queryParam['status']:'--- انتخاب وضعیت--'}}</option>
+                                <option value="{{key_exists('status',$queryParam) ? $queryParam['status']:''}}">{{key_exists('status',$queryParam) ? $queryParam['status_plain_text']:'--- انتخاب وضعیت--'}}</option>
 
                                     <option value="{{\App\OrderStatusRevision::WAITING_FOR_WORKER_STATUS}}">منتظر تایید خدمه</option>
                                     <option value="{{\App\OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS}}">قبول شده توسط خدمه</option>

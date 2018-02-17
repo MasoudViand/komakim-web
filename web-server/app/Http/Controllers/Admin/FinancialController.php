@@ -31,14 +31,6 @@ class FinancialController extends Controller
     public function index(Request $request)
     {
 
-//        $tem = new \stdClass();
-//        $tem->total_price=445500;
-//        $tem->commission =135000;
-//        $tem->created_at = new UTCDateTime();
-//        $tem->updated_at = new UTCDateTime();
-//
-//        $model = FinancialReport::raw()->insertOne($tem);
-//        dd($model);
 
         $mode ='daily';
         $queryParam =[];

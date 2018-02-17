@@ -48,8 +48,8 @@
 
                 <tbody>
                 <tr role="row" class="odd">
-                    <td class="sorting_1">{{ array_key_exists('worker',$order) ?$order['worker']['name'].'  '.$order['worker']['family']:'هنور خدمه ای تایید نکرده است' }}</td>
-                    <td class="sorting_1">{{array_key_exists('worker',$order) ?$order['worker']['phone_number']:'حدمه باید تایید کند'}}</td>
+                    <td class="sorting_1">{{ array_key_exists('worker',$order) ?$order['worker']['name'].'  '.$order['worker']['family']:'هنور هیچ خدمه ای تایید نکرده است' }}</td>
+                    <td class="sorting_1">{{array_key_exists('worker',$order) ?$order['worker']['phone_number']:'هنور هیچ خدمه ای تایید نکرده است'}}</td>
                     <td class="sorting_1">{{$order['user']['name'].'  '.$order['user']['family']  }}</td>
                     <td class="sorting_1">{{$order['user']['phone_number']}}</td>
 
@@ -116,7 +116,7 @@
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام سرویس</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">قیمت پایه سرویس</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">حداق سفارش</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">حداقل سفارش</th>
                         </tr>
                         </thead>
                         <tbody>

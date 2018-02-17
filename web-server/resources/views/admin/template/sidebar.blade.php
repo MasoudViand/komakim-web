@@ -24,12 +24,15 @@
                     <i class="fa fa-dashboard "></i> <span> داشبورد </span>
                 </a>
             </li>
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE  )
+
 
             <li >
                 <a href="{{ route('admin.map') }}" >
                     <i class="fa fa-dashboard "></i> <span> نقشه </span>
                 </a>
             </li>
+            @endif
             @if(Auth::user()->role==\App\Admin::ADMIN_ROLE or Auth::user()->role==\App\Admin::OPERATOR_ROLE  )
 
             <li >
@@ -42,23 +45,7 @@
 
             @if(Auth::user()->role==\App\Admin::ADMIN_ROLE  )
 
-		<li class="treeview">
-          <a href="">
-            <i class="fa fa-files-o"></i>
-            <span>سرویس ها</span>
-            <span class="pull-left-container">
-              <i class="fa fa-angle-left pull-left"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-			<li>
-				<a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span> لیست سرویس ها</span></a>
-			</li>
-			<li>
-				<a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span>افزودن سرویس</span></a>
-			</li>
-          </ul>
-		</li>
+
 		<li class="treeview">
           <a href="#">
             <i class="fa fa-bars"></i>
@@ -80,49 +67,47 @@
 				</li>
           </ul>
         </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-bars"></i>
-                    <span>کاربران ادمین</span>
-                    <span class="pull-left-container">
+        <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-list"></i>
+                        <span>زیر دسته بندی ها</span>
+                        <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
             </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="{{ route('admin.user_admin') }}">
-                            <i class="fa fa-th"></i> <span>لیست کاربران ادمین</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.user_admin.insert') }}">
-                            <i class="fa fa-th"></i> <span>افزودن کاربر ادمین</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{ route('admin.subcategory') }}">
+                                <i class="fa fa-star"></i> <span>لیست زیر دسته بندی ها</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.subcategory.insert') }}">
+                                <i class="fa fa-th"></i> <span>افزودن زیر دسته بندی</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+        <li class="treeview">
+                    <a href="">
+                        <i class="fa fa-files-o"></i>
+                        <span>سرویس ها</span>
+                        <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span> لیست سرویس ها</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span>افزودن سرویس</span></a>
+                        </li>
+                    </ul>
+                </li>
 
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-list"></i>
-                    <span>زیر دسته بندی ها</span>
-                    <span class="pull-left-container">
-              <i class="fa fa-angle-left pull-left"></i>
-            </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="{{ route('admin.subcategory') }}">
-                            <i class="fa fa-star"></i> <span>لیست زیر دسته بندی ها</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.subcategory.insert') }}">
-                            <i class="fa fa-th"></i> <span>افزودن زیر دسته بندی</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+
+
 
             @endif
 
@@ -134,6 +119,33 @@
                     <i class="fa fa-users"></i> <span> کاربران </span>
                 </a>
             </li>
+
+            @endif
+            @if(Auth::user()->role==\App\Admin::ADMIN_ROLE  )
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-bars"></i>
+                        <span>کاربران ادمین</span>
+                        <span class="pull-left-container">
+              <i class="fa fa-angle-left pull-left"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{ route('admin.user_admin') }}">
+                                <i class="fa fa-th"></i> <span>لیست کاربران ادمین</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.user_admin.insert') }}">
+                                <i class="fa fa-th"></i> <span>افزودن کاربر ادمین</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
 
             @endif
 

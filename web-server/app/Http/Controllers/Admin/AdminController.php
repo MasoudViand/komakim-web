@@ -210,6 +210,7 @@ class AdminController extends Controller
         $q['financials']=$financials;
         $q['orders']=$orders;
         $q['users']=$users;
+        $q['page_title']='داشبورد';
 
 
 

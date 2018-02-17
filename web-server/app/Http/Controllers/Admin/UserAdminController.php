@@ -27,6 +27,7 @@ class UserAdminController extends Controller
 
 
         $data['userAdmins']=$userAdmins;
+        $data['page_title']='کاربران ادمین';
 
 
         return view('admin.pages.user_admin.index')->with($data);;

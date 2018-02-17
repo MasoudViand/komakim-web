@@ -26,12 +26,17 @@ class EmailTemplateController extends Controller
 
         $data['mailsTemplate'] = $mailsTemplate;
         $data['total_count'] = MailTemplate::count();
+        $data['page_title']='قالب های ایمیل';
+
 
         return view('admin.pages.email.listEmailTemplate')->with($data);
     }
     public function addEmailTemplateForm()
     {
-        return view('admin.pages.email.addEmailTemplate');
+        $data['page_title']='افزودن قالب ایمیل';
+
+
+        return view('admin.pages.email.addEmailTemplate')->with($data);
     }
     public function addEmailTemplate(Request $request)
     {
@@ -58,6 +63,9 @@ class EmailTemplateController extends Controller
     {
         $mailTemplate = MailTemplate::find($mail_template_id);
         $data['mailTemplate']=$mailTemplate;
+        $data['page_title']='ویرایش قالب ایمیل';
+
+
 
         return view('admin.pages.email.editEmailTemplate')->with($data);
 

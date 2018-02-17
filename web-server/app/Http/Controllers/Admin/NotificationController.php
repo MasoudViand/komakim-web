@@ -27,8 +27,9 @@ class NotificationController extends Controller
 
 
 
+        $data['page_title']='ارسال ناتیفیکایشن';
 
-        return view('admin.pages.notification.index');
+        return view('admin.pages.notification.index')->with($data);
 
     }
 
@@ -104,7 +105,9 @@ class NotificationController extends Controller
 
 
 
-        return view('admin.pages.notification.sms_form');
+
+        $data['page_title']='ارسال پیام کوتاه';
+        return view('admin.pages.notification.sms_form')->with($data);
     }
     function sendSms(Request $request)
     {

@@ -56,7 +56,6 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="gender"id="gender" class="form-control" style="">
-                            <option value="">- انتخاب جنسیت -</option>
                             <option value="{{key_exists('gender',$queryParam)?$queryParam['gender']:''}}">{{key_exists('gender',$queryParam)?($queryParam['gender']=='male'?'مرد':'زن'):'- انتخاب جنسیت -'}}</option>
 
 

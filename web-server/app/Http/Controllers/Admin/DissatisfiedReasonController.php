@@ -30,6 +30,8 @@ class DissatisfiedReasonController extends Controller
 
         $data['dissatisfiedReasons'] = $dissatisfiedReasons;
         $data['total_count'] = DissatisfiedReason::count();
+        $data['page_title']='دلایل عدم رضایت';
+
 
         return view('admin.pages.dissatisfied_reason.list_dissatisfied_reason')->with($data);
 
@@ -38,8 +40,9 @@ class DissatisfiedReasonController extends Controller
 
     function addDissatisfiedReasonForm(){
 
+        $data['page_title']='اضافه کردن دلیل عدم رضایت';
 
-        return view('admin.pages.dissatisfied_reason.addDissatisfiedReason');
+        return view('admin.pages.dissatisfied_reason.addDissatisfiedReason')->with($data);
 
     }
 
@@ -66,6 +69,8 @@ class DissatisfiedReasonController extends Controller
         $dissatisfiedReason = DissatisfiedReason::find($dissatisfiedReason_id);
 
         $data['dissatisfiedReason']= $dissatisfiedReason;
+        $data['page_title']='ویرایش دلیل عدم رضایت';
+
 
         return view('admin.pages.dissatisfied_reason.editDissatisfiedReason')->with($data);
 

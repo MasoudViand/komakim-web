@@ -18,14 +18,7 @@
                 </div>
             @endif
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-            <div class="row">
 
-                <div class="col-sm-6">
-                    <div id="example1_filter" class="dataTables_filter">
-                        <label>جست جو:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1">
-                        </label></div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-sm-12">
                     <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
