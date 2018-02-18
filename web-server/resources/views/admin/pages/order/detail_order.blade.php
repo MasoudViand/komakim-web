@@ -13,6 +13,7 @@
                <tr role="row">
                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">ادرس</th>
                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">تاریخ در خواست</th>
+                   <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">کد رهگیری</th>
                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">قیمت کل</th>
                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">وضعیت سفارش</th>
                </tr>
@@ -22,6 +23,7 @@
                <tr role="row" class="odd">
                    <td class="sorting_1">{{$order['address']['plain_text']  }}</td>
                    <td class="sorting_1">{{$order['created_at']}}</td>
+                   <td class="sorting_1">{{$order['tracking_number']}}</td>
                    <td class="sorting_1">{{$order['total_price']}}</td>
                    <td class="sorting_1">{{$order['status']}} @if(key_exists('cancel_reason',$order))<hr>دلیل:<div class="col-sm-6">{{$order['cancel_reason']}} </div>@endif</td>
 

@@ -10,6 +10,7 @@ use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
 use App\Service;
+use App\Setting;
 use App\Transaction;
 use App\Wallet;
 use Illuminate\Http\Request;
@@ -98,8 +99,12 @@ class WalletController extends Controller
 
         if (!$wallet or $wallet->amount<$total_price)
         {
+
+            dd(1);
             return response()->json(['error'=>'مقدار کیف پول کمتر از قیمت سفارش است '])->setStatusCode(417);
         }
+
+
 
 
 
@@ -110,7 +115,7 @@ class WalletController extends Controller
         //Todo implement transactional pattern
 
 
-        //$wallet->save();
+        $wallet->save();
 
 
 
@@ -220,7 +225,12 @@ class WalletController extends Controller
         $fanantialReport =new FinancialReport();
 
         $total_price =0;
-        $commission =0;
+        $total_commission =0;
+        $commissionConstModel = Setting::where('type','commission')->first();
+        $commissionConst=$commissionConstModel->value;
+
+
+
 
         foreach ($services as $item)
         {
@@ -241,11 +251,17 @@ class WalletController extends Controller
             if ($unit_count<$minimumNumber)
                 $unit_count = $minimumNumber;
 
+            $commission=$commissionConst;
+
+
+            if ($serviceModel->commission)
+            {
+                $commission=$serviceModel->commission;
+            }
 
 
 
-            $commission = $commission+ ((int)($unit_count/$minimumNumber))*5000;
-
+            $total_commission = $total_commission+ ((int)($unit_count/$minimumNumber))*$commission;
 
 
             $total_price=$total_price+ $unit_count*$price;
@@ -256,7 +272,7 @@ class WalletController extends Controller
         if($order->discount)
             $total_price = $total_price- $order->discount;
         $fanantialReport->total_price =$total_price;
-        $fanantialReport->commission = $commission;
+        $fanantialReport->commission = $total_commission;
         $fanantialReport->created_at= new UTCDateTime(time()*1000);
 
 

@@ -73,6 +73,17 @@
 
 
                             </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">کمسیون سرویس</label>
+                                <input  type="number" class="form-control" name="commissionService" id="price"  value={{$service->commission}}>
+                                @if ($errors->has('commissionService'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('commissionService') }}</strong>
+                                    </span>
+                                @endif
+
+                            </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">واحد سرویس</label>
                                 <input type="" class="form-control" name="unitService" id="unitService" value="{{$service->unit}}">

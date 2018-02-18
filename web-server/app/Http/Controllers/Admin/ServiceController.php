@@ -38,6 +38,7 @@ class ServiceController extends Controller
 
             $item['serviceName']=$service->name;
             $item['servicePrice'] =$service->price;
+            $item['serviceCommission'] =$service->commission;
             $item['serviceUnit'] =$service->unit;
             $item['serviceDescription'] =$service->description;
             $item['serviceMinimumNumber'] =$service->minimum_number;
@@ -105,11 +106,14 @@ class ServiceController extends Controller
        $service = new Service();
        $service->name=$request['nameService'];
        $service->subcategory_id=new ObjectID($request['subcategory']);
-       $service->price=$request['priceService'];
+       $service->price=(int)$request['priceService'];
        $service->unit=$request['unitService'];
-       $service->minimum_number=$request['minOrderService'];
+       $service->minimum_number=(int)$request['minOrderService'];
        if (!is_null($request['descService']))
            $service->description = $request['descService'];
+        if (!is_null($request['commissionService']))
+            $service->commission = (int)$request['commissionService'];
+
        $service->save();
 
         $message['success'] = 'سرویس با موفقیت اضافه شد';
@@ -158,8 +162,14 @@ class ServiceController extends Controller
 
         $service =Service::find($request['idService']);
         $service->name =            $request['nameService'];
-        $service->price =           $request['priceService'];
-        $service->minimum_number =  $request['minOrderService'];
+        $service->price =          (int) $request['priceService'];
+        $service->minimum_number = (int) $request['minOrderService'];
+        if (!is_null($request['commissionService']))
+            $service->commission =  (int)$request['commissionService'];
+        else
+            $service->commission=null;
+
+
         $service->subcategory_id = new ObjectID( $request['subcategory']);
         $service->description =     $request['descService'];
         $service->unit =            $request['unitService'];

@@ -21,6 +21,7 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">زیر دسته بندی</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">نام سرویس</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 139px;">قیمت پایه</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 139px;">کمسیون</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">حداقل سفارش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">واحد سرویس</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">توضیحات</th>
@@ -38,6 +39,7 @@
                                 <td>{{$item['serviceSubCategoryName']}}</td>
                                 <td>{{$item['serviceName']}}</td>
                                 <td>{{$item['servicePrice']}}</td>
+                                <td>{{$item['serviceCommission']}}</td>
                                 <td>{{$item['serviceMinimumNumber']}}</td>
                                 <td>{{$item['serviceUnit']}}</td>
                                 <td>{{$item['serviceDescription']}}</td>
