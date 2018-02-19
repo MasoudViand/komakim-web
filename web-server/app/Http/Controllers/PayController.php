@@ -16,12 +16,38 @@ use GuzzleHttp;
 
 class PayController extends Controller
 {
-    function index($order_id,$amount)
+    function index($phone_number,$amount)
     {
+        $user = User::where('phone_number',$phone_number)->first();
+        if (!$user)
+        {
+            print_r("شماره تلفن اشتباه است یا در سامانه ثبت نشده است");
+            die();
+
+        }
 
 
+        $payOrder = new \stdClass();
 
-        $data['order_id']=$order_id;
+        $payOrder->amount=$amount;
+        $payOrder->ip=request()->ip();
+
+        $payOrder->created_at = new UTCDateTime(time()*1000);
+
+        $payOrder->user_id =new ObjectID($user->id);
+
+
+        $model = OrderPayment::raw()->insertOne($payOrder);
+
+        $orderPayment=OrderPayment::find((string)($model->getInsertedId()));
+
+        if (((int)$amount)<=0 )
+        {
+            print_r('مقدار یاید عدد و مثبت باشد');
+            die;
+        }
+
+        $data['order_id']=$orderPayment->id;
         $data['amount']=$amount;
 
         return view('payment.saman-redirector')->with($data);

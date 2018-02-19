@@ -186,8 +186,7 @@ Route::prefix('admin')->group(function (){
 });
 
 Route::prefix('pay')->group(function (){
-    Route::get('/{order_id}/{amount}', 'PayController@index')->name('pay');
-    Route::post('/', 'PayController@pay')->name('pay.submit');
+    Route::get('/{phone_number}/{amount}', 'PayController@index')->name('pay');
     Route::post('/callback', 'PayController@callback')->name('pay.redirect.bank.callback');
 
 });
