@@ -49,7 +49,7 @@
                                 @endif
                             </div>
 
-                            {{$service->name}}
+
                             <div class="form-group" style="width:350px">
                                 <label for="exampleInputEmail1">نام سرویس </label>
                                 <input  class="form-control" id="nameservice" name="nameService" value={{$service->name}}>
@@ -115,7 +115,7 @@
                         </div><!-- /.box-body -->
 
                         <div class="box-footer" style="width:350px">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">ثبت</button>
                         </div>
                     </form>
 
@@ -154,7 +154,7 @@
                         </div><!-- /.box-body -->
 
                         <div class="box-footer" style="width:350px">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">ثبت</button>
                         </div>
                     </form>
 

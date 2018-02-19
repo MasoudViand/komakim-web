@@ -15,12 +15,12 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$amount}}</h3>
-                            <p>کیف پول باقیمانده کل کاربران</p>
+                            <p>کیف پول باقیمانده کل مشتریان</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
                         </div>
-                        <a href="#" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                        {{--<a href="#" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>--}}
                     </div>
                 </div>
             </div>

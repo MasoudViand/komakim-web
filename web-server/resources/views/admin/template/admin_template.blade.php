@@ -35,6 +35,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/fonts/fonts-fa.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/bootstrap-rtl.min.css") }}">
 <link rel="stylesheet" href="{{asset("AdminLTE-RTL/dist/css/rtl.css") }}">
+<link rel="stylesheet" href="{{asset("css/komakimstyle.css") }}">
+
 <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 
 @yield('head')
