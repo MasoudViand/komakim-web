@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OrderPayment;
 use App\Transaction;
+use App\User;
 use App\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -18,11 +19,12 @@ class PayController extends Controller
 {
     function index($phone_number,$amount)
     {
+
         $user = User::where('phone_number',$phone_number)->first();
         if (!$user)
         {
-            print_r("شماره تلفن اشتباه است یا در سامانه ثبت نشده است");
-            die();
+            $data['error']='شماره تلفن اشتباه است یا در سامانه ثبت نشده است';
+            return view('payment.saman-redirector')->with($data);
 
         }
 
@@ -43,9 +45,11 @@ class PayController extends Controller
 
         if (((int)$amount)<=0 )
         {
-            print_r('مقدار یاید عدد و مثبت باشد');
-            die;
+            $data['error']='مقدار یاید عدد و مثبت باشد';
+            return view('payment.saman-redirector')->with($data);
+
         }
+        $amount=$amount*10;
 
         $data['order_id']=$orderPayment->id;
         $data['amount']=$amount;
