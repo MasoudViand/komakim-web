@@ -34,6 +34,8 @@ class PayController extends Controller
         if( ! isset($_POST['State']) or $_POST['State']!='OK')
         {
 
+
+
             $data['error']='پرداخت ناموفق';
             return view('payment.callback')->with($data);
         }
@@ -90,8 +92,8 @@ class PayController extends Controller
             $soapclient = new \nusoap_client('https://sep.shaparak.ir/payments/referencepayment.asmx?WSDL','wsdl');
             $soapProxy    = $soapclient->getProxy() ;
 
-            $mid  = 123456; // شماره مشتری بانک سامان
-            $pass = 11111; // پسورد بانک سامان
+            $mid  = 10917062; // شماره مشتری بانک سامان
+            $pass = 7193628; // پسورد بانک سامان
             $result        = $soapProxy->VerifyTransaction($ref_num,$mid);
 
         }
@@ -139,7 +141,7 @@ class PayController extends Controller
 
                 $transAction->created_at = new UTCDateTime(time()*1000);
 
-                $transAction->user_id =new ObjectID($request->user()->id);
+                $transAction->user_id =$orderPeyment->user_id;
 
                 $transAction->type =Transaction::CHARGE_FROM_BANK;
                 $meta = new \stdClass();
@@ -151,12 +153,12 @@ class PayController extends Controller
 
                 $model = Transaction::raw()->insertOne($transAction);
 
-                $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
+                $wallet = Wallet::where('user_id',$orderPeyment->user_id)->first();
                 if (!$wallet)
                 {
                     $wallet = new \stdClass();
 
-                    $wallet->user_id = new ObjectID($request->user()->id);
+                    $wallet->user_id = $orderPeyment->user_id;
                     $wallet->amount = $orderPeyment->amount;
                     $wallet->updated_at =new UTCDateTime(time()*1000);
                     $model = Wallet::raw()->insertOne($wallet);

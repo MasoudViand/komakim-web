@@ -10,7 +10,7 @@
                 Amount: '{{$amount}}',
                 MID: '10917062',
                 ResNum: '{{$order_id}}',
-                RedirectURL: '{{URL::to('/').'pay/callback'}}',
+                RedirectURL: '{{URL::to('/').'/pay/callback'}}',
             };
 
             for(var key in params){
