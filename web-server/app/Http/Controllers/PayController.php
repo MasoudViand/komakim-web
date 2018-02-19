@@ -34,8 +34,8 @@ class PayController extends Controller
 
         }
 
-        
-        $amount=$amount*10;
+
+
 
         $payOrder = new \stdClass();
 
@@ -50,11 +50,12 @@ class PayController extends Controller
         $model = OrderPayment::raw()->insertOne($payOrder);
 
         $orderPayment=OrderPayment::find((string)($model->getInsertedId()));
+        $amount=$amount*10;
 
 
 
 
-        $data['order_id']=$orderPayment->id;
+        $data['order_id']=(string)$orderPayment->id;
         $data['amount']=$amount;
 
         return view('payment.saman-redirector')->with($data);
@@ -137,7 +138,7 @@ class PayController extends Controller
 
         }
 
-        if($result != ($orderPeyment->amount))
+        if($result != ($orderPeyment->amount*10))
         {
             // مغایرت مبلغ پرداختی
 
@@ -158,7 +159,7 @@ class PayController extends Controller
             }
         }
 
-        if($result == ($orderPeyment->amount))
+        if($result == ($orderPeyment->amount)*10)
         {
             // تراکنش موفق و ثبت شماره رسید دیجیتال
 
