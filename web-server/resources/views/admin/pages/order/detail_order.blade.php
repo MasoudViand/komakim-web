@@ -68,7 +68,7 @@
 
             <div class="row">
                 <div class="col-lg-4">
-                    <strong> چزییات سقارش</strong>
+                    <strong> جزییات سفارش</strong>
                     <table class="table table-bordered table-striped dataTable" role="grid" >
                         <thead>
                         <tr role="row">
