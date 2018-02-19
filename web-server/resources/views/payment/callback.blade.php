@@ -19,7 +19,7 @@
 
 
 
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger" role="alert" @if(empty($error)) hidden @endif>
                         <strong>
                             {{ $error or '' }}
                         </strong>
@@ -30,7 +30,7 @@
                 <div class="panel-body">
 
 
-                        <div class="alert alert-success"@if(empty($seccess)) hidden @endif>
+                        <div class="alert alert-success" @if(empty($seccess)) hidden @endif>
                             {{ $success or '' }}
                         </div>
 

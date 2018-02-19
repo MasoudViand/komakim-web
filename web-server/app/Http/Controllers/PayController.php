@@ -205,7 +205,7 @@ class PayController extends Controller
                     $wallet->save();
                 }
 
-
+                $data['success']= 'کیف پول با موفقیت شارژ شد';
                 $data['order_id']=$order_id;
                 $data['ref_num']=$ref_num;
                 return view('payment.callback')->with($data);
