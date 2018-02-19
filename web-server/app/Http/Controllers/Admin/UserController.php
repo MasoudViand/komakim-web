@@ -135,11 +135,17 @@ class UserController extends Controller
                     'as'           => 'profile',],
 
                 ],
+            [ '$lookup' => [
+                'from'         => 'wallets',
+                'localField'   => '_id',
+                'foreignField' => 'user_id',
+                'as'           => 'wallet',],
+
+            ],
 
         ];
 
         $q_count= [
-
                     [ '$lookup' => [
                         'from'         => 'worker_profiles',
                         'localField'   => '_id',
@@ -204,6 +210,8 @@ class UserController extends Controller
         $data['page_title']='کاربران';
         $data['total_page']=(int)($data['count']/$limit)+1;
 
+
+       
 
 
         return view('admin.pages.user.listUser')->with($data);

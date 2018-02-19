@@ -171,6 +171,7 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">نام خوانوادگی</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">شماره تلفن</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">نوع کاربر</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">کیف پول</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">جزییات بیشتر و ویرایش</th>
                         </tr>
                         </thead>
@@ -182,6 +183,7 @@
                                 <td class="sorting_1">{{key_exists('family',$user)?$user->family:'تکمیل نشده'}}</td>
                                 <td class="sorting_1">{{$user->phone_number}}</td>
                                 <td>{{ $user->role=='client' ?'مشتری':'خدمه' }}</td>
+                                <td class="sorting_1">{{count($user['wallet'])>0?$user['wallet'][0]['amount']:0}}</td>
                                 <td><a href="{{route('admin.user.update',['user_id' => $user->_id])}}"><i class="fa fa-edit"></i></a></td>
 
                             </tr>
