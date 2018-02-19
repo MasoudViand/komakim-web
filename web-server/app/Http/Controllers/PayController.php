@@ -27,7 +27,15 @@ class PayController extends Controller
             return view('payment.saman-redirector')->with($data);
 
         }
+        if (((int)$amount)<=0 )
+        {
+            $data['error']='مقدار یاید عدد و مثبت باشد';
+            return view('payment.saman-redirector')->with($data);
 
+        }
+
+        
+        $amount=$amount*10;
 
         $payOrder = new \stdClass();
 
@@ -43,13 +51,8 @@ class PayController extends Controller
 
         $orderPayment=OrderPayment::find((string)($model->getInsertedId()));
 
-        if (((int)$amount)<=0 )
-        {
-            $data['error']='مقدار یاید عدد و مثبت باشد';
-            return view('payment.saman-redirector')->with($data);
 
-        }
-        $amount=$amount*10;
+
 
         $data['order_id']=$orderPayment->id;
         $data['amount']=$amount;
