@@ -8,7 +8,7 @@
 
             var params = {
                 Amount: '{{$amount}}',
-                MID: '23e',
+                MID: '10917062',
                 ResNum: '{{$order_id}}',
                 RedirectURL: '{{URL::to('/').'pay/callback'}}',
             };
