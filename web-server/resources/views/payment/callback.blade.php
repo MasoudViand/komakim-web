@@ -25,19 +25,13 @@
                         </strong>
                     </div>
 
-
-
-                <div class="panel-body">
-
-
-                        <div class="alert alert-success" @if(empty($seccess)) hidden @endif>
-                            {{ $success or '' }}
-                        </div>
-
-
-
-
+                <div class="alert alert-danger" role="alert" @if(empty($success)) hidden @endif>
+                    <strong>
+                        {{ $success or '' }}
+                    </strong>
                 </div>
+
+            </div>
                 <div class="panel-body">
 
                     <div class="row">
