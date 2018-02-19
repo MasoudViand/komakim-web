@@ -36,7 +36,7 @@
                         <input type='hidden' id='Amount' name='' value={{$amount}}> <!-- مبلغ -->
                         <input type='hidden' id='MID' name='MID' value='23e'> <!-- شماره مشتری بانک سامان -->
                         <input type='hidden' id='ResNum' name='ResNum' value={{$order_id}}> <!-- شماره فاکتور -->
-                        <input type='hidden' id='RedirectURL' name='RedirectURL' value={{URL::to('/').'pay/callback'}}> <!-- آدرس بازگشت -->
+                        <input type='hidden' id='RedirectURL' name='RedirectURL' value={{URL::to('/').'/pay/callback'}}> <!-- آدرس بازگشت -->
                         <input type=submit value='pay'>
                     </form>
 
