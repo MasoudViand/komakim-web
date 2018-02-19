@@ -6,6 +6,7 @@ use App\Category;
 use App\DissatisfiedReason;
 use App\Review;
 use App\User;
+use App\Wallet;
 use App\WorkerProfile;
 use bar\baz\source_with_namespace;
 use function GuzzleHttp\Psr7\str;
@@ -211,7 +212,7 @@ class UserController extends Controller
         $data['total_page']=(int)($data['count']/$limit)+1;
 
 
-       
+
 
 
         return view('admin.pages.user.listUser')->with($data);
@@ -301,6 +302,12 @@ class UserController extends Controller
     function showEditUserForm($user_id)
     {
         $user = User::find($user_id);
+        $wallet = Wallet::where('user_id',new ObjectID($user_id))->first();
+
+        if ($wallet)
+            $wallet = $wallet->amount;
+        else
+            $wallet =0;
         $data['user']=$user;
         $workerProfile=null;
         if ($user->role=='worker')
@@ -349,6 +356,7 @@ class UserController extends Controller
 
             }
         $data['workerProfile']=$workerProfile;
+        $data['wallet']=$wallet;
         $data['page_title']='ویرایش کاربران';
         $fields =Category::all();
         $data['fields']=$fields;

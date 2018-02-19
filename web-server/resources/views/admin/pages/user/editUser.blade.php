@@ -119,6 +119,10 @@
                                 @endif
                             </div>
                             <div class="form-group">
+                                <label for="exampleInputEmail1">کیف پول کاربر </label>
+                                <input  class="form-control" id="walletUser" name="walletUser" readonly value="{{$wallet}}">
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputEmail1">نوع کاربر </label>
                                 <label  class="form-control" id="roleUser"  >{{ $user->role=='client' ?'مشتری':'خدمه' }}</label>
                             </div>
