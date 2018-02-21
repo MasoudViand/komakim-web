@@ -109,7 +109,7 @@ class MapController extends Controller
 
 
 
-            if ($workerprofile->profile[0]['location'])
+            if (key_exists('location',$workerprofile->profile[0]))
             {
                $lan = $workerprofile->profile[0]['location']['coordinates'][0];
                $long = $workerprofile->profile[0]['location']['coordinates'][1];
