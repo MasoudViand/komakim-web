@@ -97,10 +97,10 @@ class ServiceController extends Controller
             'nameService' => 'required',
             'subcategory' => 'required',
             'priceService' => 'required|numeric',
-            'minOrderService' => 'required|numeric',
             'unitService' => 'required'
         ]);
 
+        
 
 
        $service = new Service();
@@ -108,7 +108,7 @@ class ServiceController extends Controller
        $service->subcategory_id=new ObjectID($request['subcategory']);
        $service->price=(int)$request['priceService'];
        $service->unit=$request['unitService'];
-       $service->minimum_number=(int)$request['minOrderService'];
+       $service->minimum_number=(int)$request['minOrderService']?:1;
        if (!is_null($request['descService']))
            $service->description = $request['descService'];
         if (!is_null($request['commissionService']))

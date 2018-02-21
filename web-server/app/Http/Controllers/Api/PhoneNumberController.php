@@ -18,21 +18,11 @@ use GuzzleHttp;
 
 class PhoneNumberController extends Controller
 {
-    function test(Request $request)
-    {
-        $order = $request->getContent();
 
-
-        $order =(json_decode($order));
-
-        $model = Node::raw()->insertOne($order);
-
-       return 1;
-
-    }
 
     function receiveCode(Request $request)
     {
+
 
 
         $validator = Validator::make($request->all(), [
@@ -264,9 +254,9 @@ class PhoneNumberController extends Controller
             'form_params' => [
                 'grant_type' => 'password',
               //  'client_id' => '5a34fe1a978ef455fd280094',// local
-                'client_id' => '5a8439cc71d2f705d3295c54',   //servertest
+                'client_id' => '5a8d36aa71d2f757f110c834',   //servertest
               //  'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
-                'client_secret' => 'rNKcfk4CJw46mlf4HwzitYbxEcEgf6v41gt01SbT', //server test
+                'client_secret' => 'X48ILgXNuhJ8HL0cmDvLfu4cOPQ41dMJsPepoYzP', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,
                 'scope' => '',
