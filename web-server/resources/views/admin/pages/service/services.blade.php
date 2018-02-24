@@ -10,6 +10,41 @@
                 </strong>
             </div>
         @endif
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label for="title">انتخاب دسته بندی</label>
+                <select name="category" id="category" class="form-control" style="width:auto">
+                    <option value="{{key_exists('category_id',$queryParam)?$queryParam['category_id']:''}}">{{key_exists('category_name',$queryParam)?$queryParam['category_name']:'--انتخاب دسته بندی--'}}</option>
+                    @foreach ($categories as $category )
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="title">انتخاب زیر دسته بندی</label>
+                <select name="subcategory" class="form-control"  id="subcategory">
+                    <option value="{{key_exists('subcategory_id',$queryParam)?$queryParam['subcategory_id']:''}}">{{key_exists('subcategory_name',$queryParam)?$queryParam['subcategory_name']:'--انتخاب دسته بندی--'}}</option>
+                    @if(!is_null($subcategories))
+                    @foreach ($subcategories as $subcategory )
+                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                    @endforeach
+
+                        @endif
+
+
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="exampleInputEmail1">نام دسته بندی </label>
+                <input  class="form-control" id="service_name" name="nameCategory" value="{{key_exists('service_name',$queryParam)?$queryParam['service_name']:''}}" >
+
+            </div>
+
+            <div class="col-sm-3">
+                <button class="btn btn-primary" id="btn_search_service">اعمال</button>
+            </div>
+        </div>
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
@@ -68,4 +103,63 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('select[name="category"]').on('change', function() {
+                var stateID = $(this).val();
+
+                console.log(stateID)
+
+                if(stateID) {
+                    $.ajax({
+                        url: 'service/subcategory/'+stateID,
+                        type: "GET",
+                        dataType: "json",
+                        success:function(data) {
+
+
+
+
+                            $('select[name="subcategory"]').empty();
+
+                            $('select[name="subcategory"]').append('<option value="">'+ "--زیر دسته بندی را انتخاب کنید--" +'</option>')
+                            $.each(data, function(key, value) {
+                                $('select[name="subcategory"]').append('<option value="'+ value._id +'">'+ value.name +'</option>');
+                            });
+
+                        }
+                    });
+                }else{
+                    $('select[name="subcategory"]').empty();
+                }
+            });
+
+            $( "#btn_search_service" ).click(function() {
+                var category_id = $( "#category" ).val();
+                var subcategory_id = $( "#subcategory" ).val();
+                var service_name = $( "#service_name" ).val();
+
+
+                var params = [];
+
+                if(category_id)
+                    params.push("category_id="+category_id)
+                if(subcategory_id)
+                    params.push("subcategory_id="+subcategory_id)
+
+                if (service_name)
+                    params.push("service_name="+service_name)
+
+                window.location.href =
+                    "http://" +
+                    window.location.host +
+                    window.location.pathname +
+                    '?' + params.join('&');
+
+
+            });
+        });
+    </script>
+
 @endsection

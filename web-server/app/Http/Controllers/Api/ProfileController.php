@@ -107,4 +107,59 @@ class ProfileController extends Controller
 
 
     }
+
+    function registerLocation(Request $request)
+    {
+
+        if (!$request->has('latitude')or!$request->has('longitude'))
+        {
+            return response()->json(['error'=>'latitude and longitude is require'])->setStatusCode('417');
+
+        }
+
+
+
+        $user = $request->user();
+
+        if ($user->role!=User::WORKER_ROLE)
+        {
+            return response()->json(['error'=>'user must have worker role'])->setStatusCode('417');
+
+        }
+
+
+
+
+
+        $location =new \stdClass();
+        $location->type ="Point";
+        $coordinates =[(double)$request->input('latitude'),(double)$request->input('longitude')];
+        $location->coordinates=$coordinates;
+
+
+
+
+        $workerProfile = WorkerProfile::where('user_id',new ObjectID($user->id))->first();
+
+        if (!$workerProfile)
+            return response()->json(['error'=>'worker profile not exist'])->setStatusCode('417');
+
+
+        $workerProfile->location =$location;
+
+
+        if ($workerProfile->save())
+        {
+            unset($user['isCompleted']);unset($user['role']);unset($user['updated_at']);unset($user['created_at']);unset($user['fcm_token']);
+
+            return response()->json(['profile'=>$user,'location'=>$location]);
+
+        }
+        else{
+
+            return response()->json(['error'=>'something wrong! try again'])->setStatusCode(409);
+        }
+
+
+    }
 }

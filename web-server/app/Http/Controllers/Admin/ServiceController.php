@@ -23,11 +23,58 @@ class ServiceController extends Controller
         $this->middleware(['auth:admin','admin']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
+        $service = new Service();
+        $service = $service->newQuery();
+        $subcategories=null;
+        $subcategories_id_arr = [];
+        $queryParam=[];
+        if ($request->has('category_id')) {
 
-        $services = Service::paginate(15);
+            $queryParam['category_id']=$request->input('category_id');
+            $categoryQueryParam= Category::find($request->input('category_id'));
+            $queryParam['category_name']=$categoryQueryParam->name;
+            $subcategories = Subcategory::where('category_id', $request->input('category_id'))->get();
+            $data['subcategories']=$subcategories;
+            foreach ($subcategories as $subcategory) {
+                $subcategories_id_arr[] = new ObjectID($subcategory->id);
+            }
+
+        }
+
+        if ($request->has('subcategory_id')) {
+            $queryParam['subcategory_id']=$request->input('subcategory_id');
+            $subcategoriesQueryParam = Subcategory::find($request->input('subcategory_id'));
+            $queryParam['subcategory_name']=$subcategoriesQueryParam->name;
+
+            $subcategories_id_arr = [];
+            $subcategories_id_arr[] = new ObjectID($request->input('subcategory_id'));
+
+        }
+
+
+        if (count($subcategories_id_arr) > 0) {
+            $service->whereIn('subcategory_id', $subcategories_id_arr);
+
+        }
+
+        if ($request->has('service_name'))
+        {
+            $queryParam['service_name']=$request->input('service_name');
+
+            //dd('%'.$request->input('name_service').'%');
+            $service->where('name', 'like', '%'.$request->input('service_name').'%');
+        }
+
+
+
+
+        $services = $service->paginate(15);
+
+
+
 
 
         $serviceArr=[];
@@ -53,11 +100,17 @@ class ServiceController extends Controller
         }
 
         $total_count=Service::count();
+        $categories = Category::all();
+
+        $data['categories']=$categories;
 
         $data['serviceArr']=$serviceArr;
         $data['services']=$services;
         $data['total_count']=$total_count;
         $data['page_title']='لیست سرویس ها';
+        $data['queryParam']=$queryParam;
+        $data['subcategories']=$subcategories;
+
 
 
 
