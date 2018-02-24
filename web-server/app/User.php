@@ -12,6 +12,10 @@ class User extends Authenticatable
 
     const WORKER_ROLE ='worker';
     const CLIENT_ROLE ='client';
+
+
+    const DISABLE_USER_STATUS ='disabled';
+    const ENABLE_USER_STATUS ='enable';
     use Notifiable,HasApiTokens;
 
     /**

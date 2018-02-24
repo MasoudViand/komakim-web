@@ -39,7 +39,7 @@ class PayController extends Controller
 
         $payOrder = new \stdClass();
 
-        $payOrder->amount=$amount;
+        $payOrder->amount=(int)$amount;
         $payOrder->ip=request()->ip();
 
         $payOrder->created_at = new UTCDateTime(time()*1000);
@@ -193,7 +193,7 @@ class PayController extends Controller
                     $wallet = new \stdClass();
 
                     $wallet->user_id = $orderPeyment->user_id;
-                    $wallet->amount = $orderPeyment->amount;
+                    $wallet->amount = (int)$orderPeyment->amount;
                     $wallet->updated_at =new UTCDateTime(time()*1000);
                     $model = Wallet::raw()->insertOne($wallet);
 
@@ -213,7 +213,6 @@ class PayController extends Controller
             }
 
         }
-
 
     }
 }
