@@ -310,7 +310,7 @@ class UserController extends Controller
             $wallet =0;
         $data['user']=$user;
         $workerProfile=null;
-        if ($user->role=='worker')
+        if ($user->role==User::WORKER_ROLE)
         {
             $workerProfile=WorkerProfile::where('user_id',new ObjectID($user_id))->first();
             $filepath=URL::to('/').'/images/workers/profile-default-male.png';
@@ -329,9 +329,9 @@ class UserController extends Controller
 
                 $date = \Morilog\Jalali\jDateTime::strftime('Y/m/d', strtotime($workerProfile->birthDay['date']));
                 $data['date']=$date;
-                if ($workerProfile->status=='pending')
+                if ($workerProfile->status==WorkerProfile::WORKER_PENDING_STATUS)
                     $workerProfileStatus='منتظر تایید';
-                elseif ($workerProfile->status=='reject')
+                elseif ($workerProfile->status==WorkerProfile::WORKER_REJECT_STATUS)
                     $workerProfileStatus ='رد شده';
                 else
                     $workerProfileStatus='تایید شده';
@@ -360,13 +360,6 @@ class UserController extends Controller
         $data['page_title']='ویرایش کاربران';
         $fields =Category::all();
         $data['fields']=$fields;
-
-
-
-
-
-
-
 
         return view('admin.pages.user.editUser')->with($data);
     }

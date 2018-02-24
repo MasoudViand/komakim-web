@@ -138,9 +138,9 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">وضعیت </label>
                                 <select class="form-control" id="status" name="status">
-                                    <option value="{{$user->status=='active' ?'active':'inactive'}}">--- {{ $user->status=='active' ?'فعال':'غیرفعال' }} ---</option>
-                                    <option value="active">فعال</option>
-                                    <option value="inactive">غیر فعال</option>
+                                    <option value="{{$user->status=='active' ?'active':'inactive'}}">--- {{ $user->status==\App\User::ENABLE_USER_STATUS ?'فعال':'غیرفعال' }} ---</option>
+                                    <option value="{{\App\User::ENABLE_USER_STATUS}}">فعال</option>
+                                    <option value="{{\App\User::DISABLE_USER_STATUS}}">غیر فعال</option>
                                 </select>
 
 
@@ -258,9 +258,9 @@
                                 <select name="statusProfile" class="form-control" style="width:350px">
                                     <option value="{{$workerProfile->status}}">--- {{ $workerProfileStatus }} ---</option>
 
-                                    <option value="pending">منتظر تایید</option>
-                                    <option value="accept">قبول درخواست</option>
-                                    <option value="reject">رد درخواست</option>
+                                    <option value="{{\App\WorkerProfile::WORKER_PENDING_STATUS}}">منتظر تایید</option>
+                                    <option value="{{\App\WorkerProfile::WORKER_ACCEPT_STATUS}}">قبول درخواست</option>
+                                    <option value="{{\App\WorkerProfile::WORKER_REJECT_STATUS}}">رد درخواست</option>
 
                                 </select>
                             </div>
