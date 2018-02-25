@@ -53,6 +53,9 @@ class FindWorker implements ShouldQueue
 
 
 
+
+
+
         $category_id =$this->order['category_id'];
         $latitude =$this->order['address']['latitude'];
         $longitude =$this->order['address']['longitude'];
@@ -89,8 +92,6 @@ class FindWorker implements ShouldQueue
 
 
 
-
-
         if (count($workersIds)>0)
         {
 
@@ -114,8 +115,19 @@ class FindWorker implements ShouldQueue
             }
 
 
+            $clientUserModel = User::find($this->order->user_id);
 
-            $this->_sendNotifications($tokens,$this->order);
+
+                $clientUser['phone_number']=$clientUserModel->phone_number;
+                $clientUser['name']=$clientUserModel->name;
+                $clientUser['family']=$clientUserModel->family;
+
+                $data=['order'=>$this->order,'client'=>$clientUser];
+
+
+
+
+            $this->_sendNotifications($tokens,$data);
 
 
 
@@ -158,6 +170,8 @@ class FindWorker implements ShouldQueue
         $response = curl_exec($ch);
 
         curl_close($ch);
+
+
 
 
     }

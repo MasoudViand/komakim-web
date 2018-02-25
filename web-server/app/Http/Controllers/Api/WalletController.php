@@ -6,12 +6,14 @@ use App\DiscountCode;
 use App\DiscountCodeLog;
 use App\FinancialReport;
 use App\Jobs\RegisterStatusOrderRevisionJob;
+use App\Jobs\SendNotificationToSingleUserJobWithFcm;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
 use App\Service;
 use App\Setting;
 use App\Transaction;
+use App\User;
 use App\Wallet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -100,7 +102,7 @@ class WalletController extends Controller
         if (!$wallet or $wallet->amount<$total_price)
         {
 
-            dd(1);
+
             return response()->json(['error'=>'مقدار کیف پول کمتر از قیمت سفارش است '])->setStatusCode(417);
         }
 
@@ -170,6 +172,8 @@ class WalletController extends Controller
         $order->save();
 
         $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,$request->user()));
+        $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری پرداخت شد','',$order,User::WORKER_ROLE));
+
 
         return response()->json(['wallet'=>$wallet,'order'=>$order]);
 

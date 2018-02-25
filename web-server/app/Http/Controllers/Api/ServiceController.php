@@ -211,7 +211,7 @@ class ServiceController extends Controller
 
 
          if (!($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS))
-             return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(423);
+             return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(420);
 
 
 
@@ -221,7 +221,7 @@ class ServiceController extends Controller
          if ($order->save())
          {
               //$order =$this->_sendNotificationToClient($order->user_id,$order);
-              $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'تایید خدمه','',$order));
+              $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'تایید خدمه','',$order,User::CLIENT_ROLE));
               $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,$request->user()) );
 
               return response()->json(['order'=>$order]);
@@ -247,7 +247,7 @@ class ServiceController extends Controller
         if ($order->save())
         {
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,$request->user()) );
-            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'شروع به کار خدمه','',$order));
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'شروع به کار خدمه','',$order,User::CLIENT_ROLE));
 
 
             //$this->_sendNotificationToClient();
@@ -272,7 +272,7 @@ class ServiceController extends Controller
         if ($order->save())
         {
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
-            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order));
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order,User::CLIENT_ROLE));
 
             return response()->json(['order'=>$order]);
 

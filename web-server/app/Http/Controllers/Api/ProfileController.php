@@ -87,6 +87,8 @@ class ProfileController extends Controller
         $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
         if ($wallet)
             $wallet = $wallet->amount;
+        else
+            $wallet=0;
 
         $user->wallet =$wallet;
 

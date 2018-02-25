@@ -129,7 +129,7 @@ class OrderController extends Controller
                 $orderModel->tracking_number = $revision['tracking_number'];
                 unset($orderModel['revisions']);
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','',$order));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','',$order,User::CLIENT_ROLE));
 
 
                 return response()->json(['order'=>$orderModel]);
@@ -152,7 +152,7 @@ class OrderController extends Controller
             if ($order->save())
             {
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::APPROVE_EDIT_BY_CLIENT_STATUS,$request->user()) );
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'تایید ادامه کار','',$order));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'تایید ادامه کار','',$order,User::WORKER_ROLE));
 
 
                 //$this->_sendNotificationToClient();
@@ -285,7 +285,7 @@ class OrderController extends Controller
             if ($user->role ==User::WORKER_ROLE)
             {
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
-                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
+                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user,User::CLIENT_ROLE));
 
 
                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order));
@@ -295,7 +295,7 @@ class OrderController extends Controller
             {
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,$user));
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری لغو شد','',$order));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری لغو شد','',$order,User::WORKER_ROLE));
 
 
             }
@@ -308,7 +308,7 @@ class OrderController extends Controller
                 return response()->json(['error'=>'internal server error'])->setStatusCode(500);
         }
         else
-            return response()->json(['error'=>'این سفارش دیگر قابل حذف کردن نیست لطفا در صورت بروز مشکل با پشتیبانی تماس حاصل فرمایید '])->setStatusCode(417);
+            return response()->json(['error'=>'این سفارش دیگر قابل حذف کردن نیست لطفا در صورت بروز مشکل با پشتیبانی تماس حاصل فرمایید '])->setStatusCode(420);
 
     }
 
