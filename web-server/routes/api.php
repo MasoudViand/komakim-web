@@ -32,6 +32,7 @@ Route::middleware('auth:api')->prefix('profile')->group(function (){
 });
 Route::middleware('auth:api','profile')->get('profile/info' ,'Api\ProfileController@getprofileInfo');
 Route::middleware('auth:api','profile')->post('profile/account_number' ,'Api\ProfileController@addAcounNumberToWorkerProfile');
+Route::middleware('auth:api','profile')->post('profile/change_availability' ,'Api\ProfileController@changeAvailibilitySattis');
 
 Route::middleware('auth:api','profile')->post('profile/fcm', 'Api\ProfileController@registerFcmToken')->name('api.fcm.insert.submit');
 Route::middleware('auth:api','profile')->post('profile/location', 'Api\ProfileController@registerLocation')->name('api.location.insert.submit');

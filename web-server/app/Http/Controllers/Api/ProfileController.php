@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\Wallet;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -82,6 +83,20 @@ class ProfileController extends Controller
     {
 
         $user = User::find($request->user()->id);
+        $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
+        if ($wallet)
+            $wallet = $wallet->amount;
+
+        $user->wallet =$wallet;
+
+        if ($user->role==User::WORKER_ROLE)
+        {
+            $workerProfile = WorkerProfile::where('user_id',new ObjectID($user->id))->first();
+            unset($user->status);unset($user->isCompleted);unset($user->role);unset($user->updated_at);unset($user->created_at);unset($user->fcm_token);
+            return response()->json(['user'=>$user,'worker_profile'=>$workerProfile]);
+
+
+        }
         unset($user->status);unset($user->isCompleted);unset($user->role);unset($user->updated_at);unset($user->created_at);unset($user->fcm_token);
 
         return response()->json(['user'=>$user]);
@@ -107,6 +122,30 @@ class ProfileController extends Controller
 
 
     }
+
+    function changeAvailibilitySattis(Request $request)
+    {
+
+
+        if (!$request->has('availability_status'))
+        {
+            return response()->json(['error' =>'availability_status must be send'])->setStatusCode(417);
+
+        }
+
+        $workerProfile = WorkerProfile::where('user_id',new ObjectID($request->user()->id))->first();
+
+        $workerProfile->availability_status = $request->input('availability_status');
+
+
+        if ($workerProfile->save())
+            return response()->json(['workerProfile',$workerProfile]);
+        else
+            return response(['error' =>'internal server error'])->setStatusCode(500);
+
+
+    }
+
 
     function registerLocation(Request $request)
     {
