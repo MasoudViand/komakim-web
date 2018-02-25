@@ -101,6 +101,7 @@ Route::prefix('admin')->group(function (){
     Route::prefix('setting')->group(function (){
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
         Route::post('/radius/edit', 'Admin\SettingController@editRadiusSearch')->name('admin.setting.radius_search');
+        Route::post('/commission/edit', 'Admin\SettingController@editCommission')->name('admin.setting.commission');
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
 
 //        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');

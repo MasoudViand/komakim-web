@@ -231,7 +231,7 @@ class WalletController extends Controller
         $total_price =0;
         $total_commission =0;
         $commissionConstModel = Setting::where('type','commission')->first();
-        $commissionConst=$commissionConstModel->value;
+        $commissionConstModel? $commissionConst=$commissionConstModel->value:$commissionConst=5000;
 
 
 
