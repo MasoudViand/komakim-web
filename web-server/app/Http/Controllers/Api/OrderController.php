@@ -285,16 +285,17 @@ class OrderController extends Controller
             if ($user->role ==User::WORKER_ROLE)
             {
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
-                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user,User::CLIENT_ROLE));
+                $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
 
-
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order));
+                if ( $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS)
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order,User::CLIENT_ROLE));
 
             }
             if ($user->role == User::CLIENT_ROLE)
             {
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,$user));
+                if ( $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS)
                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری لغو شد','',$order,User::WORKER_ROLE));
 
 

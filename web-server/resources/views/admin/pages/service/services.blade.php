@@ -36,7 +36,7 @@
                 </select>
             </div>
             <div class="col-sm-3">
-                <label for="exampleInputEmail1">نام دسته بندی </label>
+                <label for="exampleInputEmail1">نام سرویس </label>
                 <input  class="form-control" id="service_name" name="nameCategory" value="{{key_exists('service_name',$queryParam)?$queryParam['service_name']:''}}" >
 
             </div>
@@ -59,7 +59,6 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 139px;">کمسیون</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">حداقل سفارش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">واحد سرویس</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">توضیحات</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">ویرایش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">حذف</th>
                         </tr>
@@ -77,7 +76,6 @@
                                 <td>{{$item['serviceCommission']}}</td>
                                 <td>{{$item['serviceMinimumNumber']}}</td>
                                 <td>{{$item['serviceUnit']}}</td>
-                                <td>{{$item['serviceDescription']}}</td>
 
                                 <td><a href="{{route('admin.service.update',['service_id' => $item['id']])}}"><i class="fa fa-edit"></i></a></td>
                                 <td><a href="{{route('admin.service.delete',['service_id' => $item['id']])}}"  onclick="return confirm('ایا از حذف سرویس اطمینان دارید')"><i class="fa fa-remove"></i></a></td>
