@@ -7,6 +7,7 @@ use App\Wallet;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\URL;
 use MongoDB\BSON\ObjectID;
 use Validator;
 
@@ -91,7 +92,18 @@ class ProfileController extends Controller
 
         if ($user->role==User::WORKER_ROLE)
         {
+
+
             $workerProfile = WorkerProfile::where('user_id',new ObjectID($user->id))->first();
+            $url_image =  '/images/workers/profile-default-male.png';
+            if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.png')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.png';
+            if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpg';
+            if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpeg';
+
+            $url_image=URL::to('/') .''.$url_image;
+
+            $workerProfile->url_image = $url_image;
+
             unset($user->status);unset($user->isCompleted);unset($user->role);unset($user->updated_at);unset($user->created_at);unset($user->fcm_token);
             return response()->json(['user'=>$user,'worker_profile'=>$workerProfile]);
 
