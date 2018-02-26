@@ -449,7 +449,7 @@ class UserController extends Controller
        }
 
 
-        $workerProfile->nationalCode        =$request['nationCodeProfile'];
+        $workerProfile->national_code        =$request['nationCodeProfile'];
         $workerProfile->address             =$request['addressProfile'];
         $workerProfile->home_phone_number   =$request['phoneProfile'];
         $workerProfile->fields               =$request['fields'];
