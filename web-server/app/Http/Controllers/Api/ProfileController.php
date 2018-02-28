@@ -147,6 +147,10 @@ class ProfileController extends Controller
 
         }
 
+        if ($request->input('availability_status')!=WorkerProfile::WORKER_AVAILABLE_STATUS and $request->input('availability_status')!=WorkerProfile::WORKER_UNAVAILABLE_STATUS )
+            return response()->json(['error' =>'please send correct value'])->setStatusCode(417);
+
+
         $workerProfile = WorkerProfile::where('user_id',new ObjectID($request->user()->id))->first();
 
         $workerProfile->availability_status = $request->input('availability_status');
@@ -211,6 +215,17 @@ class ProfileController extends Controller
         else{
 
             return response()->json(['error'=>'something wrong! try again'])->setStatusCode(409);
+        }
+
+
+    }
+
+    function initialize(Request $request)
+    {
+        if (!$request->has('user_type'))
+        {
+            return response()->json(['error'=>'user_type is require'])->setStatusCode(417);
+
         }
 
 

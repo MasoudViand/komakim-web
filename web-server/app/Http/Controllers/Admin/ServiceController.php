@@ -186,6 +186,7 @@ class ServiceController extends Controller
         $category= Category::find($subcategory->category_id);
         $categories=Category::all();
 
+
         $subcategories = Subcategory::where('category_id',$category->id)->get();
 
         $data['service']=       $service;

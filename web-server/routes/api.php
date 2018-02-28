@@ -30,6 +30,7 @@ Route::middleware('api')->prefix('number')->group(function (){
 Route::middleware('auth:api')->prefix('profile')->group(function (){
     Route::post('/', 'Api\ProfileController@addprofile')->name('api.profile.insert.submit');
 });
+Route::middleware('api')->post('initialize' ,'Api\ProfileController@initialize');
 Route::middleware('auth:api','profile')->get('profile/info' ,'Api\ProfileController@getprofileInfo');
 Route::middleware('auth:api','profile')->post('profile/account_number' ,'Api\ProfileController@addAcounNumberToWorkerProfile');
 Route::middleware('auth:api','profile')->post('profile/change_availability' ,'Api\ProfileController@changeAvailibilitySattis');

@@ -30,6 +30,50 @@
             </div>
 
 
+            <p1> ورژن های اپلیکایشن</p1>
+
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <table id="user" class="table table-bordered table-striped" style="clear: both">
+                        <tbody>
+                        <thead>
+                        <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 107px;">نوع اپلیکایشن</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 109px;">ورژن اپ</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 100px;">به روز رسانی اجباری</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">ادرس دانلود اپ</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 200px;">جزییات بیشتر و ویرایش</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td width="15%">خدمه</td>
+                            <td width="15%" id="radius_main">2.1</td>
+                            <td width="15%" id="radius _main">بلی</td>
+                            <td width="35%" id="radius _main">www.google.com</td>
+                            <td width="35%"><a href="#"><i class="fa fa-edit"></i></a></td>
+
+
+                        </tr>
+                        <tr>
+                            <td width="15%">خدمه</td>
+                            <td width="15%" id="radius_main">2.1</td>
+                            <td width="15%" id="radius _main">بلی</td>
+                            <td width="35%" id="radius _main">www.google.com</td>
+                            <td width="35%"><a href="#"><i class="fa fa-edit"></i></a></td>
+
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+
+
+
 
         </div>
 

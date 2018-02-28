@@ -7,6 +7,7 @@
 
 
 
+
     @if(Session::has('error'))
         <div class="alert alert-danger" role="alert">
             <strong>
@@ -52,8 +53,9 @@
 
                             <div class="form-group" style="width:350px">
                                 <label for="exampleInputEmail1">نام سرویس </label>
-                                <input  class="form-control" id="nameservice" name="nameService" value={{$service->name}}>
-                                @if ($errors->has('nameService'))
+                                <input  class="form-control" id="nameservice" name="nameService" value="{{$service->name}}">
+
+                            @if ($errors->has('nameService'))
                                     <span class="help-danger">
                                         <strong>{{ $errors->first('nameService') }}</strong>
                                     </span>
