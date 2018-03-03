@@ -42,8 +42,9 @@ class NotificationController extends Controller
         if ($request->get('type')==User::WORKER_ROLE)
         {
 
-            $app_id ='5cf31f6e-0526-4083-841b-03d789183ab8';
-            $authorization = 'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi';
+
+            $app_id ='aae19cb0-6ce8-44e9-b40d-8038799b952ec';
+            $authorization = 'Authorization: Basic MzM4MjM1ZjktZDE1Ni00NDg2LWEyZWYtNDUxNDNlZmJmYWYy';
 
         }
         else
