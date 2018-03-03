@@ -84,8 +84,6 @@ class NotificationController extends Controller
 
         $response = json_decode($response);
 
-        dd($response);
-
         $recipients = $response->recipients;
          $userType= 'مشتری';
          if ($request->input('type')==User::WORKER_ROLE)

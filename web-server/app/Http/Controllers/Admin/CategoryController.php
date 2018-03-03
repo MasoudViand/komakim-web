@@ -61,7 +61,12 @@ class CategoryController extends Controller
         {
 
             // dd($request['imageّIcon']);
-            $this->validate($request, ['nameCategory' => 'required', 'statusCategory' => 'required', 'orderCategory' => 'required|numeric', 'imageّIcon' => 'required|image|mimes:jpeg,png,jpg|max:512',]);
+            $this->validate($request, [
+                'nameCategory' => 'required',
+                'statusCategory' => 'required',
+                'orderCategory' => 'required|numeric',
+                'imageّIcon' => 'required|image|mimes:jpeg,png,jpg|max:512',
+                ]);
 
             $category = new Category();
             $category->name = $request['nameCategory'];
@@ -73,7 +78,7 @@ class CategoryController extends Controller
 
                 if (file_exists((public_path('images/icons') . '/' . $category->id) . '.png')) unlink((public_path('images/icons') . '/' . $category->id) . '.png');
                 if (file_exists((public_path('images/icons') . '/' . $category->id) . '.jpg')) unlink((public_path('images/icons') . '/' . $category->id) . '.jpg');
-                if (file_exists((public_path('images/icons') . '/' . $category->id) . '.png')) unlink((public_path('images/icons') . '/' . $category->id) . '.png');
+                if (file_exists((public_path('images/icons') . '/' . $category->id) . '.png')) unlink((public_path('images/icons') . '/' . $category->id) . '.jpeg');
 
                 request()->imageّIcon->move(public_path('images/icons'), $imageName);
                 $path = (public_path('images/icons') . '/' . $imageName);

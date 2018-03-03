@@ -23,7 +23,7 @@
     @endif
 
 
-    <form role="form" method="POST" action="{{ route('admin.dissatisfied.reason.insert.submit') }}">
+    <form role="form" method="POST" enctype="multipart/form-data" action="{{ route('admin.dissatisfied.reason.insert.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
 
@@ -38,9 +38,20 @@
                                     </span>
                 @endif
             </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">اپلود ایکون </label>
+                {!! Form::file('imageّIcon', array('class' => 'image')) !!}
+                @if ($errors->has('imageّIcon'))
+                    <span class="help-danger">
+                                        <strong>{{ $errors->first('imageّIcon') }}</strong>
+                                    </span>
+                @endif
+            </div>
 
 
         </div><!-- /.box-body -->
+
+
 
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">Submit</button>

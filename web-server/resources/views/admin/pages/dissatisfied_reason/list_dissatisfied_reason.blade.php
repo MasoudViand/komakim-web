@@ -25,6 +25,7 @@
                         <thead>
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">دلیل عدم رضایت</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">عکس</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">ویرایش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">حذف</th>
                         </tr>
@@ -36,6 +37,7 @@
 
                             <tr role="row" class="odd">
                                 <td class="sorting_1">{{$dissatisfiedReason->reason}}</td>
+                                <td><img src="{{$dissatisfiedReason->filepath}}" style="max-width: 34px"></td>
                                 <td><a href="{{route('admin.dissatisfied.reason.update',['dissatisfied_reason_id' => $dissatisfiedReason->id])}}"><i class="fa fa-edit"></i></a></td>
                                 <td><a href="{{route('admin.dissatisfied.reason.delete',['dissatisfied_reason_id' => $dissatisfiedReason->id])}}"  onclick="return confirm('ایا از حذف این  دلیل  اطمینان دارید')"><i class="fa fa-remove"></i></a></td>
 
