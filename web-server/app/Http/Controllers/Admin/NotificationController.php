@@ -43,7 +43,7 @@ class NotificationController extends Controller
         {
 
 
-            $app_id ='aae19cb0-6ce8-44e9-b40d-8038799b952ec';
+            $app_id ='aae19cb0-6ce8-44e9-b40d-8038799b952e';
             $authorization = 'Authorization: Basic MzM4MjM1ZjktZDE1Ni00NDg2LWEyZWYtNDUxNDNlZmJmYWYy';
 
         }
@@ -83,6 +83,8 @@ class NotificationController extends Controller
         curl_close($ch);
 
         $response = json_decode($response);
+
+        dd($response);
 
         $recipients = $response->recipients;
          $userType= 'مشتری';
