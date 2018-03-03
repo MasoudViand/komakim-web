@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Setting;
 use App\User;
 use App\Wallet;
 use App\WorkerProfile;
@@ -222,11 +223,108 @@ class ProfileController extends Controller
 
     function initialize(Request $request)
     {
-        if (!$request->has('user_type'))
-        {
-            return response()->json(['error'=>'user_type is require'])->setStatusCode(417);
 
-        }
+        if ($request->input('user_type')==User::WORKER_ROLE)
+        {
+            $versionModel = Setting::where('type', 'app_version')->where('app_type', User::WORKER_ROLE)->first();
+            unset($versionModel->created_at);
+            unset($versionModel->updated_at);
+            unset($versionModel->_id);
+            unset($versionModel->type);
+
+            $initialize['version'] = $versionModel;
+            $userModel = $request->user();
+
+            if (!$userModel)
+            {
+                return response()->json(['initialize'=>$initialize])->setStatusCode(401);
+            }
+
+
+
+            if (!$userModel->isCompleted)
+                return response()->json(['errors'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
+            if ($userModel->status==User::DISABLE_USER_STATUS)
+                return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
+
+            $worker_profile = WorkerProfile::where('user_id',new ObjectID($userModel->id))->first();
+
+            if (!$worker_profile)
+                return response()->json(['errors'=>"پروفایل خدمه تکمیل نشده.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(423);
+            if ($worker_profile->status==WorkerProfile::WORKER_PENDING_STATUS)
+                return response()->json(['errors'=>"کاربری شما در مرحله تاییدیه میباشد.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(424);
+            if ($worker_profile->status==WorkerProfile::WORKER_REJECT_STATUS)
+                return response()->json(['errors'=>"کاربری شما رد شده است.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(425);
+
+
+            $user['phone_number'] = $userModel->phone_number;
+            $user['name'] = $userModel->name;
+            $user['family'] = $userModel->family;
+
+            $wallet =Wallet::where('user_id',new ObjectID($userModel->id))->first();
+            if ($wallet)
+                $user['wallet']=$wallet->amount;
+            else
+                $user['wallet']=0;
+
+
+
+            return response()->json(['initialize'=>$initialize,'user'=>$user,'worker_profile'=>$worker_profile]);
+
+
+
+
+        }elseif ($request->input('user_type')==User::CLIENT_ROLE)
+        {
+
+
+            $versionModel = Setting::where('type', 'app_version')->where('app_type', User::CLIENT_ROLE)->first();
+            unset($versionModel->created_at);
+            unset($versionModel->updated_at);
+            unset($versionModel->_id);
+            unset($versionModel->type);
+
+            $initialize['version'] = $versionModel;
+            $userModel = $request->user();
+
+            if (!$userModel)
+            {
+                return response()->json(['initialize'=>$initialize])->setStatusCode(401);
+            }
+
+
+
+
+
+
+            if (!$userModel->isCompleted)
+                return response()->json(['errors'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
+            if ($userModel->status==User::DISABLE_USER_STATUS)
+                return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
+
+            $user['phone_number'] = $userModel->phone_number;
+            $user['name'] = $userModel->name;
+            $user['family'] = $userModel->family;
+
+           // dd(Wallet::where('user_id',new ObjectID($userModel->id))->first());
+
+            $wallet =Wallet::where('user_id',new ObjectID($userModel->id))->first();
+
+            if ($wallet)
+                $user['wallet']=$wallet->amount;
+            else
+                $user['wallet']=0;
+
+            return response()->json(['initialize'=>$initialize,'user'=>$user]);
+        }else
+            return response()->json(['errors'=>"user_type is not defined"])->setStatusCode(417);
+
+
+
+
+
+
+
 
 
     }

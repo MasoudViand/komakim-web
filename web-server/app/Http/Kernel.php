@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'access_token' => \App\Http\Middleware\CheckUserHasAccessToken::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -61,5 +62,15 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\CheckUserHasAdminRole::class,
         'financial' => \App\Http\Middleware\CheckUserHasFinancialRole::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+    ];
+
+    /**
+     * Responsible for prioritizing the middleware
+     *
+     * @var array
+     */
+    protected $middlewarePriority = [
+        'access_token' => \App\Http\Middleware\CheckUserHasAccessToken::class,
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
     ];
 }

@@ -103,6 +103,8 @@ Route::prefix('admin')->group(function (){
         Route::post('/radius/edit', 'Admin\SettingController@editRadiusSearch')->name('admin.setting.radius_search');
         Route::post('/commission/edit', 'Admin\SettingController@editCommission')->name('admin.setting.commission');
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
+        Route::get('/edit/version/{id}', 'Admin\SettingController@showEditVersionForm')->name('admin.edit.version');
+        Route::post('/edit/version', 'Admin\SettingController@editVersion')->name('admin.edit.version.submit');
 
 //        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 

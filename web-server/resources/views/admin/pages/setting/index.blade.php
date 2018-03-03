@@ -47,20 +47,20 @@
                         </tr>
                         </thead>
                         <tr>
-                            <td width="15%">خدمه</td>
-                            <td width="15%" id="radius_main">2.1</td>
-                            <td width="15%" id="radius _main">بلی</td>
-                            <td width="35%" id="radius _main">www.google.com</td>
-                            <td width="35%"><a href="#"><i class="fa fa-edit"></i></a></td>
+                            <td width="15%">{{$appWorkerVerison->app_type==\App\User::WORKER_ROLE?'خدمه':'مشتری'}}</td>
+                            <td width="15%" id="radius_main">{{$appWorkerVerison->version}}</td>
+                            <td width="15%" id="radius _main">{{$appWorkerVerison->force_update?'بلی':'خیر'}}</td>
+                            <td width="35%" id="radius _main">{{$appWorkerVerison->download_url}}</td>
+                            <td width="35%"><a href="{{route('admin.edit.version',['id' => $appWorkerVerison->_id])}}"><i class="fa fa-edit"></i></a></td>
 
 
                         </tr>
                         <tr>
-                            <td width="15%">خدمه</td>
-                            <td width="15%" id="radius_main">2.1</td>
-                            <td width="15%" id="radius _main">بلی</td>
-                            <td width="35%" id="radius _main">www.google.com</td>
-                            <td width="35%"><a href="#"><i class="fa fa-edit"></i></a></td>
+                            <td width="15%">{{$appClientVerison->app_type==\App\User::WORKER_ROLE?'خدمه':'مشتری'}}</td>
+                            <td width="15%" id="radius_main">{{$appClientVerison->version}}</td>
+                            <td width="15%" id="radius _main">{{$appClientVerison->force_update?'بلی':'خیر'}}</td>
+                            <td width="35%" id="radius _main">{{$appClientVerison->download_url}}</td>
+                            <td width="35%"><a href="{{route('admin.edit.version',['id' => $appClientVerison->_id])}}"><i class="fa fa-edit"></i></a></td>
 
 
                         </tr>

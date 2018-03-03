@@ -58,19 +58,41 @@ class SettingController extends Controller
             $commission=$raduisModel->value;
         }
         $data['commission']=$commission;
-        if ($appClientVerison)
-            dd(1);
-        else
+        if (!$appWorkerVerison)
         {
-            $raduisModel =new \stdClass();
-            $raduisModel->type='app_version';
-            $raduisModel->app_type=5000;
-            $raduisModel->created_at = new UTCDateTime(time()*1000);
-            $raduisModel->updated_at = new UTCDateTime(time()*1000);
+            $appWorkerVerison =new \stdClass();;
+            $appWorkerVerison->type='app_version';
+            $appWorkerVerison->app_type=User::WORKER_ROLE;
+            $appWorkerVerison->version='1.0.0';
+            $appWorkerVerison->force_update=false;
+            $appWorkerVerison->download_url='www.google.com';
+            $appWorkerVerison->created_at = new UTCDateTime(time()*1000);
+            $appWorkerVerison->updated_at = new UTCDateTime(time()*1000);
 
-            $model = Setting::raw()->insertOne($raduisModel);
-            $commission=$raduisModel->value;
+            $model = Setting::raw()->insertOne($appWorkerVerison);
+
+
         }
+
+
+        $data['appWorkerVerison']=$appWorkerVerison;
+        if (!$appClientVerison)
+        {
+            $appClientVerison =new \stdClass();
+            $appClientVerison->type='app_version';
+            $appClientVerison->app_type=User::CLIENT_ROLE;
+            $appClientVerison->version='1.0.0';
+            $appClientVerison->force_update=false;
+            $appClientVerison->download_url='www.google.com';
+            $appClientVerison->created_at = new UTCDateTime(time()*1000);
+            $appClientVerison->updated_at = new UTCDateTime(time()*1000);
+
+            $model = Setting::raw()->insertOne($appClientVerison);
+
+        }
+
+
+        $data['appClientVerison']=$appClientVerison;
 
         $data['page_title']='تنظیمات دیگر';
 
@@ -130,6 +152,47 @@ class SettingController extends Controller
 
         $setting->save();
         return response()->json(['setting'=>$setting]);
+
+
+
+    }
+
+    function showEditVersionForm($id)
+    {
+        $version=Setting::find($id);
+        $data['version']=$version;
+
+        return view('admin.pages.setting.edit_version')->with($data);
+
+
+    }
+
+    function editVersion(Request $request)
+    {
+        $this->validate($request,
+            [
+                'version' => 'required',
+                'download_url' => 'required'
+            ]);
+
+        $force_update=$request->input('force_update')=='true'?true:false;
+
+        $version=Setting::find($request->input('idVersion'));
+
+        $version->version= $request->input('version');
+        $version->download_url= $request->input('download_url');
+        $version->force_update= $force_update;
+
+        if ($version->save())
+            $message['success'] = 'ورزن با موفقیت ویرایش شد ';
+        else
+            $message['error'] = 'مجددا تلاش کنید';
+
+
+
+        return redirect()->route('admin.setting')->with($message);
+
+
 
 
 
