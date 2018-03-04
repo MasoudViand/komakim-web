@@ -93,11 +93,9 @@
                                             </tr>
                                             </tbody>
                                         </table>
-
-
-                                    </div>
-                                    @if(count($service['questions'])>0)
-                                    </hr>
+                                        @if(count($service['questions'])>0)
+                                            
+                                        <hr>
 
 
                                         <h5 class="box-title">سوالات سرویس</h5>
@@ -124,7 +122,11 @@
                                             </tbody>
                                         </table>
 
-                                    @endif
+                                        @endif
+
+
+                                    </div>
+
 
 
 
