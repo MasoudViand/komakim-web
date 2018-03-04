@@ -94,7 +94,7 @@
                                             </tbody>
                                         </table>
                                         @if(count($service['questions'])>0)
-                                            
+
                                         <hr>
 
 

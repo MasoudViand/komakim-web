@@ -41,8 +41,9 @@
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">نام خوانوادگی</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">شماره تلفن</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">شماره شبا</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">اعتبار</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">اعتبار</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">تسویه</th>
                         </tr>
                         </thead>
                         <tbody id="tuserbody">
@@ -52,6 +53,7 @@
                                 <td class="sorting_1">{{$wallet['user'][0]['name']}}</td>
                                 <td class="sorting_1">{{$wallet['user'][0]['family']}}</td>
                                 <td class="sorting_1">{{$wallet['user'][0]['phone_number']}}</td>
+                                <td class="sorting_1">{{key_exists('account_number',$wallet['worker_profile'][0])?$wallet['worker_profile'][0]['account_number']:'تعیین نشده'}}</td>
                                 <td class="sorting_1">{{$wallet['amount']}}</td>
                                 <td hidden class="sorting_1">{{$wallet['_id']}}</td>
                                 <td><input type="checkbox"></td>

@@ -67,6 +67,14 @@ class SettleDeptController extends Controller
                 'as'           => 'user',],
 
             ],
+            [ '$lookup' => [
+                'from'         => 'worker_profiles',
+                'localField'   => 'user_id',
+                'foreignField' => 'user_id',
+                'as'           => 'worker_profile',],
+
+            ],
+
             [
                 '$match' => [
                     'amount'   =>[
@@ -110,6 +118,9 @@ class SettleDeptController extends Controller
         {
             array_push($walletArr,$item);
         }
+
+
+
 
 
         $countArr=[];
@@ -187,6 +198,13 @@ class SettleDeptController extends Controller
                 'as'           => 'user',],
 
             ],
+            [ '$lookup' => [
+                'from'         => 'worker_profiles',
+                'localField'   => 'user_id',
+                'foreignField' => 'user_id',
+                'as'           => 'worker_profile',],
+
+            ],
             [
                 '$match' => [
                     'amount'   =>[
@@ -210,7 +228,7 @@ class SettleDeptController extends Controller
 
             $scv_total =[];
 
-            $scv_row=['نام ','نام خانوادگی','موبایل','اعتبار'];
+            $scv_row=['نام ','نام خانوادگی','موبایل','شماره شبا','اعتبار'];
             $scv_total[]=$scv_row;
             $scv_row=[];
 
@@ -219,6 +237,7 @@ class SettleDeptController extends Controller
             $scv_row[]=$wallet['user'][0]['name'];
             $scv_row[]=$wallet['user'][0]['family'];
             $scv_row[]=$wallet['user'][0]['phone_number'];
+            $scv_row[]=key_exists('account_number',$wallet['worker_profile'][0])?$wallet['worker_profile'][0]['account_number']:'تعیین نشده';
             $scv_row[]=$wallet['amount'];
             $scv_total[]=$scv_row;
             $scv_row=[];
@@ -238,12 +257,13 @@ class SettleDeptController extends Controller
         echo "\xEF\xBB\xBF"; // UTF-8 BOM
         $file = fopen('php://output', 'w');
 
-        fputcsv($file, ['نام ','نام خانوادگی','موبایل','اعتبار']);
+        fputcsv($file, ['نام ','نام خانوادگی','موبایل','شماره شبا','اعتبار']);
         foreach ($walletArr as $wallet)
         {
             $scv_row[]=$wallet['user'][0]['name'];
             $scv_row[]=$wallet['user'][0]['family'];
             $scv_row[]=$wallet['user'][0]['phone_number'];
+            $scv_row[]=key_exists('account_number',$wallet['worker_profile'][0])?$wallet['worker_profile'][0]['account_number']:'تعیین نشده';
             $scv_row[]=$wallet['amount'];
             fputcsv($file, $scv_row);
             $scv_row=[];
