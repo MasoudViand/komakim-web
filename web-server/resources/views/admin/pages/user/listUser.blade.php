@@ -40,7 +40,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                             <select id ="status" name="status" class="form-control" style="">
-                                <option value="{{key_exists('status',$queryParam)?$queryParam['status']:''}}">{{key_exists('status',$queryParam)?($queryParam['status']=='active'?'فعال':'غیرفعال'):'--انتخاب وضعیت--'}}</option>
+                                <option value="{{key_exists('status',$queryParam)?$queryParam['status']:''}}">{{key_exists('status',$queryParam)?($queryParam['status']==\App\User::ENABLE_USER_STATUS?'فعال':'غیرفعال'):'--انتخاب وضعیت--'}}</option>
 
                                     <option value="{{\App\User::ENABLE_USER_STATUS}}">فعال</option>
                                     <option value="{{\App\User::DISABLE_USER_STATUS}}">غیرفعال</option>
