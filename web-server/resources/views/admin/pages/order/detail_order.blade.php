@@ -70,10 +70,10 @@
                     @foreach($order['services'] as $service)
                         <div class="divider" style="margin-top: 23px"></div>
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
 
 
-                                    <div class="box box">
+                                    <div class="box">
                                         <h5 class="box-title "> جزییات سفارش</h5>
                                         <div class="divider" style="margin-top: 23px"></div>
                                         <table class="table table-bordered table-striped dataTable" role="grid" >
@@ -96,11 +96,10 @@
 
 
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
+                                    @if(count($service['questions'])>0)
+                                    </hr>
 
 
-                                    <div class="box">
                                         <h5 class="box-title">سوالات سرویس</h5>
                                         <div class="divider" style="margin-top: 23px"></div>
                                         <table class="table table-bordered table-striped dataTable" role="grid" >
@@ -125,10 +124,17 @@
                                             </tbody>
                                         </table>
 
+                                    @endif
 
-                                    </div>
+
+
                                 </div>
-                                <div class="col-lg-4">
+
+
+
+
+
+                                <div class="col-lg-6">
 
 
                                     <div class="box">
