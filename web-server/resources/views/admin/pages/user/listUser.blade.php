@@ -42,8 +42,8 @@
                             <select id ="status" name="status" class="form-control" style="">
                                 <option value="{{key_exists('status',$queryParam)?$queryParam['status']:''}}">{{key_exists('status',$queryParam)?($queryParam['status']=='active'?'فعال':'غیرفعال'):'--انتخاب وضعیت--'}}</option>
 
-                                    <option value="active">فعال</option>
-                                    <option value="inactive">غیرفعال</option>
+                                    <option value="{{\App\User::ENABLE_USER_STATUS}}">فعال</option>
+                                    <option value="{{\App\User::DISABLE_USER_STATUS}}">غیرفعال</option>
 
                             </select>
                         </label>
