@@ -111,7 +111,7 @@ class TransactionsController extends Controller
 
         //execute query with skip and limit that retrieve by query param
 
-         $transactionsModel =$transactionsQuery->skip($skip)->take($limit)->get();
+         $transactionsModel =$transactionsQuery->orderBy('_id','desc')->skip($skip)->take($limit)->get();
 
 
 
@@ -229,7 +229,7 @@ class TransactionsController extends Controller
 
         //execute query with skip and limit that retrieve by query param
 
-        $transactionsModel =$transactionsQuery->skip($skip)->take($limit)->get();
+        $transactionsModel =$transactionsQuery->orderBy('_id','desc')->skip($skip)->take($limit)->get();
 
         // dd($walletArr[0]['user'][0]['name']);
         $scv_total =[];

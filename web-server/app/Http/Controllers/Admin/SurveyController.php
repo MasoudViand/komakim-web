@@ -83,6 +83,7 @@ class SurveyController extends Controller
 
 
         $q = [
+            ['$sort'=>['_id'=>-1]],
             [ '$skip' => $skip ],
             [ '$limit' => $limit ],
 
@@ -138,6 +139,7 @@ class SurveyController extends Controller
         if ($request->has('sort'))
         {
             $queryParam['sort']=$request->input('sort');
+            array_shift($q);
             if ($request->input('sort')=='desc')
             {
                 $ql=[

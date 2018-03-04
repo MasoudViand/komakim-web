@@ -126,6 +126,7 @@ class UserController extends Controller
 
 
         $q = [
+                ['$sort'=>['_id'=>-1]],
                 [ '$skip' => $skip ],
                 [ '$limit' => $limit ],
 
@@ -167,12 +168,23 @@ class UserController extends Controller
 
         if ($request->has('sort')) {
             $queryParam['sort']=$request->input('sort');
-
+            array_shift($q);
             if ($request->input('sort') == 'desc') {
-                $q[] = ['$sort' => ['profile.mean_score' => 1],];
+
+                $ql=[
+                    '$sort' =>[
+                        'profile.mean_score' =>1
+                    ]
+                ];
+                array_unshift($q,$ql);
             } else {
 
-                $q[] = ['$sort' => ['profile.mean_score' => -1],];
+                $ql=[
+                    '$sort' =>[
+                        'profile.mean_score' =>-1
+                    ]
+                ];
+                array_unshift($q,$ql);
             }
         }
 

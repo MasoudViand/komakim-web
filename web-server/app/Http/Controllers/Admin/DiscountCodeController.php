@@ -23,7 +23,7 @@ class DiscountCodeController extends Controller
     public function index(){
 
 
-        $discountCodes =DiscountCode::paginate(15);
+        $discountCodes =DiscountCode::orderBy('_id','desc')->paginate(15);
         $data['discountCodes']=$discountCodes;
         $data['total_count']=DiscountCode::count();
         $data['page_title']='کد تخفیف';

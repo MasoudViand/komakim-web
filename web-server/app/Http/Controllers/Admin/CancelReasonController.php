@@ -24,7 +24,7 @@ class CancelReasonController extends Controller
     function index()
     {
 
-        $cancelReasons = CancelReason::all();
+        $cancelReasons = CancelReason::orderBy('_id','desc')->get();
         foreach ($cancelReasons as $item)
         {
             $item->type=$item->type==User::WORKER_ROLE ?'خدمه':'مشتری';

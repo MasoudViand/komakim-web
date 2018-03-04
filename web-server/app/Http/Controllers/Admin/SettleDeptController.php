@@ -55,6 +55,7 @@ class SettleDeptController extends Controller
         $queryParam['skip']=$skip;
 
         $q = [
+            ['$sort'=>['_id'=>-1]],
             [ '$limit' => $limit ],
             [ '$skip'  => $skip   ],
 
@@ -189,6 +190,7 @@ class SettleDeptController extends Controller
 
 
         $q = [
+            ['$sort'=>['_id'=>-1]],
             [ '$skip'=> $skip],
             [ '$limit' => $limit ],
             [ '$lookup' => [

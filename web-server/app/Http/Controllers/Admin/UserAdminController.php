@@ -23,7 +23,7 @@ class UserAdminController extends Controller
 
     public function index()
     {
-        $userAdmins =Admin::all();
+        $userAdmins =Admin::orderBy('_id','desc')->get();
 
 
         $data['userAdmins']=$userAdmins;

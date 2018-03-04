@@ -69,6 +69,7 @@ class OrderController extends Controller
 
 
         $q = [
+            ['$sort'=>['_id'=>-1]],
             [ '$skip'  =>$skip ],
             [ '$limit' => 10 ],
 
@@ -77,6 +78,7 @@ class OrderController extends Controller
         if (count($query)>0)
         {
             $q = [
+                ['$sort'=>['_id'=>-1]],
                 ['$match' => $query],
                 [ '$skip'  =>$skip ],
                 [ '$limit' => 10 ],
