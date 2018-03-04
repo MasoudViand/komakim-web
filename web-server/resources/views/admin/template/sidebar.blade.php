@@ -101,7 +101,7 @@
                             <a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span> لیست سرویس ها</span></a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.service') }}"><i class="fa fa-th"></i> <span>افزودن سرویس</span></a>
+                            <a href="{{ route('admin.service.insert') }}"><i class="fa fa-th"></i> <span>افزودن سرویس</span></a>
                         </li>
                     </ul>
                 </li>
