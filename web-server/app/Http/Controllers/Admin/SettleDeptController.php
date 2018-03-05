@@ -144,6 +144,10 @@ class SettleDeptController extends Controller
         $data['queryParam']=$queryParam;
         $data['page_title']='تسویه حساب';
 
+        $total_worker_amount_wallet=$this->_calculateTotalWorkerRemailWallet();
+        $data['total_worker_amount_wallet']=$total_worker_amount_wallet;
+
+
 
 
         return view('admin.pages.settle.index')->with($data);
@@ -276,6 +280,53 @@ class SettleDeptController extends Controller
 
 
 
+    }
+
+
+    private function _calculateTotalWorkerRemailWallet()
+    {
+        $q = [
+
+
+            [ '$lookup' => [
+                'from'         => 'users',
+                'localField'   => 'user_id',
+                'foreignField' => '_id',
+                'as'           => 'user',],
+
+            ],
+            [
+                '$match' => [
+                    'amount'   =>[
+                        '$gt' =>0
+                    ],
+                    'user.role' => User::WORKER_ROLE,
+                ]            ],
+            [
+                '$group' =>[
+                    '_id' =>null,
+                    'total_amount' =>[
+                        '$sum' =>'$amount'
+                    ]
+                ]
+            ],
+
+        ];
+
+        $model = Wallet::raw()->aggregate($q);
+        $wallerArr=[];
+        foreach ($model as $item)
+        {
+            array_push($wallerArr,$item);
+        }
+        $amount =0;
+
+
+        if (count($wallerArr)>0)
+            $amount = ($wallerArr[0]['total_amount']);
+
+
+        return $amount;
     }
 
 

@@ -22,6 +22,22 @@
             @endif
 
 
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>{{$total_worker_amount_wallet}}</h3>
+                            <p>کیف پول باقیمانده کل خدمه</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        {{--<a href="#" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>--}}
+                    </div>
+                </div>
+            </div>
+
+
             <a href="{{route('admin.settle.export',$queryParam)}}"> <button id="export_csv" class="btn btn-primary" >خروجی اکسل</button></a>
             <div class="row">
                 <div class="col-sm-6">
