@@ -191,7 +191,7 @@ class ProfileController extends Controller
 
         $location =new \stdClass();
         $location->type ="Point";
-        $coordinates =[(double)$request->input('latitude'),(double)$request->input('longitude')];
+        $coordinates =[(double)$request->input('longitude'),(double)$request->input('latitude')];
         $location->coordinates=$coordinates;
 
 

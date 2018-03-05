@@ -400,7 +400,7 @@ class UserController extends Controller
         $user->family=$request['familyUser'];
         $user->phone_number=$request['mobileUser'];
         $user->email=$request['emailUser'];
-        $user->password =bcrypt($request['phone_number']);
+        $user->password =bcrypt($request['mobileUser']);
         $user->status= $request['status'];
         if ($user->save())
             $message['success']='یوزر با موفقیت ویرایش شد';
