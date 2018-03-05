@@ -184,7 +184,7 @@
                     var row = $(this).parent().parent();
                     console.log(row);
                     var rowcells = row.find('td');
-                    number =rowcells[4].innerHTML;
+                    number =rowcells[5].innerHTML;
                     numbers.push(number)
                     // rowcells contains all td's in the row
                     // you can do
