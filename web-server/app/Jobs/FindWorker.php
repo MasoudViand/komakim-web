@@ -62,6 +62,7 @@ class FindWorker implements ShouldQueue
 
         $category=Category::find($category_id);
 
+
         $distanc =Setting::where('type','radius')->first();
         if ($distanc)
             $distanc =(int)$distanc->value;
@@ -77,13 +78,19 @@ class FindWorker implements ShouldQueue
             '$geometry' => [
                 'type' => 'Point',
                 'coordinates' => [
-                    $latitude, $longitude
+                     $longitude,$latitude
                 ],
             ],
             '$maxDistance' => $distanc,
         ])->
         where('fields' ,$category->name)->
-        where('availability_status', 'available')->get(['user_id']);
+        where('availability_status', WorkerProfile::WORKER_AVAILABLE_STATUS)->get(['user_id']);
+
+
+
+
+
+
 
 
 
