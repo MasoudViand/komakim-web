@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Order;
+use App\OrderStatusRevision;
 use App\Setting;
 use App\User;
 use App\Wallet;
@@ -267,6 +269,17 @@ class ProfileController extends Controller
             else
                 $user['wallet']=0;
 
+            $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
+
+            $countOrders = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->count();
+
+            $hasActiveOrder=false;
+
+            if ($countOrders>0)
+                $hasActiveOrder=true;
+            $initialize['hasActiveOrder']=$hasActiveOrder;
+
+
 
 
             return response()->json(['initialize'=>$initialize,'user'=>$user,'worker_profile'=>$worker_profile]);
@@ -283,6 +296,8 @@ class ProfileController extends Controller
             unset($versionModel->updated_at);
             unset($versionModel->_id);
             unset($versionModel->type);
+
+
 
             $initialize['version'] = $versionModel;
             $userModel = $request->user();
@@ -314,6 +329,15 @@ class ProfileController extends Controller
                 $user['wallet']=$wallet->amount;
             else
                 $user['wallet']=0;
+            $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
+
+            $countOrders = Order::whereIn('status',$activeStatus)->where('user_id',new ObjectID($request->user()->id))->count();
+
+            $hasActiveOrder=false;
+
+            if ($countOrders>0)
+                $hasActiveOrder=true;
+            $initialize['hasActiveOrder']=$hasActiveOrder;
 
             return response()->json(['initialize'=>$initialize,'user'=>$user]);
         }else

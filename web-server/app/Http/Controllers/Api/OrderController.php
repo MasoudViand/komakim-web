@@ -28,7 +28,7 @@ class OrderController extends Controller
         {
             $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
-            $orders = Order::whereIn('status',$activeStatus)->where('user_id',$request->user()->id)->get();
+            $orders = Order::whereIn('status',$activeStatus)->where('user_id',new ObjectID($request->user()->id))->get();
 
             foreach ($orders as $item)
             {
@@ -58,7 +58,7 @@ class OrderController extends Controller
 
             $archiveStatus = [OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS];
 
-            $orders = Order::whereIn('status',$archiveStatus)->where('user_id',$request->user()->id)->skip($offset)->take($limit)->get();
+            $orders = Order::whereIn('status',$archiveStatus)->where('user_id',new ObjectID($request->user()->id))->skip($offset)->take($limit)->get();
 
             foreach ($orders as $item)
             {
@@ -195,7 +195,7 @@ class OrderController extends Controller
     {
         $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
-        $orders = Order::whereIn('status',$activeStatus)->where('worker_id',$request->user()->id)->get();
+        $orders = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->get();
 
 
         foreach ($orders as $item)
@@ -226,7 +226,7 @@ class OrderController extends Controller
 
         $archiveStatus = [OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS];
 
-        $orders = Order::whereIn('status',$archiveStatus)->skip($offset)->take($limit)->get();
+        $orders = Order::whereIn('status',$archiveStatus)->where('worker_id',new ObjectID($request->user()->id))->skip($offset)->take($limit)->get();
 
         foreach ($orders as $item)
         {
