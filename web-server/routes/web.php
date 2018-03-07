@@ -27,7 +27,7 @@ Route::post('/workwithus', 'HomeController@registerWorker')->name('register.work
 
 Route::get('/faq', 'HomeController@showRepeadQuestions')->name('list.repeat.questions');
 Route::get('/rules', 'HomeController@showrules')->name('list.rules');
-Route::get('/work_with_us_condition', 'HomeController@showWorkWithUsCondition')->name('list.work.with.us.condition');
+Route::get('/conditions', 'HomeController@showWorkWithUsCondition')->name('list.work.with.us.condition');
 Route::prefix('admin')->group(function (){
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
