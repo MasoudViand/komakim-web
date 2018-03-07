@@ -20,13 +20,14 @@ Route::get('/', function () {
 //Auth::routes();
 
 Route::post('/callback', 'HomeController@callback')->name('home');
-Route::get('/test', 'HomeController@notif')->name('home');
-
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/workwithus', 'HomeController@getworkwithusForm')->name('register.worker');
 Route::post('/workwithus', 'HomeController@registerWorker')->name('register.worker.submit');
 
+Route::get('/faq', 'HomeController@showRepeadQuestions')->name('list.repeat.questions');
+Route::get('/rules', 'HomeController@showrules')->name('list.rules');
+Route::get('/work_with_us_condition', 'HomeController@showWorkWithUsCondition')->name('list.work.with.us.condition');
 Route::prefix('admin')->group(function (){
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
@@ -109,8 +110,12 @@ Route::prefix('admin')->group(function (){
         Route::post('/work_with_us_condition/edit', 'Admin\SettingController@EditWorkWithUsConditionForm')->name('admin.work.with.us.condition.insert.submit');
         Route::get('/rules', 'Admin\SettingController@showRolesForm')->name('admin.rules.insert');
         Route::post('/rules/edit', 'Admin\SettingController@editRoles')->name('admin.rules.insert.submit');
-        Route::post('/repeat_questions', 'Admin\SettingController@ListRepeatQuestions')->name('admin.repeat.question');
-        Route::post('/repeat_questions/update/{repeat_question_id}', 'Admin\SettingController@ShowEditRepeatQuestions')->name('admin.repeat.question.update');
+        Route::get('/repeat_questions', 'Admin\SettingController@ListRepeatQuestions')->name('admin.repeat.question');
+        Route::get('/repeat_questions/insert', 'Admin\SettingController@ShowRepeatQuestionsForm')->name('admin.repeat.question.insert');
+        Route::post('/repeat_questions/insert', 'Admin\SettingController@CreateRepeatQuestions')->name('admin.repeat.question.insert.submit');
+        Route::get('/repeat_questions/update/{repeat_question_id}', 'Admin\SettingController@ShowEditRepeatQuestionsForm')->name('admin.repeat.question.update');
+        Route::get('/repeat_questions/delete/{repeat_question_id}', 'Admin\SettingController@delete')->name('admin.repeat.question.delete');
+        Route::post('/repeat_questions/update/', 'Admin\SettingController@edit')->name('admin.repeat.question.update.submit');
 
 //        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\OrderPayment;
+use App\RepeatQuestion;
+use App\Setting;
 use App\User;
 use App\WorkerProfile;
 use function GuzzleHttp\Psr7\_parse_message;
@@ -215,5 +217,40 @@ class HomeController extends Controller
         return true;
     }
 
+    function showRepeadQuestions()
+    {
+
+        $repeadQuestions=RepeatQuestion::all();
+
+        $data['repeadQuestions']=$repeadQuestions;
+
+
+        return view('client.repeat_questions')->with($data);
+
+
+
+
+    }
+    function showrules()
+    {
+        $rules =Setting::where('type','rules')->first();
+
+
+        $data['rules']=$rules;
+
+        return view('client.rules')->with($data);
+    }
+
+    function showWorkWithUsCondition()
+    {
+
+        $workWithUsCondition =Setting::where('type','workWithUsCondition')->first();
+
+
+        $data['workWithUsCondition']=$workWithUsCondition;
+
+        return view('client.work_with_us_condition')->with($data);
+
+    }
 
 }

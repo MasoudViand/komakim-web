@@ -309,12 +309,92 @@ class SettingController extends Controller
 
     function ListRepeatQuestions()
     {
-        $repeadQuestions = RepeatQuestion::all();
+        $repeadQuestions = RepeatQuestion::paginate(15);
 
         $data['repeadQuestions']=$repeadQuestions;
 
-        return view('admin.pages.setting.repeat_questions_list')->with($data);
+        return view('admin.pages.setting.repeat_question_list')->with($data);
 
+
+    }
+    function ShowRepeatQuestionsForm()
+    {
+        return view('admin.pages.setting.repeat_question_form');
+
+
+    }
+
+    function CreateRepeatQuestions(Request $request){
+
+
+        $this->validate($request,
+            [
+
+                'question' => 'required',
+                'answer' => 'required'
+            ]);
+
+        $repeadQuestion= new  RepeatQuestion();
+
+        $repeadQuestion->answer=$request->input('answer');
+        $repeadQuestion->question = $request->input('question');
+
+        if ($repeadQuestion->save())
+            $message['success'] = 'سوال متداول با موفقیت ایجاد شد ';
+        else
+            $message['error'] = 'مجددا تلاش کنید';
+
+
+        return redirect()->back()->with($message);
+
+
+
+
+    }
+
+    function ShowEditRepeatQuestionsForm($repeat_question_id)
+    {
+        $repeatQuestion=RepeatQuestion::find($repeat_question_id);
+
+        $data['repeatQuestion']=$repeatQuestion;
+
+        return view('admin.pages.setting.edit_repeat_question_form')->with($data);
+    }
+    function edit(Request $request)
+    {
+        $this->validate($request,
+            [
+
+                'question' => 'required',
+                'answer' => 'required'
+            ]);
+
+
+
+        $repeatQuestion=RepeatQuestion::find($request->input('id'));
+        $repeatQuestion->answer=$request->input('answer');
+        $repeatQuestion->question=$request->input('question');
+         if ($repeatQuestion->save())
+             $message['success'] = 'سوال متداول با موفقیت ویرایش شد ';
+         else
+             $message['error'] = 'مجددا تلاش کنید';
+
+        return redirect()->route('admin.repeat.question')->with($message);
+
+
+
+
+
+
+    }
+    function delete($repeat_question_id)
+    {
+        if(RepeatQuestion::destroy($repeat_question_id))
+            $message['success'] = 'سوال با موفقیت حذف شد';
+        else
+            $message['error'] = 'مجددا تلاش کن';
+
+        return redirect()->back()->with($message);
 
     }
 
