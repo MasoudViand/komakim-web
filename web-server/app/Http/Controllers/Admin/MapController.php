@@ -27,14 +27,15 @@ class MapController extends Controller
     {
 
         $query=[];
-        $query['status']='active';
+        $query['status']=User::ENABLE_USER_STATUS;
         $query['role']  =User::WORKER_ROLE;
-        $query['profile.availability_status']='available';
+        $query['profile.availability_status']=WorkerProfile::WORKER_AVAILABLE_STATUS;
         $query['profile.status'] ='accept';
         $queryParam=[];
         $fields =Category::all();
         $data['fields']=$fields;
         $data['page_title']='نقشه';
+
 
         if (!$request->has('phone_number')and !$request->has('national_code') and !$request->has('fields') and !$request->has('fields') and !$request->has('gender')){
             $locations=[];
@@ -111,8 +112,8 @@ class MapController extends Controller
 
             if (key_exists('location',$workerprofile->profile[0]))
             {
-               $lan = $workerprofile->profile[0]['location']['coordinates'][0];
-               $long = $workerprofile->profile[0]['location']['coordinates'][1];
+               $lan = $workerprofile->profile[0]['location']['coordinates'][1];
+               $long = $workerprofile->profile[0]['location']['coordinates'][0];
                $name = $workerprofile->name;
 
                $location =['lat'=>$lan ,'lng'=>$long,'name'=>$name];

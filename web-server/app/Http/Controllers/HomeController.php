@@ -81,11 +81,11 @@ class HomeController extends Controller
         $user->name =$request['name'];
         $user->family =$request['family'];
         $user->email =$request['email'];
-        $user->status = 'active';
+        $user->status = User::ENABLE_USER_STATUS;
         $user->password=bcrypt($request['mobileNumber']);
         $user->phone_number=$request['mobileNumber'];
         $user->isCompleted =true;
-        $user->role ='worker';
+        $user->role =User::WORKER_ROLE;
         if ($user->save()){
             $message =$this->_saveProfile($request,$user->id);
         }else

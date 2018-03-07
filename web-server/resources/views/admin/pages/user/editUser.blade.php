@@ -138,7 +138,7 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">وضعیت </label>
                                 <select class="form-control" id="status" name="status">
-                                    <option value="{{$user->status=='active' ?'active':'inactive'}}">--- {{ $user->status==\App\User::ENABLE_USER_STATUS ?'فعال':'غیرفعال' }} ---</option>
+                                    <option value="{{$user->status==\App\User::ENABLE_USER_STATUS ?\App\User::ENABLE_USER_STATUS:\App\User::DISABLE_USER_STATUS}}">--- {{ $user->status==\App\User::ENABLE_USER_STATUS ?'فعال':'غیرفعال' }} ---</option>
                                     <option value="{{\App\User::ENABLE_USER_STATUS}}">فعال</option>
                                     <option value="{{\App\User::DISABLE_USER_STATUS}}">غیر فعال</option>
                                 </select>

@@ -155,7 +155,7 @@ class FindWorker implements ShouldQueue
     private function _sendNotifications($tokens,$order)
     {
         $content = array(
-            "en" => 'سفارش جدید'
+            "en" => 'سفارش کار جدید'
         );
         $fields = array(
             'app_id' => "aae19cb0-6ce8-44e9-b40d-8038799b952e",

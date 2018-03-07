@@ -432,7 +432,7 @@ class UserController extends Controller
 
 
         $workerProfile = WorkerProfile::where('user_id',new ObjectID($request['idUser']))->first();
-        $workerProfileByNationalCode = WorkerProfile::where('nationalCode',$request['nationCodeProfile'])->first();
+        $workerProfileByNationalCode = WorkerProfile::where('national_code',$request['nationCodeProfile'])->first();
         if ($workerProfileByNationalCode)
         {
             if (!($workerProfileByNationalCode->id=$workerProfile->id))

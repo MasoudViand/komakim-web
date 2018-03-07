@@ -105,6 +105,12 @@ Route::prefix('admin')->group(function (){
         Route::get('/', 'Admin\SettingController@index')->name('admin.setting');
         Route::get('/edit/version/{id}', 'Admin\SettingController@showEditVersionForm')->name('admin.edit.version');
         Route::post('/edit/version', 'Admin\SettingController@editVersion')->name('admin.edit.version.submit');
+        Route::get('/work_with_us_condition', 'Admin\SettingController@showWorkWithUsConditionForm')->name('admin.work.with.us.condition.insert');
+        Route::post('/work_with_us_condition/edit', 'Admin\SettingController@EditWorkWithUsConditionForm')->name('admin.work.with.us.condition.insert.submit');
+        Route::get('/rules', 'Admin\SettingController@showRolesForm')->name('admin.rules.insert');
+        Route::post('/rules/edit', 'Admin\SettingController@editRoles')->name('admin.rules.insert.submit');
+        Route::post('/repeat_questions', 'Admin\SettingController@ListRepeatQuestions')->name('admin.repeat.question');
+        Route::post('/repeat_questions/update/{repeat_question_id}', 'Admin\SettingController@ShowEditRepeatQuestions')->name('admin.repeat.question.update');
 
 //        Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 

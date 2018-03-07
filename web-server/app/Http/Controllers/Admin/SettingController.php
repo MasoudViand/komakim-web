@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Jobs\SendNotificationToSingleUserJobWithFcm;
+use App\RepeatQuestion;
 use App\Setting;
 use App\User;
 use Illuminate\Http\Request;
@@ -194,6 +195,125 @@ class SettingController extends Controller
 
 
 
+
+
+    }
+
+    function showWorkWithUsConditionForm()
+    {
+
+        $workWithUsCondition=Setting::where('type','workWithUsCondition')->first();
+
+        $text=null;
+
+        if ($workWithUsCondition)
+            $text=$workWithUsCondition->value;
+        $data['text']=$text;
+
+
+        return view('admin.pages.setting.work_with_us_condition')->with($data);
+
+
+    }
+    function EditWorkWithUsConditionForm(Request $request)
+    {
+        $this->validate($request,
+            [
+
+                'workWithUsCondition' => 'required'
+            ]);
+
+        $workWithUsCondition=Setting::where('type','workWithUsCondition')->first();
+
+        if (!$workWithUsCondition)
+        {
+            $workWithUsCondition= new Setting();
+            $workWithUsCondition->type='workWithUsCondition';
+            $workWithUsCondition->value= $request->input('workWithUsCondition');
+            $workWithUsCondition->created_at = new UTCDateTime(time()*1000);
+            $workWithUsCondition->updated_at = new UTCDateTime(time()*1000);
+
+        }else
+        {
+            $workWithUsCondition->value= $request->input('workWithUsCondition');
+            $workWithUsCondition->updated_at = new UTCDateTime(time()*1000);
+
+        }
+
+        if ($workWithUsCondition->save())
+            if ($workWithUsCondition->save())
+                $message['success'] = 'ورزن با موفقیت ویرایش شد ';
+            else
+                $message['error'] = 'مجددا تلاش کنید';
+
+
+
+        return redirect()->route('admin.setting')->with($message);
+
+
+    }
+
+    function showRolesForm()
+    {
+
+        $rules=Setting::where('type','rules')->first();
+
+        $text=null;
+
+        if ($rules)
+            $text=$rules->value;
+        $data['text']=$text;
+
+
+        return view('admin.pages.setting.rules')->with($data);
+
+
+    }
+
+    function editRoles(Request $request)
+    {
+        $this->validate($request,
+            [
+
+                'rules' => 'required'
+            ]);
+
+        $rules=Setting::where('type','rules')->first();
+
+        if (!$rules)
+        {
+            $rules= new Setting();
+            $rules->type='rules';
+            $rules->value= $request->input('rules');
+            $rules->created_at = new UTCDateTime(time()*1000);
+            $rules->updated_at = new UTCDateTime(time()*1000);
+
+        }else
+        {
+            $rules->value= $request->input('rules');
+            $rules->updated_at = new UTCDateTime(time()*1000);
+
+        }
+
+
+            if ($rules->save())
+                $message['success'] = 'ورزن با موفقیت ویرایش شد ';
+            else
+                $message['error'] = 'مجددا تلاش کنید';
+
+
+
+        return redirect()->route('admin.setting')->with($message);
+
+    }
+
+    function ListRepeatQuestions()
+    {
+        $repeadQuestions = RepeatQuestion::all();
+
+        $data['repeadQuestions']=$repeadQuestions;
+
+        return view('admin.pages.setting.repeat_questions_list')->with($data);
 
 
     }

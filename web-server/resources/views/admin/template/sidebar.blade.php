@@ -253,10 +253,27 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.work.with.us.condition.insert') }}">
+                            <i class="fa fa-th"></i> <span> شرایط همکاری با ما</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.rules.insert') }}">
+                            <i class="fa fa-th"></i> <span>قوانین و مقررات</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.repeat.question') }}">
+                            <i class="fa fa-th"></i> <span>سوالات متداول</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.setting') }}">
                             <i class="fa fa-th"></i> <span> تنظیمات دیگر</span>
                         </a>
                     </li>
+
+
 
                 </ul>
             </li>
