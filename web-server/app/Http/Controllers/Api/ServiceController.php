@@ -214,17 +214,28 @@ class ServiceController extends Controller
              return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(420);
 
 
-
-         $order->worker_id=new ObjectID($request->user()->id);
+        $userId = $request->user()->id;
+         $order->worker_id=new ObjectID($userId);
          $order->status   =OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS;
 
          if ($order->save())
          {
-              //$order =$this->_sendNotificationToClient($order->user_id,$order);
-              $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'تایید خدمه','',$order,User::CLIENT_ROLE));
-              $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,$request->user()) );
 
-              return response()->json(['order'=>$order]);
+             $workerProfile=WorkerProfile::where('user_id',new ObjectID($userId))->first();
+             $workerProfile->availability_status=WorkerProfile::WORKER_UNAVAILABLE_STATUS;
+
+             if ($workerProfile->save())
+             {
+                 //$order =$this->_sendNotificationToClient($order->user_id,$order);
+                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'تایید خدمه','',$order,User::CLIENT_ROLE));
+                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,$request->user()) );
+                 return response()->json(['order'=>$order]);
+
+             }else
+             {
+                 return response()->json(['error'=>'internal error'])->setStatusCode(500);
+             }
+
          }else
          {
              return response()->json(['error'=>'internal error'])->setStatusCode(500);
@@ -271,6 +282,9 @@ class ServiceController extends Controller
 
         if ($order->save())
         {
+            $workerProfile=WorkerProfile::where('user_id',new ObjectID($request->user()->id))->first();
+            $workerProfile->availability_status=WorkerProfile::WORKER_AVAILABLE_STATUS;
+            $workerProfile->save();
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
             $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order,User::CLIENT_ROLE));
 

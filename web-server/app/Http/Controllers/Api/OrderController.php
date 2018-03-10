@@ -11,6 +11,7 @@ use App\Order;
 use App\OrderStatusRevision;
 use App\Review;
 use App\User;
+use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Mockery\Tests\React_WritableStreamInterface;
@@ -282,8 +283,21 @@ class OrderController extends Controller
         {
             $user = $request->user();
 
+            $workerId=$order->worker_id;
+
+            if ($workerId)
+            {
+                $workerProfile = WorkerProfile::where('user_id',$workerId)->first();
+                $workerProfile->availability_status=WorkerProfile::WORKER_AVAILABLE_STATUS;
+                $workerProfile->save();
+            }
+
+
+
             if ($user->role ==User::WORKER_ROLE)
             {
+
+
                 $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
 
