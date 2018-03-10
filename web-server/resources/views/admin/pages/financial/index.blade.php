@@ -64,6 +64,9 @@
             </div>'
 
 
+
+
+
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
@@ -91,6 +94,34 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-4">
+                <label> تعداد داده ها</label>
+                <input type="number" value="{{key_exists('limit',$queryparam)?$queryparam['limit']:''}}" id="limit">
+            </div>
+            <div class="col-sm-4">
+                <form class="form-inline">
+                    <label style="margin-left: 12px">نمایش نمودار</label>
+
+                    <select id ="mode" name="mdoe" class="form-control" style="width: auto">
+                        <option value="{{key_exists('mode',$queryparam) ? $queryparam['mode']:''}}">{{key_exists('mode',$queryparam) ? ($queryparam['mode']=='daily'?'روزانه':($queryparam['mode']=='weekly'?'هفتگی':'ماهانه')):'--- انتخاب حالت گزارش گیری--'}}</option>
+
+                        <option value="daily">روزانه</option>
+                        <option value="weekly">هفتگی</option>
+                        <option value="monthly">ماهانه</option>
+
+                    </select>
+
+                </form>
+
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-primary" id="search_filter"> جست جو</button>
+            </div>
+
+        </div>
+        <br>
                 <div id="blockChart"  class="col-md-12">
                     <!-- AREA CHART -->
                     <div class="box box-primary">
@@ -114,27 +145,7 @@
                     </div>
 
                 </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <label> تعداد داده ها</label>
-                <input type="number" value="{{key_exists('limit',$queryparam)?$queryparam['limit']:''}}" id="limit">
-            </div>
-            <div class="col-sm-4">
-                <label> نو ع گزارش گیری</label>
-                <select id ="mode" name="mdoe" class="form-control" style="">
-                    <option value="{{key_exists('mode',$queryparam) ? $queryparam['mode']:''}}">{{key_exists('mode',$queryparam) ? ($queryparam['mode']=='daily'?'روزانه':($queryparam['mode']=='weekly'?'هفتگی':'ماهانه')):'--- انتخاب حالت گزارش گیری--'}}</option>
 
-                    <option value="daily">روزانه</option>
-                    <option value="weekly">هفتگی</option>
-                    <option value="monthly">ماهانه</option>
-
-                </select>
-            </div>
-            <div class="col-sm-4">
-                <button class="btn btn-primary" id="search_filter"> جست جو</button>
-            </div>
-
-        </div>
 
         <div class="row">
             <div class="col-sm-6"><a href="{{route('admin.financial',$preQueryparam)}}"> <button class="btn-primary btn"> قبلی </button></a></div>
