@@ -269,13 +269,10 @@ class ProfileController extends Controller
             else
                 $user['wallet']=0;
 
-            $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
-
-            $countOrders = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->count();
-
+            
             $hasActiveOrder=false;
 
-            if ($countOrders>0)
+            if ($worker_profile->has_active_order)
                 $hasActiveOrder=true;
             $initialize['hasActiveOrder']=$hasActiveOrder;
 

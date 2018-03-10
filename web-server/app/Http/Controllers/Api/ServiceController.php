@@ -222,7 +222,7 @@ class ServiceController extends Controller
          {
 
              $workerProfile=WorkerProfile::where('user_id',new ObjectID($userId))->first();
-             $workerProfile->availability_status=WorkerProfile::WORKER_UNAVAILABLE_STATUS;
+             $workerProfile->has_active_order=true;
 
              if ($workerProfile->save())
              {
@@ -283,7 +283,7 @@ class ServiceController extends Controller
         if ($order->save())
         {
             $workerProfile=WorkerProfile::where('user_id',new ObjectID($request->user()->id))->first();
-            $workerProfile->availability_status=WorkerProfile::WORKER_AVAILABLE_STATUS;
+            $workerProfile->has_active_order=false;
             $workerProfile->save();
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
             $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order,User::CLIENT_ROLE));

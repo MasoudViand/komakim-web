@@ -286,7 +286,7 @@ class OrderController extends Controller
             if ($workerId)
             {
                 $workerProfile = WorkerProfile::where('user_id',$workerId)->first();
-                $workerProfile->availability_status=WorkerProfile::WORKER_AVAILABLE_STATUS;
+                $workerProfile->has_active_order=false;
                 $workerProfile->save();
             }
 

@@ -112,8 +112,9 @@ class HomeController extends Controller
         $workerProfile->another_capability = $request['anotherCapability'];
         $workerProfile->certificates = $request['certificates'];
         $workerProfile->experience = $request['experience'];
-        $workerProfile->status ='pending';
-        $workerProfile->availability_status ='available';
+        $workerProfile->status =WorkerProfile::WORKER_PENDING_STATUS;
+        $workerProfile->availability_status =WorkerProfile::WORKER_UNAVAILABLE_STATUS;
+        $workerProfile->has_active_order=false;
         $message=null;
         if ($workerProfile->save()){
             $message['success'] ='پروفایل به درستی ذخیره شد';
@@ -254,14 +255,14 @@ class HomeController extends Controller
     }
     function test()
     {
-        $workerProfile = WorkerProfile::all();
-
-        foreach ($workerProfile as $item)
-        {
-            $item->has_active_order=false;
-           if ($item->save())
-               print_r('has_active_profile been save');
-        }
+//        $workerProfile = WorkerProfile::all();
+//
+//        foreach ($workerProfile as $item)
+//        {
+//            $item->has_active_order=false;
+//           if ($item->save())
+//               print_r('has_active_profile been save');
+//        }
     }
 
 }
