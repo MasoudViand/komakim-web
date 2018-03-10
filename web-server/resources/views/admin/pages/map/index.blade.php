@@ -166,7 +166,7 @@
                             });
 //
                             google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.setContent(element['name']+'    ');
+                            infowindow.setContent('    مصطفی');
                             infowindow.open(map, this);
                         });
 

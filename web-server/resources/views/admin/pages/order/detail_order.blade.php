@@ -72,6 +72,7 @@
 
                     @foreach($order['services'] as $service)
                         <div class="divider" style="margin-top: 23px"></div>
+                    <div class="col-sm-6">
                         <div class="box box-danger">
                             <div class="box box-title">جزییات سفارش</div>
 
@@ -93,30 +94,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                             {{--<div class="row">--}}
-                        {{--<div class="col-sm-4">--}}
-                            {{--<label>نام سرویس:</label>--}}
-                            {{--<br>--}}
-                            {{--{{$service['entity']['name'] }}--}}
 
-
-                        {{--</div>--}}
-                        {{--<div class="col-sm-4">--}}
-                            {{--<label>قیمت پایه :</label>--}}
-                            {{--<br>--}}
-                            {{--{{$service['entity']['price']}}--}}
-
-
-                        {{--</div>--}}
-
-                        {{--<div class="col-sm-4">--}}
-                            {{--<label>تعداد سفارش :</label>--}}
-                            {{--<br>--}}
-                            {{--{{$service['unit_count'] }}--}}
-
-
-                        {{--</div>--}}
-                    {{--</div>--}}
                             <br>
                             <table class="table table-bordered table-striped dataTable" role="grid" >
                                 <thead>
@@ -133,154 +111,41 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            {{--<div class="row">--}}
-                        {{--<div class="col-sm-6">--}}
 
-                            {{--<label>توضیحات :</label>--}}
-                            {{--<br>--}}
-                            {{--{{$service['description'] }}--}}
-
-                        {{--</div>--}}
-
-                        {{--<div class="col-sm-6">--}}
-
-                            {{--<label>تعداد سفارش :</label>--}}
-                            {{--<br>--}}
-                            {{--{{$service['price']}}--}}
-
-                        {{--</div>--}}
-                    {{--</div>--}}
                             @if(count($service['questions'])>0)
 
-                        <hr>
+                                <hr>
 
 
-                        <h5 class="box-title">سوالات سرویس</h5>
-                        <div class="divider" style="margin-top: 23px"></div>
-                        <table class="table table-bordered table-striped dataTable" role="grid" >
-                            <thead>
-                            <tr role="row">
-                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">سوال</th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">جواب</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                                <h5 class="box-title">سوالات سرویس</h5>
+                                <div class="divider" style="margin-top: 23px"></div>
+                                <table class="table table-bordered table-striped dataTable" role="grid" >
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">سوال</th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">جواب</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                            @foreach( $service['questions'] as $question)
-                                {{--<tr role="row" class="odd">--}}
-                                <tr>
-                                    <td class="sorting_1">{{$question['text']}}</td>
-                                    <td class="sorting_1">{{$question['answer']?'اری ':'خیر'}}</td>
-                                </tr>
+                                    @foreach( $service['questions'] as $question)
+                                        {{--<tr role="row" class="odd">--}}
+                                        <tr>
+                                            <td class="sorting_1">{{$question['text']}}</td>
+                                            <td class="sorting_1">{{$question['answer']?'اری ':'خیر'}}</td>
+                                        </tr>
 
-                            @endforeach
+                                    @endforeach
 
-                            {{--</tr>--}}
-                            </tbody>
-                        </table>
+                                    {{--</tr>--}}
+                                    </tbody>
+                                </table>
 
-                    @endif
-
-
-
-                            {{--<div class="row">--}}
-                                {{--<div class="col-lg-6">--}}
-
-
-                                    {{--<div class="box">--}}
-                                        {{--<h5 class="box-title "> جزییات سفارش</h5>--}}
-                                        {{--<div class="divider" style="margin-top: 23px"></div>--}}
-                                        {{--<table class="table table-bordered table-striped dataTable" role="grid" >--}}
-                                            {{--<thead>--}}
-                                            {{--<tr role="row">--}}
-                                                {{--<th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد سفارش</th>--}}
-                                                {{--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">توضیحات</th>--}}
-                                                {{--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">مجموع قیمت</th>--}}
-                                            {{--</tr>--}}
-                                            {{--</thead>--}}
-                                            {{--<tbody>--}}
-                                            {{--<tr role="row" class="odd">--}}
-                                                {{--<td class="sorting_1">{{$service['unit_count'] }}</td>--}}
-                                                {{--<td class="sorting_1">{{$service['description']}}</td>--}}
-                                                {{--<td class="sorting_1">{{$service['price']}}</td>--}}
-
-                                            {{--</tr>--}}
-                                            {{--</tbody>--}}
-                                        {{--</table>--}}
-                                        {{--@if(count($service['questions'])>0)--}}
-
-                                        {{--<hr>--}}
-
-
-                                        {{--<h5 class="box-title">سوالات سرویس</h5>--}}
-                                        {{--<div class="divider" style="margin-top: 23px"></div>--}}
-                                        {{--<table class="table table-bordered table-striped dataTable" role="grid" >--}}
-                                            {{--<thead>--}}
-                                            {{--<tr role="row">--}}
-                                                {{--<th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">سوال</th>--}}
-                                                {{--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">جواب</th>--}}
-                                            {{--</tr>--}}
-                                            {{--</thead>--}}
-                                            {{--<tbody>--}}
-
-                                            {{--@foreach( $service['questions'] as $question)--}}
-                                                {{--<tr role="row" class="odd">--}}
-                                                {{--<tr>--}}
-                                                    {{--<td class="sorting_1">{{$question['text']}}</td>--}}
-                                                    {{--<td class="sorting_1">{{$question['answer']?'اری ':'خیر'}}</td>--}}
-                                                {{--</tr>--}}
-
-                                            {{--@endforeach--}}
-
-                                            {{--</tr>--}}
-                                            {{--</tbody>--}}
-                                        {{--</table>--}}
-
-                                        {{--@endif--}}
-
-
-                                    {{--</div>--}}
-
-
-
-
-                                {{--</div>--}}
-
-
-
-
-
-                                {{--<div class="col-lg-6">--}}
-
-
-                                    {{--<div class="box">--}}
-                                        {{--<h5 class="box-title">جزییات سرویس</strong>--}}
-                                        {{--<div class="divider" style="margin-top: 23px"></div>--}}
-                                        {{--<table class="table table-bordered table-striped dataTable" role="grid" >--}}
-                                            {{--<thead>--}}
-                                            {{--<tr role="row">--}}
-                                                {{--<th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام سرویس</th>--}}
-                                                {{--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">قیمت پایه سرویس</th>--}}
-                                                {{--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">حداقل سفارش</th>--}}
-                                            {{--</tr>--}}
-                                            {{--</thead>--}}
-                                            {{--<tbody>--}}
-                                            {{--<tr role="row" class="odd">--}}
-                                                {{--<td class="sorting_1">{{$service['entity']['name'] }}</td>--}}
-                                                {{--<td class="sorting_1">{{$service['entity']['price']}}</td>--}}
-                                                {{--<td class="sorting_1">{{$service['entity']['minimum_number']}}</td>--}}
-
-                                            {{--</tr>--}}
-                                            {{--</tbody>--}}
-                                        {{--</table>--}}
-
-
-                                    {{--</div>--}}
-
-                            {{--</div>--}}
-
-                        {{--</div>--}}
+                            @endif
                         </div>
+
+                    </div>
+
                         <div class="divider" style="margin-top: 23px"></div>
                     @endforeach
 
