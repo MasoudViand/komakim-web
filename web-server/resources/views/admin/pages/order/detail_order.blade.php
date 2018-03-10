@@ -71,7 +71,6 @@
                 <div class="col-md-12">
 
                     @foreach($order['services'] as $service)
-                        <div class="divider" style="margin-top: 23px"></div>
                     <div class="col-sm-6">
                         <div class="box box-danger">
                             <div class="box box-title">جزییات سفارش</div>
@@ -146,7 +145,6 @@
 
                     </div>
 
-                        <div class="divider" style="margin-top: 23px"></div>
                     @endforeach
 
 
