@@ -22,6 +22,7 @@ Route::get('/', function () {
 Route::post('/callback', 'HomeController@callback')->name('home');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/test', 'HomeController@test')->name('testhome');
 Route::get('/workwithus', 'HomeController@getworkwithusForm')->name('register.worker');
 Route::post('/workwithus', 'HomeController@registerWorker')->name('register.worker.submit');
 

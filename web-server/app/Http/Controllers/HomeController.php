@@ -252,5 +252,16 @@ class HomeController extends Controller
         return view('client.work_with_us_condition')->with($data);
 
     }
+    function test()
+    {
+        $workerProfile = WorkerProfile::all();
+
+        foreach ($workerProfile as $item)
+        {
+            $item->has_active_order=false;
+           if ($item->save())
+               print_r('has_active_profile been save');
+        }
+    }
 
 }
