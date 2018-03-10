@@ -114,10 +114,15 @@ class OrderController extends Controller
         foreach ($model as $item)
         {
 
+            $tehrantime = $item['created_at']->toDateTime();
+            $tehrantime->setTimeZone(new \DateTimeZone('Asia/Tehran'));
+
+
+
             $order=[];
             $order['user']=User::find($item->user_id);
             $order['created_at'] = \Morilog\Jalali\jDateTime::strftime('d/m/Y', $item['created_at']->toDateTime());
-            $order['created_at_hour']=\Morilog\Jalali\jDateTime::strftime('h:i', $item['created_at']->toDateTime());
+            $order['created_at_hour']=\Morilog\Jalali\jDateTime::strftime('h:i', $tehrantime);
 
             switch ($item->status)
             {
