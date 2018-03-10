@@ -196,24 +196,22 @@ class OrderController extends Controller
     {
         $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
-        $orders = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->get();
+        $order = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->first();
 
 
-        foreach ($orders as $item)
-        {
 
-            if ($item->worker_id)
-                $item->worker=User::find($item->worker_id);
+            if ($order->worker_id)
+                $order->worker=User::find($order->worker_id);
             else
-                $item->worker=false;
-            if ($item->revisions)
+                $order->worker=null;
+            if ($order->revisions)
             {
-                $item->services=$item->revisions[0]['services'];
-                unset($item->revisions);
-            }
+                $order->services=$order->revisions[0]['services'];
+                unset($order->revisions);
+
 
         }
-        return response()->json(['orders' => $orders]);
+        return response()->json(['order' => $order]);
     }
 
         function listArchiveOrderWorker(Request $request)
