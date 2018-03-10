@@ -84,7 +84,8 @@ class FindWorker implements ShouldQueue
             '$maxDistance' => $distanc,
         ])->
         where('fields' ,$category->name)->
-        where('availability_status', WorkerProfile::WORKER_AVAILABLE_STATUS)->get(['user_id']);
+        where('availability_status', WorkerProfile::WORKER_AVAILABLE_STATUS)->
+        where('has_active_order',false)->get(['user_id']);
 
 
 

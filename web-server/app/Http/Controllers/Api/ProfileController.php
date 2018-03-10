@@ -269,7 +269,7 @@ class ProfileController extends Controller
             else
                 $user['wallet']=0;
 
-            
+
             $hasActiveOrder=false;
 
             if ($worker_profile->has_active_order)
