@@ -7,6 +7,7 @@ use App\Jobs\CheckServiceAccepted;
 use App\Jobs\FindWorker;
 use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Jobs\SendNotificationToSingleUserJobWithFcm;
+use App\Jobs\SendSmsToSingleUser;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
@@ -286,10 +287,12 @@ class ServiceController extends Controller
             $workerProfile->has_active_order=false;
             $workerProfile->save();
 
+            $user_id=$order->user_id;
+            $user =User::find($user_id);
+            $phone_number=$user->phone_number;
+            $message='سفارش با کد پیگیری '.$order->tracking_number.' به پایان رسید و در انتظار پرداخت شماست. کمکیم';
 
-
-            $this->_sendSmsToClient($order);
-
+            $this->dispatch(new SendSmsToSingleUser($phone_number,$message));
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,$request->user()) );
             $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'اتمام کار خدمه','',$order,User::CLIENT_ROLE));
 
@@ -309,29 +312,7 @@ class ServiceController extends Controller
 
             $user =User::find($user_id);
             $phone_number=$user->phone_number;
-            try {
 
-
-                $sender = "100065995";
-                $receptor = $phone_number;
-                $message = 'شفارش با کد پیگیری '.$order->tracking_number.' به پایان رسید و در انتظار پرداخت شماست';
-                $api = new \Kavenegar\KavenegarApi("41592B50794462786F746C68364338573231783474673D3D");
-                $api->Send($sender, $receptor, $message);
-                return true;
-
-
-            } catch(\Kavenegar\Exceptions\ApiException $e){
-                dd($e);
-                // در صورتی که خروجی وب سرویس 200 نباشد این خطا رخ می دهد
-
-                return false;
-
-
-            }
-            catch(\Kavenegar\Exceptions\HttpException $e){
-                // در زمانی که مشکلی در برقرای ارتباط با وب سرویس وجود داشته باشد این خطا رخ می دهد
-            return false;
-            }
         }
 
 

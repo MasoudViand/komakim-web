@@ -7,6 +7,7 @@ use App\DiscountCodeLog;
 use App\FinancialReport;
 use App\Jobs\RegisterStatusOrderRevisionJob;
 use App\Jobs\SendNotificationToSingleUserJobWithFcm;
+use App\Jobs\SendSmsToSingleUser;
 use App\Order;
 use App\OrderPayment;
 use App\OrderStatusRevision;
@@ -171,8 +172,13 @@ class WalletController extends Controller
         $order->status=OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS;
         $order->save();
 
-        $this->_sendSmsToWorker($order);
+        $user_id=$order->worker_id;
 
+        $user =User::find($user_id);
+        $phone_number=$user->phone_number;
+        $message = 'سفارش با کد پیگیری '.$order->tracking_number.' با موفقیت پرداخت شد. کمکیم';
+
+        $this->dispatch(new SendSmsToSingleUser($phone_number,$message));
         $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,$request->user()));
         $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری پرداخت شد','',$order,User::WORKER_ROLE));
 
@@ -287,38 +293,6 @@ class WalletController extends Controller
             return $fanantialReport;
         else
             return false;
-    }
-
-
-    private function     _sendSmsToWorker($order)
-    {
-        $user_id=$order->worker_id;
-
-        $user =User::find($user_id);
-        $phone_number=$user->phone_number;
-        try {
-
-
-            $sender = "100065995";
-            $receptor = $phone_number;
-            $message = 'شفارش با کد پیگیری '.$order->tracking_number.'با موفقیت پرداخت شد';
-            $api = new \Kavenegar\KavenegarApi("41592B50794462786F746C68364338573231783474673D3D");
-            $api->Send($sender, $receptor, $message);
-            return true;
-
-
-        } catch(\Kavenegar\Exceptions\ApiException $e){
-            dd($e);
-            // در صورتی که خروجی وب سرویس 200 نباشد این خطا رخ می دهد
-
-            return false;
-
-
-        }
-        catch(\Kavenegar\Exceptions\HttpException $e){
-            // در زمانی که مشکلی در برقرای ارتباط با وب سرویس وجود داشته باشد این خطا رخ می دهد
-            return false;
-        }
     }
 
 
