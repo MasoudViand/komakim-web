@@ -54,18 +54,20 @@
                 </div>
             @endif
 
-
+<div class="box col-sm-3">
             <div class="row" style="margin-top: 50px">
-                <div class="col-sm-3">
+                <div class="col-sm-12">
                     <label> از تاریخ :</label>
                     <input  id="from" type="text" value="{{key_exists('from',$queryParam) ?$queryParam['from']:''}}">
                 </div>
-                <div class="col-sm-3">
+				<div class="clearfix"></div>
+                <div class="col-sm-12">
                     <label> تا تاریخ :</label>
                     <input id="to" type="text" value="{{key_exists('to',$queryParam) ?$queryParam['to']:''}}">
                 </div>
-                <div class="col-sm-3">
-                    <label> نوع :</label>
+				<div class="clearfix"></div>
+                <div class="col-sm-12">
+                    <label> نوع :</label><br>
                     <select name="typeOfuser" id="type"  style="">
                         <option value="{{key_exists('type',$queryParam) ?$queryParam['type']:''}}">{{key_exists('type',$queryParam)?(($queryParam['type']==\App\Transaction::PAY_ORDER ?'پرداخت مشتری':(($queryParam['type']==\App\Transaction::DONE_ORDER ?'واریز به کیف پول خدمه':($queryParam['type']==\App\Transaction::CHARGE_FROM_BANK ?'شارژ از بانک':'تسفیه حساب با مشتری'))))):'--- انتخاب نوع ---'}}</option>
 
@@ -76,22 +78,22 @@
 
                     </select>
                 </div>
-
+				<div class="clearfix"></div>
+					<div  class="col-sm-6">
+						<label> تعداد نمایش در هر صحفه</label><br>
+						<input type="number" id="per_record_in_page" value="{{key_exists('limit',$queryParam)?$queryParam['limit']:''}}">
+					</div>
+					<div class="clearfix"></div><br>
+                    <button id="filter_button" class="btn btn-primary btn-group" style="margin:15px;">اعمال</button>
+					<div class="clearfix"></div>
             </div>
-            <div class="row">
-                <div  class="col-sm-6">
-                    <label> تعداد نمایش در هر صحفه</label>
-                    <input type="number" id="per_record_in_page" value="{{key_exists('limit',$queryParam)?$queryParam['limit']:''}}">
-                </div >
-            </div>
- <div class="col-sm-3">
-                    <button id="filter_button" class="btn btn-primary">اعمال</button>
-                </div>
+            <div class="clearfix"></div>
+</div>
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                    <table id="example1" class="box table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                         <thead>
                         <tr role="row">
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">مقدار</th>

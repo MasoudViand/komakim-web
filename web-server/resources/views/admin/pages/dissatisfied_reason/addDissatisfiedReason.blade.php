@@ -22,7 +22,7 @@
         </div>
     @endif
 
-
+<div class="box col-xs-6">
     <form role="form" method="POST" enctype="multipart/form-data" action="{{ route('admin.dissatisfied.reason.insert.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
@@ -31,7 +31,7 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">دلیل عدم رضایت </label>
-                <input  class="form-control" id="DissatisfiedReason" name="DissatisfiedReason" placeholder="نام دسته بندی ">
+                <input  class="form-control" id="DissatisfiedReason" name="DissatisfiedReason" placeholder="دلیل عدم رضایت ">
                 @if ($errors->has('DissatisfiedReason'))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('DissatisfiedReason') }}</strong>
@@ -54,9 +54,10 @@
 
 
         <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">ثبت</button>
         </div>
     </form>
-
+</div>
+<div class="clearfix"></div>
 
 @endsection

@@ -22,7 +22,7 @@
         </div>
     @endif
 
-
+<div class="box col-xs-6">
     <form role="form" method="POST" enctype="multipart/form-data" action="{{ route('admin.dissatisfied.reason.update.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
@@ -55,9 +55,10 @@
 
 
         <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">ثبت</button>
         </div>
     </form>
-
+</div>
+<div class="clearfix"></div>
 
 @endsection

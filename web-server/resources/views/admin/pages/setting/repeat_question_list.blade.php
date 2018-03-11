@@ -16,9 +16,8 @@
                 <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                     <thead>
                     <tr role="row">
-                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">سوال</th>
-                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">جواب</th>
-                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 102px;">ویرایش</th>
+                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">سوال</th>
+                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">ویرایش</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -28,7 +27,6 @@
 
                         <tr role="row" class="odd">
                             <td class="sorting_1">{{$item->question}}</td>
-                            <td class="sorting_1">{{$item->answer}}</td>
 
                             <td><a href="{{route('admin.repeat.question.update',['repeat_question_id' => $item['id']])}}"><i class="fa fa-edit"></i></a></td>
                             <td><a href="{{route('admin.repeat.question.delete',['repeat_question_id' => $item->id])}}"  onclick="return confirm('ایا از حذف این  سوال متداول  اطمینان دارید')"><i class="fa fa-remove"></i></a></td>

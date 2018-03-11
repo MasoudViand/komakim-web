@@ -40,7 +40,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 
-    <div class="box-body">
+    <div class="col-sm-12 box">
 
 
             <div class="row" style="margin-top: 50px">
@@ -95,7 +95,7 @@
             </div>
         </div>
 		
-		
+		</div>
 		
         <hr>
         <div class="row">
@@ -209,6 +209,8 @@
 
 
             var myJSON = JSON.stringify(data);
+
+            console.log(myJSON)
 
 
             if(data) {

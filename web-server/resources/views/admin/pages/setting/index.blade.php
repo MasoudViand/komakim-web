@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-12">
 
-                <table id="user" class="table table-bordered table-striped" style="clear: both">
+                <table id="user" class="box table table-bordered table-striped" style="clear: both">
                     <tbody>
                     <tr>
                         <td width="35%">شعاع جست جو</td>
@@ -30,12 +30,14 @@
             </div>
 
 
-            <p1> ورژن های اپلیکایشن</p1>
+            
 
-            <div class="row">
+           
                 <div class="col-sm-12">
+				
+				<p> ورژن های اپلیکایشن</p>
 
-                    <table id="user" class="table table-bordered table-striped" style="clear: both">
+                    <table id="user" class="box table table-bordered table-striped" style="clear: both">
                         <tbody>
                         <thead>
                         <tr role="row">
@@ -75,7 +77,7 @@
 
 
 
-        </div>
+       
 
 
     </div>
