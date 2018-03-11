@@ -12,16 +12,16 @@
         @endif
 
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3 form-inline">
                 <label for="title">انتخاب دسته بندی</label>
-                <select name="category" id="category" class="form-control" style="width:auto">
+                <select name="category" id="category" class="form-control">
                     <option value="{{key_exists('category_id',$queryParam)?$queryParam['category_id']:''}}">{{key_exists('category_name',$queryParam)?$queryParam['category_name']:'--انتخاب دسته بندی--'}}</option>
                     @foreach ($categories as $category )
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3 form-inline">
                 <label for="title">انتخاب زیر دسته بندی</label>
                 <select name="subcategory" class="form-control"  id="subcategory">
                     <option value="{{key_exists('subcategory_id',$queryParam)?$queryParam['subcategory_id']:''}}">{{key_exists('subcategory_name',$queryParam)?$queryParam['subcategory_name']:'--انتخاب دسته بندی--'}}</option>

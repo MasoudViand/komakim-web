@@ -22,7 +22,7 @@
         </div>
     @endif
 
-
+<div class="box col-sm-6">
     <form role="form" method="POST" action="{{ route('admin.subcategory.update.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
@@ -71,6 +71,7 @@
             <button type="submit" class="btn btn-primary">ثبت</button>
         </div>
     </form>
-
+</div>
+<div class="clearfix"></div>
 
 @endsection
