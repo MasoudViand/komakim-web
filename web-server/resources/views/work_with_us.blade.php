@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('header')
-    <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">
+{{--    <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">--}}
     <script src="{{asset("AdminLTE-RTL/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
 
 
@@ -11,7 +11,6 @@
 
 
 @section('content')
-    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <style>
         body {
         }
@@ -47,7 +46,9 @@
     <script src="{{asset("AdminLTE-RTL/bootstrap/js/bootstrap.min.js") }}"></script>
     <script src="{{asset("Persian-Jalali-Calendar-Data-Picker-Plugin-With-jQuery-kamaDatepicker/src/kamadatepicker.js") }}"></script>
     <script src="{{asset("bootstrap-select-1.12.4/dist/js/bootstrap-select.js") }}"></script>
-<div class="container">
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
+    <div class="container">
     @if(Session::has('error'))
 
         <div class="alert alert-danger" role="alert">
@@ -290,7 +291,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Register
+                                    ثبت
                                 </button>
                             </div>
                         </div>
