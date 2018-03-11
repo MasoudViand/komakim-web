@@ -40,14 +40,14 @@
     <div class="box-body">
 
         @if(Session::has('success'))
-            <div class="alert alert-sussecc" role="alert">
+            <div class="alert alert-success" role="alert">
                 <strong>
                     {{ Session::get('success') }}
                 </strong>
             </div>
         @endif
             @if(Session::has('error'))
-                <div class="alert alert-sussecc" role="alert">
+                <div class="alert alert-success" role="alert">
                     <strong>
                         {{ Session::get('error') }}
                     </strong>
@@ -56,9 +56,6 @@
 
 
             <div class="row" style="margin-top: 50px">
-                <div class="col-sm-3">
-                    <button id="filter_button" class="btn btn-primary">اعمال</button>
-                </div>
                 <div class="col-sm-3">
                     <label> از تاریخ :</label>
                     <input  id="from" type="text" value="{{key_exists('from',$queryParam) ?$queryParam['from']:''}}">
@@ -86,11 +83,10 @@
                     <label> تعداد نمایش در هر صحفه</label>
                     <input type="number" id="per_record_in_page" value="{{key_exists('limit',$queryParam)?$queryParam['limit']:''}}">
                 </div >
-                <div class="col-sm-6">
-                    <button  id="per_record_in_page_button" class="btn btn-primary"> ثبت</button>
-                </div>
             </div>
-
+ <div class="col-sm-3">
+                    <button id="filter_button" class="btn btn-primary">اعمال</button>
+                </div>
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
