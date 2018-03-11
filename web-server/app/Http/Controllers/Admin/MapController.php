@@ -105,6 +105,7 @@ class MapController extends Controller
 
         $locations = [];
 
+
         foreach ($model as $workerprofile)
         {
 
@@ -114,7 +115,7 @@ class MapController extends Controller
             {
                $lan = $workerprofile->profile[0]['location']['coordinates'][1];
                $long = $workerprofile->profile[0]['location']['coordinates'][0];
-               $name = $workerprofile->name;
+               $name = $workerprofile->name.' '.$workerprofile->family;
 
                $location =['lat'=>$lan ,'lng'=>$long,'name'=>$name];
                array_push($locations,$location);
@@ -127,11 +128,6 @@ class MapController extends Controller
         $data['locations']=$locations;
         $data['queryParam']=$queryParam;
 
-
-
-
-
-        //dd($locations);
 
 
         return view('admin.pages.map.index')->with($data);

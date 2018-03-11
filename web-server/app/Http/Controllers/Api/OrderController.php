@@ -198,6 +198,9 @@ class OrderController extends Controller
 
         $order = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->first();
 
+        if (!$order)
+            return response()->json(['order' => $order]);
+
 
 
             if ($order->worker_id)

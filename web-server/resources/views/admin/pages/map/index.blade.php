@@ -157,7 +157,7 @@
 
                             if (x.style.display="none")
                             {
-                                console.log('sddd');
+
                             }
 
                             marker = new google.maps.Marker({
@@ -166,7 +166,7 @@
                             });
 //
                             google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.setContent('    مصطفی');
+                            infowindow.setContent(element['name']);
                             infowindow.open(map, this);
                         });
 
