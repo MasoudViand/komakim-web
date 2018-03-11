@@ -392,7 +392,7 @@ class FinancialController extends Controller
                     $temDate=clone $to;
                     $temDate = $temDate->modify('-'.$i.' weeks');
                     $temDate->format('d/m/Y');
-                    //$x_axis[]=$temDate->format("Y").'/'.$temDate->format("m").'/'.$temDate->format("W");
+                    $x_axis[]=$temDate->format('d/m/Y');
                 }
                 foreach ($x_axis as $x_axi)
                 {

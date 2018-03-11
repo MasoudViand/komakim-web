@@ -255,6 +255,11 @@
         commissions =JSON.parse(commissions.replace(/&quot;/g,'"'));
         var total_prices= ("{{ json_encode($y_total_price) }}");
         total_prices =JSON.parse(total_prices.replace(/&quot;/g,'"'));
+        mode_val=("{{json_encode($queryparam['mode']=='daily'?'روزانه':($queryparam['mode']=='weekly'?'هفتگی':'ماهانه'))}}")
+        mode_val =JSON.parse(mode_val.replace(/&quot;/g,'"'));
+
+
+
 
         new Chart(document.getElementById("line-chart"), {
             type: 'line',
@@ -276,7 +281,7 @@
             options: {
                 title: {
                     display: true,
-                    text: 'گزارش مالی روزانه'
+                    text: 'گزارش مالی '+mode_val
                 }
             }
         });
