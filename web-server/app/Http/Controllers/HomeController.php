@@ -41,6 +41,8 @@ class HomeController extends Controller
         $categories =Category::all();
         $data['categories']=$categories;
 
+
+
        return view('work_with_us')->with($data);
     }
 
