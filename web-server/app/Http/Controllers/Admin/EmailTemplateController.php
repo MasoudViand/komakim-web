@@ -22,7 +22,7 @@ class EmailTemplateController extends Controller
 
     public function index()
     {
-        $mailsTemplate =MailTemplate::paginate(15);
+        $mailsTemplate =MailTemplate::paginate(20);
 
         $data['mailsTemplate'] = $mailsTemplate;
         $data['total_count'] = MailTemplate::count();

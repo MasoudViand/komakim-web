@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::orderBy('order', 'asc')->paginate(15);
+        $categories = Category::orderBy('order', 'asc')->paginate(20);
 
 
         foreach ($categories as $category) {

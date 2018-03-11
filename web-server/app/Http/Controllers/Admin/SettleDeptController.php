@@ -35,7 +35,7 @@ class SettleDeptController extends Controller
 
         }
         else
-            $limit=10;
+            $limit=20;
 
         if ($request->has('page'))
         {

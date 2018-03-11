@@ -25,7 +25,7 @@ class SubCategoryController extends Controller
     public function index()
     {
 
-        $subcategories =Subcategory::orderBy('order', 'desc')->paginate(15);
+        $subcategories =Subcategory::orderBy('order', 'desc')->paginate(20);
         $subcategoryArr=[];
 
         foreach ($subcategories as $subcategory)
