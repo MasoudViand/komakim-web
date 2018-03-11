@@ -71,7 +71,7 @@ class OrderController extends Controller
         $q = [
             ['$sort'=>['_id'=>-1]],
             [ '$skip'  =>$skip ],
-            [ '$limit' => 10 ],
+            [ '$limit' => 20 ],
 
         ];
         $q_count=[];
@@ -81,7 +81,7 @@ class OrderController extends Controller
                 ['$sort'=>['_id'=>-1]],
                 ['$match' => $query],
                 [ '$skip'  =>$skip ],
-                [ '$limit' => 10 ],
+                [ '$limit' => 20 ],
 
             ];
             $q_count=[['$match' => $query]];
@@ -206,7 +206,7 @@ class OrderController extends Controller
         }
 
 
-        $data['total_page']=(int)($data['count']/10)+1;
+        $data['total_page']=(int)($data['count']/20)+1;
         $data['queryParam']=$queryParam;
         $data['page']= $page;
         $data['orders']     =$ordersArr;

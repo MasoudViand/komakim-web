@@ -42,7 +42,7 @@ class FinancialController extends Controller
         $queryParam['mode']=$mode;
 
 
-        $limit=10;
+        $limit=20;
         if ($request->has('limit'))
         {
             $limit= (int)$request->input('limit');

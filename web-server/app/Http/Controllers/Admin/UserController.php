@@ -27,7 +27,7 @@ class UserController extends Controller
     function index(Request $request){
 
 
-        $limit =10;
+        $limit =20;
         $query=[];
         $queryParam=[];
         $fields =Category::all();

@@ -26,7 +26,7 @@ class SurveyController extends Controller
         $queryParam =[];
 
 
-        $limit=10;
+        $limit=20;
         $queryParam['limit']=$limit;
 
 

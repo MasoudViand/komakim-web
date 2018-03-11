@@ -26,7 +26,7 @@ class DissatisfiedReasonController extends Controller
     {
 
 
-        $dissatisfiedReasons = DissatisfiedReason::orderBy('_id','desc')->paginate(15);
+        $dissatisfiedReasons = DissatisfiedReason::orderBy('_id','desc')->paginate(20);
 
         foreach ($dissatisfiedReasons as $dissatisfiedReason) {
             $filepath =  '/images/icons/service-icon-default.jpg';

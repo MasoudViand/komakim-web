@@ -43,7 +43,7 @@ class TransactionsController extends Controller
 
         }
         else
-            $limit=10;
+            $limit=20;
         $queryParam['limit']=$limit;
 
 

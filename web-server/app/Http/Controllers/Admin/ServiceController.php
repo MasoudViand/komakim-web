@@ -71,7 +71,7 @@ class ServiceController extends Controller
 
 
 
-        $services = $service->paginate(15);
+        $services = $service->paginate(20);
 
 
 
