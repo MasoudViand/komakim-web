@@ -171,6 +171,8 @@ class WalletController extends Controller
         $order->status=OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS;
         $order->save();
 
+        $this->_sendSmsToWorker($order);
+
         $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,$request->user()));
         $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری پرداخت شد','',$order,User::WORKER_ROLE));
 
@@ -286,6 +288,39 @@ class WalletController extends Controller
         else
             return false;
     }
+
+
+    private function     _sendSmsToWorker($order)
+    {
+        $user_id=$order->worker_id;
+
+        $user =User::find($user_id);
+        $phone_number=$user->phone_number;
+        try {
+
+
+            $sender = "100065995";
+            $receptor = $phone_number;
+            $message = 'شفارش با کد پیگیری '.$order->tracking_number.'با موفقیت پرداخت شد';
+            $api = new \Kavenegar\KavenegarApi("41592B50794462786F746C68364338573231783474673D3D");
+            $api->Send($sender, $receptor, $message);
+            return true;
+
+
+        } catch(\Kavenegar\Exceptions\ApiException $e){
+            dd($e);
+            // در صورتی که خروجی وب سرویس 200 نباشد این خطا رخ می دهد
+
+            return false;
+
+
+        }
+        catch(\Kavenegar\Exceptions\HttpException $e){
+            // در زمانی که مشکلی در برقرای ارتباط با وب سرویس وجود داشته باشد این خطا رخ می دهد
+            return false;
+        }
+    }
+
 
 }
 
