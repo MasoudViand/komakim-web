@@ -136,7 +136,7 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">وضعیت </label>
+                                <label for="exampleInputEmail1">وضعیت ورود </label>
                                 <select class="form-control" id="status" name="status">
                                     <option value="{{$user->status==\App\User::ENABLE_USER_STATUS ?\App\User::ENABLE_USER_STATUS:\App\User::DISABLE_USER_STATUS}}">--- {{ $user->status==\App\User::ENABLE_USER_STATUS ?'فعال':'غیرفعال' }} ---</option>
                                     <option value="{{\App\User::ENABLE_USER_STATUS}}">فعال</option>
@@ -259,8 +259,8 @@
                                     <option value="{{$workerProfile->status}}">--- {{ $workerProfileStatus }} ---</option>
 
                                     <option value="{{\App\WorkerProfile::WORKER_PENDING_STATUS}}">منتظر تایید</option>
-                                    <option value="{{\App\WorkerProfile::WORKER_ACCEPT_STATUS}}">قبول درخواست</option>
-                                    <option value="{{\App\WorkerProfile::WORKER_REJECT_STATUS}}">رد درخواست</option>
+                                    <option value="{{\App\WorkerProfile::WORKER_ACCEPT_STATUS}}">تایید شده</option>
+                                    <option value="{{\App\WorkerProfile::WORKER_REJECT_STATUS}}">رد شده</option>
 
                                 </select>
                             </div>
