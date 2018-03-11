@@ -30,10 +30,106 @@ class FinancialController extends Controller
 
     public function index(Request $request)
     {
-
-
         $mode ='daily';
         $queryParam =[];
+
+
+        $fromDate =new \DateTime('midnight');
+        $queryParam['from_date']=\Morilog\Jalali\jDateTime::strftime('Y/m/d', $fromDate);
+        $fromDate =Carbon::instance($fromDate);
+        $toDate=new \DateTime();
+        $toDate = Carbon::instance($toDate);
+        $queryParam['to_date']=\Morilog\Jalali\jDateTime::strftime('Y/m/d', $toDate);
+
+
+
+
+
+        //from which date query should be executed
+
+        if ($request->has('from_date'))
+        {
+            $queryParam['from_date']=$request->input('from_date');
+            $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('from_date').' 00:00:00');
+
+            $fromDate = Carbon::instance($date);
+
+        }
+
+        //until which date query should be executed
+
+        if ($request->has('to_date'))
+        {
+            $queryParam['to_date']=$request->input('to_date');
+            $date = \Morilog\Jalali\jDateTime::createDatetimeFromFormat('Y/m/d H:i:s', $request->input('to_date').' 00:00:00');
+
+            $toDate = Carbon::instance($date);
+        }
+
+        $fromDate = new UTCDateTime($fromDate);
+        $toDate = new UTCDateTime($toDate);
+        $q_field=[
+            [
+                '$match' => [
+                    'created_at' =>
+                        [
+                            '$gt' => $fromDate,
+                            '$lt' => $toDate,
+                        ]
+                ]
+            ]
+        ];
+
+        $q_field[]=
+            [
+                '$group' =>[
+                    '_id' =>[
+                        'month' =>['$month'=>'$created_at'],
+                        'day' =>['$dayOfMonth'=>'$created_at'],
+                        'year' =>['$year'=>'$created_at'],
+
+                    ],
+                    'total_price' =>[
+                        '$sum' =>'$total_price'
+                    ],
+                    'commission' =>[
+                        '$sum' =>'$commission'
+                    ],
+                    'count' =>[
+                        '$sum'=>1
+                    ]
+                ]
+
+            ];
+
+        $model = FinancialReport::raw()->aggregate($q_field);
+
+        $reportArr=[];
+
+        foreach ($model as $item)
+        {
+            array_push($reportArr,$item);
+        }
+
+        $commission_field=0;
+        $total_price_field=0;
+        $count_field =0;
+
+        foreach ($reportArr as $item)
+        {
+            $commission_field= $commission_field+$item['commission'];
+            $total_price_field    = $total_price_field +$item['total_price'];
+            $count_field     = $count_field  +$item['count'];
+
+        }
+
+        $data['commission_field']=$commission_field;
+        $data['total_price_field']=$total_price_field;
+        $data['count_field']=$count_field;
+
+        //////////////////////////////////////////
+
+
 
         if ($request->has('mode')){
             $mode =$request->input('mode');
@@ -52,6 +148,7 @@ class FinancialController extends Controller
 
 
         }
+
         $queryParam['limit']=$limit;
         $page =1;
         if ($request->has('page'))
@@ -374,6 +471,7 @@ class FinancialController extends Controller
         $data['preQueryparam']  =   $preQueryparam;
         $data['nextQueryparam']  =  $nextQueryparam;
         $data['page_title']=        'گزارش مالی';
+
 
 
         return view('admin.pages.financial.index')->with($data);

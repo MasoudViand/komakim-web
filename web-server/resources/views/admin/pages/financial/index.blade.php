@@ -1,5 +1,7 @@
 @extends('admin.template.admin_template')
 
+
+
 @section('content')
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <style>
@@ -47,14 +49,14 @@
 			
                 <div class="col-sm-4 form-inline">
                     <label> از تاریخ :</label>
-                    <input type="text" class="form-control" id="from" {{key_exists('from',$queryparam)?$queryparam['from']:''}}>
+                    <input type="text" class="form-control" id="from" value="{{$queryparam['from_date']}}" >
                 </div>
 				
 				<div class="clearfix"></div>
 				
                 <div class="col-sm-4 form-inline">
                     <label> تا تاریخ :</label>
-                    <input type="text" class="form-control" id="to" {{key_exists('to',$queryparam)?$queryparam['to']:''}}>
+                    <input type="text" class="form-control" id="to" value="{{$queryparam['to_date']}}">
                 </div>
 				
 				<div class="clearfix"></div><br>
@@ -76,16 +78,14 @@
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد تراکنش ها</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">جمع درامد خالص</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">جمع درامد ناخالص</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">نوع</th>
 
                         </tr>
                         </thead>
                         <tbody id="tuserbody">
                         <tr role="row" class="odd">
-                            <td class="sorting_1">{{$count_sum}}</td>
-                            <td class="sorting_1">{{$commission_sum}}</td>
-                            <td class="sorting_1">{{$total_price_sum}}</td>
-                            <td class="sorting_1">{{key_exists('mode',$queryparam)?($queryparam['mode']=='daily'?'روزانه':($queryparam['mode']=='weekly'?'هفتگی':'ماهانه')):'روزانه'}}</td>
+                            <td class="sorting_1">{{$count_field}}</td>
+                            <td class="sorting_1">{{$commission_field}}</td>
+                            <td class="sorting_1">{{$total_price_field}}</td>
 
                         </tr>
                         </tbody>
@@ -199,43 +199,24 @@
             mode =$("#mode").val()
 
 
-            var data={};
+            var params = [];
+
             if(from)
-                data.from =from;
+                params.push("from_date="+from)
             if (to_value)
-                data.to =to_value;
-            if (mode)
-                data.mode = mode;
+                params.push("to_date="+to_value)
+
+            console.log(params);
 
 
-            var myJSON = JSON.stringify(data);
-
-            console.log(myJSON)
-
-
-            if(data) {
-
-                $.ajax({
-                    type: "POST",
-                    url: 'financial/filter',
-                    data :myJSON,
-                    success:function(data) {
-
-                        var tablebody = $( "#tuserbody" );
-
-                        tablebody.empty();
-                        tablebody.append(' <tr role="row" class="odd">'+' <td class="sorting_1">'+data.total_count+'</td>'+' <td class="sorting_1">'+data.total_prices+'</td>'+' <td class="sorting_1">'+data.total_commission+'</td>'+' <td class="sorting_1">'+mode+'</td>'+'</tr>')
+            window.location.href =
+                "http://" +
+                window.location.host +
+                window.location.pathname +
+                '?' + params.join('&');
 
 
-
-
-                    },
-                    dataType: "json"
-                });
-            }else{
-
-            }
-
+         
 
         })
         $("#search_filter").click(function () {
