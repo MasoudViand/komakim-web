@@ -23,25 +23,21 @@
                 </div>
             @endif
             <div class="row">
-
-
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div id="example1_filter" class="dataTables_filter">
                         <label>تلفن همراه<input type="search"id="mobile" class="form-control input-sm" value="{{key_exists('phone_number',$queryParam)?$queryParam['phone_number']:''}}" placeholder="" aria-controls="example1">
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div id="example1_filter" class="dataTables_filter">
                         <label>کدملی<input type="search" id="nationalCode" name="nationalCode" class="form-control input-sm" value="{{key_exists('national_code',$queryParam)?$queryParam['national_code']:''}}" placeholder="" aria-controls="example1">
                         </label>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label for="title">حوزه های همکاری</label>
+                        <label>حوزه های همکاری</label>
                         <select id="fields"  name="fields[]"  class="selectpicker" multiple data-hide-disabled="true" >
                             @foreach($fields as $field)
                                 <option   <?php if(key_exists('fields',$queryParam)){ foreach ($queryParam['fields'] as $item){ if ($item==$field->name) echo 'selected';} }?> value="{{$field->name}}"  >{{$field->name}}</option>
@@ -52,7 +48,7 @@
                     </div>
 
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-1">
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="gender"id="gender" class="form-control" style="">
@@ -66,12 +62,12 @@
 
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
 
                     <button id="search_filter" class="btn btn-primary" > جست جو</button>
 
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix"></div><br>
                 <div id="nodataLabel" > <label> فعلا داده برای نشان دادن وجود ندارد</label></div>
 
 
