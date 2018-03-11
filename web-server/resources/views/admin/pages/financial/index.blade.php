@@ -43,29 +43,22 @@
     <div class="box-body">
 
 
-
-
-
-
-
-
             <div class="row" style="margin-top: 50px">
-                <div class="col-sm-4">
+			
+                <div class="col-sm-4 form-inline">
                     <label> از تاریخ :</label>
-                    <input type="text" id="from" {{key_exists('from',$queryparam)?$queryparam['from']:''}}>
+                    <input type="text" class="form-control" id="from" {{key_exists('from',$queryparam)?$queryparam['from']:''}}>
                 </div>
-                <div class="col-sm-4">
+				<div class="clearfix"></div>
+                <div class="col-sm-4 form-inline">
                     <label> تا تاریخ :</label>
-                    <input type="text"  id="to" {{key_exists('to',$queryparam)?$queryparam['to']:''}}>
+                    <input type="text" class="form-control" id="to" {{key_exists('to',$queryparam)?$queryparam['to']:''}}>
                 </div>
+				<div class="clearfix"></div><br>
             <div class="col-sm-4">
                 <button class="btn btn-primary" id="btn_date_search"> ثبت </button>
             </div>
-            </div>'
-
-
-
-
+            </div>
 
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
@@ -92,8 +85,11 @@
                         </tbody>
                     </table>
                 </div>
+				
             </div>
         </div>
+		
+		
         <hr>
         <div class="row">
             <div class="col-sm-4">
