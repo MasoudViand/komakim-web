@@ -22,7 +22,7 @@
         </div>
     @endif
 
-
+<div class="box col-sm-6">
     <form role="form" method="POST" action="{{ route('admin.service.insert.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
@@ -104,14 +104,15 @@
 
 
 
-
+</div>
         </div><!-- /.box-body -->
 
         <div class="box-footer">
             <button type="submit" class="btn btn-primary">ثبت</button>
         </div>
     </form>
-
+</div><br>
+<div class="clearfix"></div>
 
 
 

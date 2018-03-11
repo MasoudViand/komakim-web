@@ -77,8 +77,9 @@
 
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <label for="title">حوزه های همکاری</label>
-                        <select id="fields"  name="fields[]"  class="selectpicker" multiple data-hide-disabled="true" >
+                        
+                        <select id="fields"  name="fields[]"  class="selectpicker" multiple  >
+						   <option value="" selected hidden disabled>حوزه های همکاری</option>
                             @foreach($fields as $field)
                                 <option   <?php if(key_exists('fields',$queryParam)){ foreach ($queryParam['fields'] as $item){ if ($item==$field->name) echo 'selected';} }?> value="{{$field->name}}"  >{{$field->name}}</option>
                             @endforeach
@@ -105,7 +106,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="sort" id="sort" class="form-control" style="">
-                            <option value="{{key_exists('sort',$queryParam)?$queryParam['sort']:''}}">{{key_exists('sort',$queryParam)?($queryParam['sort']=='asc'?'بالا به پایین':'پایین به بال'):'--- دسته بندی بر اساس امتیاز ---'}}</option>
+                            <option value="{{key_exists('sort',$queryParam)?$queryParam['sort']:''}}">{{key_exists('sort',$queryParam)?($queryParam['sort']=='asc'?'بالا به پایین':'پایین به بال'):'--- نمایش بر اساس امتیاز ---'}}</option>
 
                             <option value="asc">بالا به پایین</option>
                             <option value="desc">پایین به بالا</option>
@@ -148,7 +149,7 @@
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select id="availabilitystatus" name="availabilitystatus" class="form-control" style="">
-                            <option value="{{key_exists('availability_status',$queryParam)?$queryParam['availability_status']:''}}">{{key_exists('availability_status',$queryParam)?($queryParam['availability_status']=='available'?'اماده برای ارایه سرویس':'جارج از سرویس دهی'):'--- وضعیت قابلیت ارایه سرویس ---'}}</option>
+                            <option value="{{key_exists('availability_status',$queryParam)?$queryParam['availability_status']:''}}">{{key_exists('availability_status',$queryParam)?($queryParam['availability_status']=='available'?'اماده برای ارایه سرویس':'جارج از سرویس دهی'):'---  قابلیت ارایه سرویس ---'}}</option>
 
 
                             <option value="available">اماده برای ارایه سرویس</option>
@@ -160,11 +161,12 @@
                 </div>
 
             </div>
-
+			<br>
             <button id="search_filter" class="btn btn-primary" > جست جو</button>
+			<br><br>
             <div class="row">
-                <div class="col-sm-12">
-                    <table id="user_table" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                <div class="col-sm-12 ">
+                    <table id="user_table" class="box table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                         <thead>
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام</th>

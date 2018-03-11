@@ -35,7 +35,7 @@
 
                 </select>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3 form-inline">
                 <label for="exampleInputEmail1">نام سرویس </label>
                 <input  class="form-control" id="service_name" name="nameCategory" value="{{key_exists('service_name',$queryParam)?$queryParam['service_name']:''}}" >
 
@@ -45,6 +45,7 @@
                 <button class="btn btn-primary" id="btn_search_service">اعمال</button>
             </div>
         </div>
+		<hr>
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
