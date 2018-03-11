@@ -194,7 +194,7 @@ class OrderController extends Controller
         function listActiveOrderWorker(Request $request)
 
     {
-        $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
+        $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
         $order = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->first();
 
@@ -204,6 +204,8 @@ class OrderController extends Controller
                 $order->worker=User::find($order->worker_id);
             else
                 $order->worker=null;
+            if ($order->user_id)
+                $order->client = User::find($order->user_id);
             if ($order->revisions)
             {
                 $order->services=$order->revisions[0]['services'];
@@ -223,7 +225,7 @@ class OrderController extends Controller
         if ($request->has('limit'))
             $limit = $request->input('limit');
 
-        $archiveStatus = [OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS];
+        $archiveStatus = [OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS];
 
         $orders = Order::whereIn('status',$archiveStatus)->where('worker_id',new ObjectID($request->user()->id))->skip($offset)->take($limit)->get();
 
