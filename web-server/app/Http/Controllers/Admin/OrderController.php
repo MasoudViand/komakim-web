@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Admin;
 use App\Category;
 use App\DissatisfiedReason;
 use App\Jobs\RegisterStatusOrderRevisionJob;
+use App\Jobs\SendNotificationToSingleUserJobWithFcm;
+use App\Jobs\SendSmsToSingleUser;
 use App\Order;
 use App\OrderStatusRevision;
 use App\Review;
@@ -17,6 +20,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\HtmlString;
 use MongoDB\BSON\ObjectID;
+use MongoDB\BSON\UTCDateTime;
 use Symfony\Component\Console\Question\Question;
 
 class OrderController extends Controller
@@ -155,6 +159,9 @@ class OrderController extends Controller
                 case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
                     $order['status']='لغو توسط ادمین';
                     break;
+                case OrderStatusRevision::NOT_FOUND_WORKER_STATUS:
+                    $order['status']='عدم یافت خدمه';
+                    break;
 
             }
 
@@ -201,6 +208,9 @@ class OrderController extends Controller
                 case OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS:
                     $queryParam['status_plain_text']='لغو توسط ادمین';
                     break;
+                case OrderStatusRevision::NOT_FOUND_WORKER_STATUS:
+                    $queryParam['status_plain_text']='عدم یافت خدمه';
+                    break;
 
 
             }
@@ -245,6 +255,9 @@ class OrderController extends Controller
         {
             case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
                 $order['status']='منتظر تایید خدمه';
+                break;
+            case OrderStatusRevision::NOT_FOUND_WORKER_STATUS:
+                $order['status']='عدم یافت خدمه';
                 break;
             case OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS:
                 $order['status']='قبول درخواست توسط خدمه';
@@ -343,6 +356,9 @@ class OrderController extends Controller
                 case OrderStatusRevision::WAITING_FOR_WORKER_STATUS:
                     $revision['status']='منتظر تایید خدمه';
                     break;
+                case OrderStatusRevision::NOT_FOUND_WORKER_STATUS:
+                    $revision['status']='عدم یافت خدمه';
+                    break;
                 case OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS:
                     $revision['status']='قبول درخواست توسط خدمه';
                     break;
@@ -375,7 +391,8 @@ class OrderController extends Controller
             }
 
             $revision['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($item->created_at));
-            $revision['whom']   =User::find($item->whom);
+            if (!is_null($revision['whom']))
+                $revision['whom']   =User::find($item->whom);
             $revisions[]=$revision;
 
 
@@ -385,9 +402,6 @@ class OrderController extends Controller
 
         $data['revisions']=$revisions;
         $data['page_title']='دیدن جزییات سفارش';
-
-
-
 
 
 
@@ -410,14 +424,32 @@ class OrderController extends Controller
         $order->status =OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
         if ($order->save())
         {
-            $user_id = $order->worker_id;
+            $revision = new \stdClass();
+            $revision->order_id=($order->order_id);
+            $revision->created_at = new UTCDateTime(time()*1000);
+            $revision->status=OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
+            $revision->whom =Admin::find($request->user()->id);
+            $model = OrderStatusRevision::raw()->insertOne($revision);
+            $worker_id = $order->worker_id;
+            $user_id = $order->user_id;
 
-            if ($user_id)
+            $user = User::find($user_id);
+            $user_number = $user->phone_number;
+            $message='سفارش با کد پیگیری '.$order->tracking_number.'توسط کمکیم لغو شد';
+            $this->dispatch(new SendSmsToSingleUser($user_number,$message));
+
+
+            if ($worker_id)
             {
-                $workerProfile =WorkerProfile::where('user_id',$user_id)->first();
+                $worker = User::find($worker_id);
+                $worker_number = $worker->phone_number;
+                $this->dispatch(new SendSmsToSingleUser($worker_number,$message));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'لغو توسط ادمین','',$order,User::WORKER_ROLE));
+                $workerProfile =WorkerProfile::where('user_id',$worker_id)->first();
                 $workerProfile->has_active_order=false;
                 $workerProfile->save();
             }
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'لغو توسط ادمین','',$order,User::CLIENT_ROLE));
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$request->user()));
             return redirect()->back();
 

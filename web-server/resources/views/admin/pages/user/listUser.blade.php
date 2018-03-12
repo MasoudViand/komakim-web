@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
-                        <label>نام<input type="search" id="email" class="form-control input-sm" placeholder="" value="{{key_exists('name',$queryParam)?$queryParam['name']:''}}" aria-controls="example1">
+                        <label>نام<input type="search" id="name_user" class="form-control input-sm" placeholder="" value="{{key_exists('name',$queryParam)?$queryParam['name']:''}}" aria-controls="example1">
                         </label>
                     </div>
                 </div>
@@ -254,7 +254,7 @@
 
             $( "#search_filter" ).click(function() {
                 var email = $( "#email" ).val();
-                var name = $( "#name" ).val();
+                var name = $( "#name_user" ).val();
                 var mobile = $( "#mobile" ).val();
                 var status = $( "#status" ).val();
                 var role = $( "#typeOfuser" ).val();

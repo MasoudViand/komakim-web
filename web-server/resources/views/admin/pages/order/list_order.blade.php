@@ -39,10 +39,11 @@
                                     <option value="{{\App\OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS}}">قبول شده توسط خدمه</option>
                                     <option value="{{\App\OrderStatusRevision::START_ORDER_BY_WORKER_STATUS}}">شروع کار توسط خدمه</option>
                                     <option value="{{\App\OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS}}">اتمام توسط خدمه</option>
-                                    <option value="{{\App\OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS}}">پرداخت شده توسط خدمه</option>
+                                    <option value="{{\App\OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS}}">پرداخت شده توسط مشتری</option>
                                     <option value="{{\App\OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS}}">لغو توسط خدمه</option>
                                     <option value="{{\App\OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS}}">لغو توسط مشتری</option>
                                     <option value="{{\App\OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS}}">لغو توسط ادمین</option>
+                                    <option value="{{\App\OrderStatusRevision::NOT_FOUND_WORKER_STATUS}}">عدم یافت خدمه</option>
 
                             </select>
                         </label>

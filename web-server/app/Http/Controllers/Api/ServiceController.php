@@ -28,6 +28,7 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
+use function MongoDB\is_first_key_operator;
 
 class ServiceController extends Controller
 {
@@ -211,6 +212,7 @@ class ServiceController extends Controller
 
 
 
+
          if (!($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS))
              return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(420);
 
@@ -253,6 +255,14 @@ class ServiceController extends Controller
         }
         $order = Order::find($request->input('order_id'));
 
+        if ($order['worker_id'] and (string)$order['worker_id']!=$request->user()->id)
+            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+
+
+        if (!($order['status']==OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS))
+            return response()->json(['error'=>'وضعیت سفارش قبول شده توسط کاربر نیست'])->setStatusCode(420);
+
+
 
         $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
 
@@ -279,6 +289,16 @@ class ServiceController extends Controller
             return response()->json(['error'=>'order id is require'])->setStatusCode(417);
         }
         $order = Order::find($request->input('order_id'));
+
+        if ($order['worker_id'] and (string)$order['worker_id']!=$request->user()->id)
+            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+
+
+        if (!($order['status']==OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS))
+            return response()->json(['error'=>'وضعیت سفارش شروع شده توسط کاربر نیست'])->setStatusCode(420);
+
+
+
         $order->status =OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS;
 
         if ($order->save())
@@ -304,17 +324,6 @@ class ServiceController extends Controller
         }
 
     }
-
-
-        private function     _sendSmsToClient($order)
-        {
-            $user_id=$order->user_id;
-
-            $user =User::find($user_id);
-            $phone_number=$user->phone_number;
-
-        }
-
 
 
 

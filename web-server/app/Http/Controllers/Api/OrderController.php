@@ -146,6 +146,13 @@ class OrderController extends Controller
                 return response()->json(['error'=>'order id is require'])->setStatusCode(417);
             }
             $order = Order::find($request->input('order_id'));
+            if ($order['user_id'] and (string)$order['user_id']!=$request->user()->id)
+                return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+
+
+            if (!($order['status']==OrderStatusRevision::EDIT_BY_WORKER_STATUS))
+                return response()->json(['error'=>'وضعیت سفارش ویرایش شده توسط کاربر نیست'])->setStatusCode(420);
+
 
 
             $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
@@ -154,6 +161,7 @@ class OrderController extends Controller
             {
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::APPROVE_EDIT_BY_CLIENT_STATUS,$request->user()) );
                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'تایید ادامه کار','',$order,User::WORKER_ROLE));
+
 
 
                 //$this->_sendNotificationToClient();

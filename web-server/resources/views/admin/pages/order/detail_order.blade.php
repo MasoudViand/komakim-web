@@ -220,9 +220,8 @@
                                     <tr role="row" class="odd">
                                         <td class="sorting_1">{{$revision['status']  }}</td>
                                         <td class="sorting_1">{{$revision['created_at']  }}</td>
-                                        <td class="sorting_1">{{$revision['whom']['name'].'  '.$revision['whom']['family']  }}</td>
-
-
+{{--                                        <td class="sorting_1">{{$revision['whom']['name'].'  '.$revision['whom']['family']  }}</td>--}}
+                                        <td class="sorting_1">{{!is_null($revision['whom'])?$revision['whom']['name']:''.'  '.!is_null($revision['whom'])?$revision['whom']['family']:'' }}</td>
 
                                     </tr>
 
@@ -242,7 +241,7 @@
 
                 <div class="row" id="cancel_order_section">
                     <div class="col-sm-12">
-                        <div <?php  if($order['status']=='لغو توسط ادمین'){ echo 'hidden';}   ?> >
+                        <div <?php  if($order['status']=='لغو توسط ادمین'or$order['status']=='عدم یافت خدمه'or$order['status']=='پرداخت توسط خدمه'or$order['status']=='لغو توسط مشتری'or$order['status']=='لغو توسط خدمه' ){ echo 'hidden';}   ?> >
                             <button  hidden class="btn btn-primary btn-danger" id="cancel_order">لغو سفارش</button>
 
                         </div>

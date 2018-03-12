@@ -10,6 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use MongoDB\BSON\ObjectID;
+use MongoDB\BSON\UTCDateTime;
+
 class CheckServiceAccepted implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -40,6 +43,15 @@ class CheckServiceAccepted implements ShouldQueue
         $order =Order::find($this->order_id);
 
         if ($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS){
+            $order->status =OrderStatusRevision::NOT_FOUND_WORKER_STATUS;
+            $revision = new \stdClass();
+            $revision->order_id=($order->order_id);
+            $revision->created_at = new UTCDateTime(time()*1000);
+            $revision->status=OrderStatusRevision::NOT_FOUND_WORKER_STATUS;
+            $revision->whom =null;
+            $model = OrderStatusRevision::raw()->insertOne($revision);
+
+
             $user_id=$order['user_id'];
             $user=User::find($user_id);
             $token=$user['fcm_token'];

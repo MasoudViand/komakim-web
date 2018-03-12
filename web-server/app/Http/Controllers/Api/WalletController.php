@@ -60,6 +60,14 @@ class WalletController extends Controller
         if (!$order)
             return response()->json(['error'=>'سفارشی پیدا نشد '])->setStatusCode(417);
 
+        if ($order['user_id'] and (string)$order['user_id']!=$request->user()->id)
+            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+
+
+        if (!($order['status']==OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS))
+            return response()->json(['error'=>'وضعیت سفارش انجام شده توسط کاربر نیست'])->setStatusCode(420);
+
+
 
         $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
 

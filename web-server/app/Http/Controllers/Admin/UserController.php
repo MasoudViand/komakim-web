@@ -79,6 +79,13 @@ class UserController extends Controller
 
 
         }
+        if ($request->has('name'))
+        {
+            $query['name']=['$regex'=>$request->input('name')];
+            $queryParam['name']=$request->input('name');
+
+
+        }
 
         if ($request->has('national_code'))
         {
@@ -169,8 +176,8 @@ class UserController extends Controller
             $q_count[]= ['$match' => $query ];
         }
 
-      //  $q[5]['$match']['name']=['$regex'=>'mos'];
-       // dd($q[5]['$match']);
+
+
 
 
         if ($request->has('sort')) {
