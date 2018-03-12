@@ -242,7 +242,7 @@
 
                 <div class="row" id="cancel_order_section">
                     <div class="col-sm-12">
-                        <div <?php  if($order['status']=='لغو توسط ادمین'or$order['status']=='عدم یافت خدمه'or$order['status']=='پرداخت توسط خدمه'or$order['status']=='لغو توسط مشتری'or$order['status']=='لغو توسط خدمه' ){ echo 'hidden';}   ?> >
+                        <div <?php  if($order['status']=='لغو توسط ادمین'or$order['status']=='عدم یافت خدمه'or$order['status']=='منتظر تایید خدمه'or$order['status']=='پرداخت توسط خدمه'or$order['status']=='لغو توسط مشتری'or$order['status']=='لغو توسط خدمه' ){ echo 'hidden';}   ?> >
                             <button  hidden class="btn btn-primary btn-danger" id="cancel_order">لغو سفارش</button>
 
                         </div>
