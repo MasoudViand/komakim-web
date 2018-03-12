@@ -343,6 +343,8 @@ class OrderController extends Controller
 
         $revisionModel =OrderStatusRevision::where('order_id',$order_id)->get();
 
+      //  dd(!is_null($revisionModel[1]['whom']));
+
 
 
 
@@ -391,7 +393,8 @@ class OrderController extends Controller
             }
 
             $revision['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($item->created_at));
-            if (!is_null($revision['whom']))
+
+            if (!is_null($item->whom))
                 $revision['whom']   =User::find($item->whom);
             $revisions[]=$revision;
 

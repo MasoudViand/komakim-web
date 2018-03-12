@@ -221,7 +221,8 @@
                                         <td class="sorting_1">{{$revision['status']  }}</td>
                                         <td class="sorting_1">{{$revision['created_at']  }}</td>
 {{--                                        <td class="sorting_1">{{$revision['whom']['name'].'  '.$revision['whom']['family']  }}</td>--}}
-                                        <td class="sorting_1">{{!is_null($revision['whom'])?$revision['whom']['name']:''.'  '.!is_null($revision['whom'])?$revision['whom']['family']:'' }}</td>
+                                        {{--<td class="sorting_1">{{!is_null($revision['whom'])?$revision['whom']['name']:''.'  '.!is_null($revision['whom'])?$revision['whom']['family']:'' }}</td>--}}
+                                        <td class="sorting_1">{{key_exists('whom',$revision)?$revision['whom']['name'].' '.$revision['whom']['family']:''}}</td>
 
                                     </tr>
 

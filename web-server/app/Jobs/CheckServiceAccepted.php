@@ -43,9 +43,11 @@ class CheckServiceAccepted implements ShouldQueue
         $order =Order::find($this->order_id);
 
         if ($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS){
+
             $order->status =OrderStatusRevision::NOT_FOUND_WORKER_STATUS;
+            $order->save();
             $revision = new \stdClass();
-            $revision->order_id=($order->order_id);
+            $revision->order_id=($order->_id);
             $revision->created_at = new UTCDateTime(time()*1000);
             $revision->status=OrderStatusRevision::NOT_FOUND_WORKER_STATUS;
             $revision->whom =null;
