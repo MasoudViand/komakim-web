@@ -41,6 +41,7 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
     ];
 
     /**
@@ -62,6 +63,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\CheckUserHasAdminRole::class,
         'financial' => \App\Http\Middleware\CheckUserHasFinancialRole::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'two_factor' => \App\Http\Middleware\TwoFactorVerify::class,
     ];
 
     /**
@@ -73,4 +75,6 @@ class Kernel extends HttpKernel
         'access_token' => \App\Http\Middleware\CheckUserHasAccessToken::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
     ];
+
+
 }

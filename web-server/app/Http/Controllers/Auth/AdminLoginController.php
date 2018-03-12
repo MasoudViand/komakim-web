@@ -36,9 +36,20 @@ class AdminLoginController extends Controller
 
     public function logout()
     {
+        $user =Auth::user();
+        $user->token_2fa_expiry=null;
+        $user->token_2fa=null;
 
         Auth::logout();
         Session::flush();
-        return redirect('home');
+        return redirect('admin/login');
+    }
+
+    public function authenticated()
+    {
+        $user = Auth::user();
+        $user->token_2fa_expiry = \Carbon\Carbon::now();
+        $user->save();
+        return redirect('/admin');
     }
 }
