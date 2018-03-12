@@ -85,7 +85,7 @@
                     <div class="form-group">
                         
                         <select id="fields"  name="fields[]"  class="selectpicker" multiple  >
-						   <option value="" selected hidden disabled>حوزه های همکاری</option>
+						  
                             @foreach($fields as $field)
                                 <option   <?php if(key_exists('fields',$queryParam)){ foreach ($queryParam['fields'] as $item){ if ($item==$field->name) echo 'selected';} }?> value="{{$field->name}}"  >{{$field->name}}</option>
                             @endforeach
