@@ -24,19 +24,25 @@
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
             <div class="row">
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
                         <label>ایمیل<input type="search" id="email" class="form-control input-sm" placeholder="" value="{{key_exists('email',$queryParam)?$queryParam['email']:''}}" aria-controls="example1">
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
+                    <div id="example1_filter" class="dataTables_filter">
+                        <label>نام<input type="search" id="email" class="form-control input-sm" placeholder="" value="{{key_exists('name',$queryParam)?$queryParam['name']:''}}" aria-controls="example1">
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
                         <label>تلفن همراه<input type="search"id="mobile" class="form-control input-sm" value="{{key_exists('phone_number',$queryParam)?$queryParam['phone_number']:''}}" placeholder="" aria-controls="example1">
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
 
                             <select id ="status" name="status" class="form-control" style="">
@@ -49,7 +55,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div id="example1_filter" class="dataTables_filter">
 
                         <select name="typeOfuser" id="typeOfuser" onchange="onhideWorker()" class="form-control" style="">
@@ -248,6 +254,7 @@
 
             $( "#search_filter" ).click(function() {
                 var email = $( "#email" ).val();
+                var name = $( "#name" ).val();
                 var mobile = $( "#mobile" ).val();
                 var status = $( "#status" ).val();
                 var role = $( "#typeOfuser" ).val();
@@ -262,6 +269,8 @@
                 var params = [];
                 if(email)
                     params.push("email="+email)
+                if(name)
+                    params.push("name="+name)
                 if(mobile)
                     params.push("phone_number="+mobile)
 

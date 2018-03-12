@@ -11,6 +11,7 @@ use App\Review;
 use App\Service;
 use App\ServiceQuestion;
 use App\User;
+use App\WorkerProfile;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -409,6 +410,14 @@ class OrderController extends Controller
         $order->status =OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
         if ($order->save())
         {
+            $user_id = $order->worker_id;
+
+            if ($user_id)
+            {
+                $workerProfile =WorkerProfile::where('user_id',$user_id)->first();
+                $workerProfile->has_active_order=false;
+                $workerProfile->save();
+            }
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$request->user()));
             return redirect()->back();
 

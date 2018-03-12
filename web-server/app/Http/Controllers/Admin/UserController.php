@@ -125,6 +125,8 @@ class UserController extends Controller
         }
 
 
+
+
         $q = [
                 ['$sort'=>['_id'=>-1]],
                 [ '$skip' => $skip ],
@@ -147,6 +149,8 @@ class UserController extends Controller
 
         ];
 
+
+
         $q_count= [
                     [ '$lookup' => [
                         'from'         => 'worker_profiles',
@@ -164,6 +168,9 @@ class UserController extends Controller
             $q[]= ['$match' => $query ];
             $q_count[]= ['$match' => $query ];
         }
+
+      //  $q[5]['$match']['name']=['$regex'=>'mos'];
+       // dd($q[5]['$match']);
 
 
         if ($request->has('sort')) {
