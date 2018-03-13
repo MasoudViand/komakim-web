@@ -67,7 +67,8 @@ class UserAdminController extends Controller
 
            $userAdmin=new Admin();
            $userAdmin->name = $request->get('username');
-           $userAdmin->حاخدثـدعپذثق = $request->get('phone_number');
+           $userAdmin->email = $request->get('email');
+           $userAdmin->phone_number = $request->get('phone_number');
            $userAdmin->role = $request->get('role');
            $userAdmin->password = bcrypt($request->get('password'));
 
@@ -100,6 +101,7 @@ class UserAdminController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'role' => 'required',
+                'phone_number' => 'required',
                 'email' => 'required|email',]);
 
 
