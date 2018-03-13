@@ -59,6 +59,16 @@
                 @endif
 
             </div>
+            <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                <label for="exampleInputPassword1">شماره تلفن</label>
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{$userAdmin->phone_number}}" required>
+                @if ($errors->has('phone_number'))
+                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone_number') }}</strong>
+                                    </span>
+                @endif
+
+            </div>
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="exampleInputPassword1">گذر واژه</label>
                 <input id="password" type="password" class="form-control" name="password" >

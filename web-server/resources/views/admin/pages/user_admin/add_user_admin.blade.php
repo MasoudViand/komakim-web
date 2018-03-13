@@ -51,12 +51,23 @@
                 </select>
 
             </div>
-            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="exampleInputPassword1">ایمیل</label>
                 <input type="email" class="form-control" name="email" id="email"  required>
                 @if ($errors->has('email'))
                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                @endif
+
+            </div>
+
+            <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                <label for="exampleInputPassword1">شماره تلفن</label>
+                <input type="text" class="form-control" name="phone_number" id="phone_number"  required>
+                @if ($errors->has('phone_number'))
+                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone_number') }}</strong>
                                     </span>
                 @endif
 

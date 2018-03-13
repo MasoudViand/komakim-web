@@ -294,7 +294,7 @@ class ServiceController extends Controller
             return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
 
 
-        if (!($order['status']==OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS))
+        if (!($order['status']==OrderStatusRevision::START_ORDER_BY_WORKER_STATUS))
             return response()->json(['error'=>'وضعیت سفارش شروع شده توسط کاربر نیست'])->setStatusCode(420);
 
 

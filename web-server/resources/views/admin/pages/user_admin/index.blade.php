@@ -29,6 +29,7 @@
                         <tr role="row">
                             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">نام کاربر</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">ایمیل</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">شماره تلفن</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">سطح دسترسی</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">ویرایش</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">حذف</th>
@@ -42,6 +43,7 @@
                             <tr role="row" class="odd">
                                 <td class="sorting_1">{{$userAdmin->name}}</td>
                                 <td>{{$userAdmin->email}}</td>
+                                <td>{{$userAdmin->phone_number}}</td>
                                 <td>{{$userAdmin->role=='admin'?'مدیرکل':($userAdmin->role=='operator'?"اپراتور":'مالی')}}</td>
                                 <td><a href="{{route('admin.user_admin.update',['user_admin_id' => $userAdmin->id])}}"><i class="fa fa-edit"></i></a></td>
                                 <td><a href="{{route('admin.user_admin.delete',['user_admin_id' => $userAdmin->id])}}"  onclick="return confirm('ایا از حذف کاربر ادمین اطمینان دارید')"><i class="fa fa-remove"></i></a></td>

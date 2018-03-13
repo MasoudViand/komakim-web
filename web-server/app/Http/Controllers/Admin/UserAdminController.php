@@ -50,6 +50,7 @@ class UserAdminController extends Controller
                 'username' => 'required',
                 'role' => 'required',
                 'email' => 'required|email',
+                'phone_number' => 'required',
                 'password' => 'required|string|min:6|confirmed',]);
 
 
@@ -58,10 +59,15 @@ class UserAdminController extends Controller
                 $message['error'] = 'این ایمیل قبلا ثبت شده';
                 return redirect()->back()->with($message);
             }
+            if (Admin::where('phone_number',$request->get('phone_number'))->first())
+            {
+                $message['error'] = 'این شماره قبلا ثبت شده';
+                return redirect()->back()->with($message);
+            }
 
            $userAdmin=new Admin();
            $userAdmin->name = $request->get('username');
-           $userAdmin->email = $request->get('email');
+           $userAdmin->حاخدثـدعپذثق = $request->get('phone_number');
            $userAdmin->role = $request->get('role');
            $userAdmin->password = bcrypt($request->get('password'));
 
@@ -142,11 +148,27 @@ class UserAdminController extends Controller
 
             }
 
+            if (Admin::where('phone_number',$request->get('phone_number'))->first())
+            {
+                $user = Admin::where('phone_number',$request->get('phone_number'))->first();
+
+
+                if ($user->id != $request->input('id'))
+                {
+                    $message['error'] = 'این شماره به نام کاربری دیگر قبلا ثبت شده';
+                    return redirect()->back()->with($message);
+                }
+
+
+
+            }
+
 
             $userAdmin = Admin::find($request->input('id'));
             if (!is_null($request->input('password')))
                 $userAdmin->password = bcrypt($request->input('password'));
             $userAdmin->email = $request->input('email');
+            $userAdmin->phone_number = $request->input('phone_number');
             $userAdmin->role  = $request->input('role');
             $userAdmin->name = $request->input('username');
 
