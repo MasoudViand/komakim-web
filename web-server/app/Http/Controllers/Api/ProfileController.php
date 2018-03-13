@@ -249,6 +249,12 @@ class ProfileController extends Controller
             if ($userModel->status==User::DISABLE_USER_STATUS)
                 return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
 
+            if ($request->has('fcm_token'))
+            {
+                $userModel->fcm_token=$request->input('fcm_token');
+                $userModel->save();
+            }
+
             $worker_profile = WorkerProfile::where('user_id',new ObjectID($userModel->id))->first();
 
             if (!$worker_profile)
@@ -304,21 +310,19 @@ class ProfileController extends Controller
                 return response()->json(['initialize'=>$initialize])->setStatusCode(401);
             }
 
-
-
-
-
-
             if (!$userModel->isCompleted)
                 return response()->json(['errors'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
             if ($userModel->status==User::DISABLE_USER_STATUS)
                 return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
+            if ($request->has('fcm_token'))
+            {
+                $userModel->fcm_token=$request->input('fcm_token');
+                $userModel->save();
+            }
 
             $user['phone_number'] = $userModel->phone_number;
             $user['name'] = $userModel->name;
             $user['family'] = $userModel->family;
-
-           // dd(Wallet::where('user_id',new ObjectID($userModel->id))->first());
 
             $wallet =Wallet::where('user_id',new ObjectID($userModel->id))->first();
 
@@ -340,12 +344,7 @@ class ProfileController extends Controller
         }else
             return response()->json(['errors'=>"user_type is not defined"])->setStatusCode(417);
 
-
-
-
-
-
-
+        
 
 
     }
