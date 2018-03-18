@@ -68,9 +68,7 @@ class WalletController extends Controller
             return response()->json(['error'=>'وضعیت سفارش انجام شده توسط کاربر نیست'])->setStatusCode(420);
 
 
-
         $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
-
 
 
 
@@ -259,32 +257,45 @@ class WalletController extends Controller
 
             $serviceModel=Service::find($item['service_id']);
 
-
-
-            $minimumNumber =(int)$serviceModel->minimum_number;
-
-
-            $price         =(int)$serviceModel->price;
-
-            $unit_count = $item['unit_count'];
-
-            if ($unit_count<$minimumNumber)
-                $unit_count = $minimumNumber;
-
-            $commission=$commissionConst;
-
-
-            if ($serviceModel->commission)
+            if ($serviceModel)
             {
-                $commission=$serviceModel->commission;
+                $minimumNumber =(int)$serviceModel->minimum_number;
+
+
+                $price         =(int)$serviceModel->price;
+
+                $unit_count = $item['unit_count'];
+
+                if ($unit_count<$minimumNumber)
+                    $unit_count = $minimumNumber;
+
+                $commission=$commissionConst;
+
+
+                if ($serviceModel->commission)
+                {
+                    $commission=$serviceModel->commission;
+                }
+
+
+
+                $total_commission = $total_commission+ ((int)($unit_count/$minimumNumber))*$commission;
+
+
+                $total_price=$total_price+ $unit_count*$price;
+            }
+            else
+            {
+                $unit_count = $item['unit_count'];
+                $commission=$commissionConst;
+                $total_commission = $total_commission+ ((int)($unit_count))*$commission;
+                $total_price=$total_price+ $unit_count*$item['price'];
+
             }
 
 
 
-            $total_commission = $total_commission+ ((int)($unit_count/$minimumNumber))*$commission;
 
-
-            $total_price=$total_price+ $unit_count*$price;
 
 
 

@@ -31,7 +31,7 @@ class PhoneNumberController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()])->setStatusCode(417);
+            return response()->json(['error'=>$validator->errors()])->setStatusCode(417);
         }
 
 
@@ -46,14 +46,14 @@ class PhoneNumberController extends Controller
 
             if ($user->role !=User::CLIENT_ROLE)
             {
-                return response()->json(['errors'=>'کاربری با این شماره در سامانه وجود دارد'])->setStatusCode(420);
+                return response()->json(['error'=>'کاربری با این شماره در سامانه وجود دارد'])->setStatusCode(420);
 
             }
 
 
             if ($user->status ==User::DISABLE_USER_STATUS)
             {
-                return response()->json(['errors'=>'کاربر غیر فعال شده است'])->setStatusCode(420);
+                return response()->json(['error'=>'کاربر غیر فعال شده است'])->setStatusCode(420);
             }
 
             return $this->_sendSms($request);
@@ -64,44 +64,44 @@ class PhoneNumberController extends Controller
 
             if (!$user )
             {
-                return response()->json(['errors'=>'باید ابندا فرم ثبت نام توسط خدمه تکمیل گردد'])->setStatusCode(420);
+                return response()->json(['error'=>'باید ابندا فرم ثبت نام توسط خدمه تکمیل گردد'])->setStatusCode(420);
 
             }
             if ($user->role !=User::WORKER_ROLE)
             {
-                return response()->json(['errors'=>'کاربری با این شماره در سامانه وجود دارد'])->setStatusCode(420);
+                return response()->json(['error'=>'کاربری با این شماره در سامانه وجود دارد'])->setStatusCode(420);
 
             }
 
 
             if ($user->status ==User::DISABLE_USER_STATUS)
             {
-                return response()->json(['errors'=>'کاربر غیر فعال شده است'])->setStatusCode(420);
+                return response()->json(['error'=>'کاربر غیر فعال شده است'])->setStatusCode(420);
             }
 
             $workerProfile = WorkerProfile::where('user_id' , new ObjectID($user->id))->first();
             if (!$workerProfile)
             {
-                return response()->json(['errors'=>'پروفایل کاربر تشکیل نشده است'])->setStatusCode(420);
+                return response()->json(['error'=>'پروفایل کاربر تشکیل نشده است'])->setStatusCode(420);
             }
 
             if ($workerProfile->status==WorkerProfile::WORKER_PENDING_STATUS)
             {
-                return response()->json(['errors'=>'درخواست کاربر هنوز مورد بررسی قرار نگرفته'])->setStatusCode(420);
+                return response()->json(['error'=>'درخواست کاربر هنوز مورد بررسی قرار نگرفته'])->setStatusCode(420);
 
             }
 
 
             if ($workerProfile->status==WorkerProfile::WORKER_REJECT_STATUS)
             {
-                return response()->json(['errors'=>'درخواست خدمه مورد قبول واقع نشده'])->setStatusCode(402);
+                return response()->json(['error'=>'درخواست خدمه مورد قبول واقع نشده'])->setStatusCode(402);
             }
 
             return $this->_sendSms($request);
 
         }
         else
-            return response()->json(['errors'=>'نوع کاربر ناشناخته می باشد'])->setStatusCode(402);
+            return response()->json(['error'=>'نوع کاربر ناشناخته می باشد'])->setStatusCode(402);
 
     }
     function verifyCode(Request $request)
@@ -115,12 +115,12 @@ class PhoneNumberController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()])->setStatusCode(417);
+            return response()->json(['error'=>$validator->errors()])->setStatusCode(417);
 
         }
 
         if ((!($request['user_type']==User::WORKER_ROLE))and (!($request['user_type']==User::CLIENT_ROLE)) )
-            return response()->json(['errors'=>'user_type is invalid'])->setStatusCode(417);
+            return response()->json(['error'=>'user_type is invalid'])->setStatusCode(417);
 
 
         $tempToken = TempToken::where('sms_code',$request['sms_code'])->where('random_string_token',$request['validation_code'])->first();
@@ -132,7 +132,7 @@ class PhoneNumberController extends Controller
         if ($tempToken)
             {
                 if ($tempToken->user_type!=$request->input('user_type'))
-                    return response()->json(['errors'=>'کد ناشناخته'])->setStatusCode(402);
+                    return response()->json(['error'=>'کد ناشناخته'])->setStatusCode(402);
 
 
             $phoneNumber =$tempToken->phone_number;
@@ -161,7 +161,7 @@ class PhoneNumberController extends Controller
                 }else
                 {
                     $tempToken->delete();
-                    return response()->json(['errors'=>'شما باید ابتدا از طریق فرم سایت ثبت نام اولیه را انجام دهید'])->setStatusCode(420);
+                    return response()->json(['error'=>'شما باید ابتدا از طریق فرم سایت ثبت نام اولیه را انجام دهید'])->setStatusCode(420);
                 }
 
                 }
@@ -195,7 +195,7 @@ class PhoneNumberController extends Controller
 
             return response()->json($result);
         }else{
-            return response()->json(['errors'=>'کد ناشناخته'])->setStatusCode(402);
+            return response()->json(['error'=>'کد ناشناخته'])->setStatusCode(402);
         }
         
     }
@@ -246,7 +246,7 @@ class PhoneNumberController extends Controller
                 // در صورتی که خروجی وب سرویس 200 نباشد این خطا رخ می دهد
 
                 TempToken::where('phone_number',$tempToken->phone_number)->delete();
-                return response()->json(['errors'=>"تلفن در دسترس نیست"])->setStatusCode(420);
+                return response()->json(['error'=>"تلفن در دسترس نیست"])->setStatusCode(420);
 
 
             }
@@ -254,12 +254,12 @@ class PhoneNumberController extends Controller
                 // در زمانی که مشکلی در برقرای ارتباط با وب سرویس وجود داشته باشد این خطا رخ می دهد
                 echo $e->errorMessage();
                 TempToken::where('phone_number',$tempToken->phone_number)->delete();
-                return response()->json(['errors'=>"kave negar service not response"])->setStatusCode(500);
+                return response()->json(['error'=>"kave negar service not response"])->setStatusCode(500);
             }
 
         }else
         {
-            return response()->json(['errors'=>"service not response"])->setStatusCode(500);
+            return response()->json(['error'=>"service not response"])->setStatusCode(500);
 
         }
 
