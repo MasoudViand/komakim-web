@@ -290,7 +290,11 @@ class OrderController extends Controller
 
         }
         $services=[];
-        foreach ($orderModel->services as $item)
+        if ($orderModel->revisions)
+            $servicesModel=$orderModel->revisions[0];
+        else
+            $servicesModel=$orderModel->services;
+        foreach ($servicesModel as $item)
         {
 
             $service =[];

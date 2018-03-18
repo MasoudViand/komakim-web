@@ -94,6 +94,12 @@ class OrderController extends Controller
             if(!property_exists($order, 'parent_id'))
                 return response()->json(['errors'=>'parent_id is invalid'])->setStatusCode('417');
 
+            if (count($order->services)<1)
+            {
+                return response()->json(['errors'=>'سرویسی برای ویرایش وجود ندارد'])->setStatusCode('417');
+
+            }
+
 
 
             $orderModel=Order::find($order->parent_id);
