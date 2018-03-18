@@ -27,24 +27,24 @@ class ReviewController extends Controller
         $review = (json_decode($review));
 
 
-        if (!property_exists($review, 'score')) return response()->json(['error' => 'score is invalid'])->setStatusCode('417');
+        if (!property_exists($review, 'score')) return response()->json(['errors' => 'score is invalid'])->setStatusCode('417');
 
 
-        if (!property_exists($review, 'order_id')) return response()->json(['error' => 'order_id is invalid'])->setStatusCode('417');
+        if (!property_exists($review, 'order_id')) return response()->json(['errors' => 'order_id is invalid'])->setStatusCode('417');
 
-        if (property_exists($review, 'reasons') and !is_array($review->reasons)) return response()->json(['error' => 'review is invalid'])->setStatusCode('417');
+        if (property_exists($review, 'reasons') and !is_array($review->reasons)) return response()->json(['errors' => 'review is invalid'])->setStatusCode('417');
 
 
         $order = Order::find($review->order_id);
 
 
         if (!$order) {
-            return response()->json(['error' => 'سفارسی با این نام وجود ندارد'])->setStatusCode('417');
+            return response()->json(['errors' => 'سفارسی با این نام وجود ندارد'])->setStatusCode('417');
 
         }
 
         if (!$order->worker_id)
-            return response()->json(['error' => 'هنوز خدمه برای این سفارش تعیین نشده'])->setStatusCode('417');
+            return response()->json(['errors' => 'هنوز خدمه برای این سفارش تعیین نشده'])->setStatusCode('417');
 
 
 

@@ -58,7 +58,7 @@ class ServiceController extends Controller
     function listservice(Request $request)
     {
         if (!$request->has('category_id'))
-            return response()->json(['error'=>'category id is require'])->setStatusCode('417');
+            return response()->json(['errors'=>'category id is require'])->setStatusCode('417');
 
         $q = [
 
@@ -160,12 +160,12 @@ class ServiceController extends Controller
 
         $order =(json_decode($order));
         if(!property_exists($order, 'address') )
-            return response()->json(['error'=>'address is invalid'])->setStatusCode('417');
+            return response()->json(['errors'=>'address is invalid'])->setStatusCode('417');
         if(!property_exists($order, 'services') || !is_array($order->services))
-            return response()->json(['error'=>'services is invalid'])->setStatusCode('417');
+            return response()->json(['errors'=>'services is invalid'])->setStatusCode('417');
 
         if(!property_exists($order, 'total_price'))
-            return response()->json(['error'=>'total_price is invalid'])->setStatusCode('417');
+            return response()->json(['errors'=>'total_price is invalid'])->setStatusCode('417');
 
         $order->status =OrderStatusRevision::WAITING_FOR_WORKER_STATUS;
         $user = $request->user();
@@ -204,7 +204,7 @@ class ServiceController extends Controller
 
 
         if(!$request->has('order_id'))
-            return response()->json(['error'=>'order_id is required'])->setStatusCode(417);
+            return response()->json(['errors'=>'order_id is required'])->setStatusCode(417);
 
 
          $order = Order::find($request->input('order_id'));
@@ -214,7 +214,7 @@ class ServiceController extends Controller
 
 
          if (!($order['status']==OrderStatusRevision::WAITING_FOR_WORKER_STATUS))
-             return response()->json(['error'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(420);
+             return response()->json(['errors'=>'این سفارش توسط خدمه دیگری مورد توافق قرار گرفته اشت'])->setStatusCode(420);
 
 
         $userId = $request->user()->id;
@@ -236,12 +236,12 @@ class ServiceController extends Controller
 
              }else
              {
-                 return response()->json(['error'=>'internal error'])->setStatusCode(500);
+                 return response()->json(['errors'=>'internal error'])->setStatusCode(500);
              }
 
          }else
          {
-             return response()->json(['error'=>'internal error'])->setStatusCode(500);
+             return response()->json(['errors'=>'internal errors'])->setStatusCode(500);
          }
 
 
@@ -251,16 +251,16 @@ class ServiceController extends Controller
     function startOrder(Request $request)
     {
         if (!$request->has('order_id')){
-            return response()->json(['error'=>'order id is require'])->setStatusCode(417);
+            return response()->json(['errors'=>'order id is require'])->setStatusCode(417);
         }
         $order = Order::find($request->input('order_id'));
 
         if ($order['worker_id'] and (string)$order['worker_id']!=$request->user()->id)
-            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+            return response()->json(['errors'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
 
 
         if (!($order['status']==OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS))
-            return response()->json(['error'=>'وضعیت سفارش قبول شده توسط کاربر نیست'])->setStatusCode(420);
+            return response()->json(['errors'=>'وضعیت سفارش قبول شده توسط کاربر نیست'])->setStatusCode(420);
 
 
 
@@ -278,7 +278,7 @@ class ServiceController extends Controller
 
         }else
         {
-            return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+            return response()->json(['errors'=>'internal server errors'])->setStatusCode(500);
         }
     }
 
@@ -286,16 +286,16 @@ class ServiceController extends Controller
     {
 
         if (!$request->has('order_id')){
-            return response()->json(['error'=>'order id is require'])->setStatusCode(417);
+            return response()->json(['errors'=>'order id is require'])->setStatusCode(417);
         }
         $order = Order::find($request->input('order_id'));
 
         if ($order['worker_id'] and (string)$order['worker_id']!=$request->user()->id)
-            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+            return response()->json(['errors'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
 
 
         if (!($order['status']==OrderStatusRevision::START_ORDER_BY_WORKER_STATUS))
-            return response()->json(['error'=>'وضعیت سفارش شروع شده توسط کاربر نیست'])->setStatusCode(420);
+            return response()->json(['errors'=>'وضعیت سفارش شروع شده توسط کاربر نیست'])->setStatusCode(420);
 
 
 
@@ -320,7 +320,7 @@ class ServiceController extends Controller
 
         }else
         {
-            return response()->json(['error'=>'internal server error'])->setStatusCode(500);
+            return response()->json(['errors'=>'internal server errors'])->setStatusCode(500);
         }
 
     }
