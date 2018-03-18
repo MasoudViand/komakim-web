@@ -26,14 +26,14 @@ class ProfileController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()])->setStatusCode(417);
+            return response()->json(['error'=>$validator->errors()])->setStatusCode(417);
         }
 
          $user =$request->user();
 
 
         if ($user->isCompleted)
-            return response()->json(['errors'=>"profile previously completed"])->setStatusCode(417);
+            return response()->json(['error'=>"profile previously completed"])->setStatusCode(417);
 
 
         $user->name =$request['name'];
@@ -49,7 +49,7 @@ class ProfileController extends Controller
 
 
         }else{
-            return response()->json(['errors'=>"something not right"])->setStatusCode(417);
+            return response()->json(['error'=>"something not right"])->setStatusCode(417);
 
 
         }
@@ -245,9 +245,9 @@ class ProfileController extends Controller
 
 
             if (!$userModel->isCompleted)
-                return response()->json(['errors'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
+                return response()->json(['error'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
             if ($userModel->status==User::DISABLE_USER_STATUS)
-                return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
+                return response()->json(['error'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
 
             if ($request->has('fcm_token'))
             {
@@ -258,11 +258,11 @@ class ProfileController extends Controller
             $worker_profile = WorkerProfile::where('user_id',new ObjectID($userModel->id))->first();
 
             if (!$worker_profile)
-                return response()->json(['errors'=>"پروفایل خدمه تکمیل نشده.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(423);
+                return response()->json(['error'=>"پروفایل خدمه تکمیل نشده.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(423);
             if ($worker_profile->status==WorkerProfile::WORKER_PENDING_STATUS)
-                return response()->json(['errors'=>"کاربری شما در مرحله تاییدیه میباشد.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(424);
+                return response()->json(['error'=>"کاربری شما در مرحله تاییدیه میباشد.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(424);
             if ($worker_profile->status==WorkerProfile::WORKER_REJECT_STATUS)
-                return response()->json(['errors'=>"کاربری شما رد شده است.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(425);
+                return response()->json(['error'=>"کاربری شما رد شده است.لطفا با پشتیبانی تماس بگیرید"])->setStatusCode(425);
 
 
             $user['phone_number'] = $userModel->phone_number;
@@ -311,9 +311,9 @@ class ProfileController extends Controller
             }
 
             if (!$userModel->isCompleted)
-                return response()->json(['errors'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
+                return response()->json(['error'=>"پروفایل شما تکمیل نیست",'initialize'=>$initialize])->setStatusCode(421);
             if ($userModel->status==User::DISABLE_USER_STATUS)
-                return response()->json(['errors'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
+                return response()->json(['error'=>"کاربری شما غیر فعال شده.لطفا با پشتیبانی تماس بگیرید",'initialize'=>$initialize])->setStatusCode(422);
             if ($request->has('fcm_token'))
             {
                 $userModel->fcm_token=$request->input('fcm_token');
@@ -342,10 +342,7 @@ class ProfileController extends Controller
 
             return response()->json(['initialize'=>$initialize,'user'=>$user]);
         }else
-            return response()->json(['errors'=>"user_type is not defined"])->setStatusCode(417);
-
-        
-
+            return response()->json(['error'=>"user_type is not defined"])->setStatusCode(417);
 
     }
 }
