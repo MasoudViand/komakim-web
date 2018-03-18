@@ -23,7 +23,7 @@
 
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-4">
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$total_worker_amount_wallet}}</h3>

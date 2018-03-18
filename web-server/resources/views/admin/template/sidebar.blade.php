@@ -29,7 +29,7 @@
 
             <li >
                 <a href="{{ route('admin.map') }}" >
-                    <i class="fa fa-dashboard "></i> <span> نقشه </span>
+                    <i class="fa fa-map"></i> <span> نقشه </span>
                 </a>
             </li>
             @endif
@@ -78,7 +78,7 @@
                     <ul class="treeview-menu">
                         <li>
                             <a href="{{ route('admin.subcategory') }}">
-                                <i class="fa fa-star"></i> <span>لیست زیر دسته بندی ها</span>
+                                <i class="fa fa-th"></i> <span>لیست زیر دسته بندی ها</span>
                             </a>
                         </li>
                         <li>
@@ -125,7 +125,7 @@
 
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-bars"></i>
+                        <i class="fa fa-user-secret"></i>
                         <span>کاربران ادمین</span>
                         <span class="pull-left-container">
               <i class="fa fa-angle-left pull-left"></i>
@@ -279,12 +279,12 @@
             </li>
             <li >
                 <a href="{{ route('admin.notification') }}" >
-                    <i class="fa fa-dashboard "></i> <span> ناتیفیکیشن </span>
+                    <i class="fa fa-bell"></i> <span> ناتیفیکیشن </span>
                 </a>
             </li>
             <li >
                 <a href="{{ route('admin.sms') }}" >
-                    <i class="fa fa-dashboard "></i> <span> پیام کوتاه </span>
+                    <i class="fa fa-comments"></i> <span> پیام کوتاه </span>
                 </a>
             </li>
 

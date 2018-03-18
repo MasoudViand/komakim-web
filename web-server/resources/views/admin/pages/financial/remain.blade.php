@@ -11,7 +11,7 @@
         <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-4">
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$amount}}</h3>

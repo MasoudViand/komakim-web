@@ -24,3 +24,8 @@
 .pagination > li > a {
 	cursor: pointer !important;
 }
+.sidebar-menu .treeview-menu > li > a {
+    padding: 5px 15px 5px 5px;
+    display: block;
+    font-size: 14px;
+}
