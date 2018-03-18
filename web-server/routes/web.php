@@ -108,6 +108,7 @@ Route::middleware(['auth:admin','two_factor'])->prefix('admin')->group(function 
         Route::get('/', 'Admin\OrderController@index')->name('admin.order.list');
         Route::post('/filter/', 'Admin\OrderController@filterOrder')->name('admin.order.filter.submit');
         Route::get('/detail/{order_id}', 'Admin\OrderController@showDetailOrder')->name('admin.order.detail');
+        Route::get('/revisions/{order_id}', 'Admin\OrderController@showRevisionsOfOrder')->name('admin.order.revisions');
         Route::post('/cancel/', 'Admin\OrderController@CancelOrderByAdmin')->name('admin.order.cancel');
 
     });

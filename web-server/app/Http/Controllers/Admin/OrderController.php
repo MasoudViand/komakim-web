@@ -303,6 +303,12 @@ class OrderController extends Controller
             $service =[];
 
             $service['entity'] =Service::find($item['service_id']);
+            if (!$service['entity'])
+            {
+                $service['entity']['name']=$item['service_name'];
+                $service['entity']['price']=$item['price'];
+            }
+
             $service['unit_count'] =$item['unit_count'];
             $service['description']  =$item['description'];
             $service['price'] =$item['price'];
@@ -331,7 +337,6 @@ class OrderController extends Controller
         $order['services'][0]['entity'];
 
 
-//
         $data['order']=$order;
         $data['review']=false;
         $reviewModel = Review::where('order_id',new ObjectID($order_id))->first();
@@ -472,6 +477,90 @@ class OrderController extends Controller
 
         }
         else return redirect()->with(['error'=>'لغو نشد']);
+
+    }
+
+    function showRevisionsOfOrder($order_id)
+    {
+        $orderModel =Order::find($order_id);
+
+        if (!$orderModel)
+            dd('سفارشی وجود ندارد');
+        if (!$orderModel->revisions)
+            dd('ویرایشی برای این سفارش وجود ندارد');
+        $revisionsModel =$orderModel->revisions;
+
+        $userRevision['services']=$orderModel->services;
+        $userRevision['tracking_number']=$orderModel->tracking_number;
+        $userRevision['total_price']=$orderModel->total_price;
+        $userRevision['created_at']=$orderModel->created_at;
+
+        array_push($revisionsModel,$userRevision);
+
+        //dd($revisionsModel);
+
+
+        $revisions=[];
+
+        //dd($revisionsModel);
+        foreach ($revisionsModel as $item)
+        {
+            $revision['tracking_number']=$item['tracking_number'];
+            $revision['total_price']=$item['total_price'];
+            $revision['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($item['created_at']));
+            $services=[];
+            foreach ($item['services'] as $serviceModel)
+            {
+                $service =[];
+
+                $service['entity'] =Service::find($serviceModel['service_id']);
+                if (!$service['entity'])
+                {
+                    $service['entity']['name']=$serviceModel['service_name'];
+                    $service['entity']['price']=$serviceModel['price'];
+                }
+
+                $service['unit_count'] =$serviceModel['unit_count'];
+                $service['description']  =$serviceModel['description'];
+                $service['price'] =$serviceModel['price'];
+                $questions =[];
+                if (key_exists('questions',$serviceModel))
+                {
+                    $questionsId=array_keys($serviceModel['questions']);
+                    $questionsValue=array_values($serviceModel['questions']);
+
+
+                    for ($i=0;$i<count($questionsId);$i++)
+                    {
+                        $question['text']=ServiceQuestion::find($questionsId[$i])['questions'];
+                        $question['answer'] =$questionsValue[$i];
+                        $questions[]=$question;
+                    }
+                    $service['questions'] =$questions;
+                }
+
+
+                $services[]=$service;
+
+
+
+
+
+            }
+            $revision['services']=$services;
+
+
+
+
+
+            array_push($revisions,$revision);
+
+
+        }
+        $data['revisions']=$revisions;
+        return view('admin.pages.order.revisions_order')->with($data);
+
+
 
     }
 
