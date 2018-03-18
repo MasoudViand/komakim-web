@@ -28,7 +28,7 @@ class WalletController extends Controller
     {
 
         if (!$request->has('amount'))
-            return response()->json(['error'=>'amount is require'])->setStatusCode(417);
+            return response()->json(['errors'=>'amount is require'])->setStatusCode(417);
 
         $payOrder = new \stdClass();
 
@@ -52,20 +52,20 @@ class WalletController extends Controller
     {
 
         if (!$request->has('order_id'))
-            return response()->json(['error'=>'order_id is require'])->setStatusCode(417);
+            return response()->json(['errors'=>'order_id is require'])->setStatusCode(417);
 
 
         $order = Order::find($request->input('order_id'));
 
         if (!$order)
-            return response()->json(['error'=>'سفارشی پیدا نشد '])->setStatusCode(417);
+            return response()->json(['errors'=>'سفارشی پیدا نشد '])->setStatusCode(417);
 
         if ($order['user_id'] and (string)$order['user_id']!=$request->user()->id)
-            return response()->json(['error'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+            return response()->json(['errors'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
 
 
         if (!($order['status']==OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS))
-            return response()->json(['error'=>'وضعیت سفارش انجام شده توسط کاربر نیست'])->setStatusCode(420);
+            return response()->json(['errors'=>'وضعیت سفارش انجام شده توسط کاربر نیست'])->setStatusCode(420);
 
 
         $wallet = Wallet::where('user_id',new ObjectID($request->user()->id))->first();
@@ -110,7 +110,7 @@ class WalletController extends Controller
         {
 
 
-            return response()->json(['error'=>'مقدار کیف پول کمتر از قیمت سفارش است '])->setStatusCode(417);
+            return response()->json(['errors'=>'مقدار کیف پول کمتر از قیمت سفارش است '])->setStatusCode(417);
         }
 
 
@@ -201,16 +201,16 @@ class WalletController extends Controller
 
         if (!$discountCode)
         {
-            return response()->json(['error'=>'مقدار کد تخفیف وارد شده صحیح نیست'])->setStatusCode(417);
+            return response()->json(['errors'=>'مقدار کد تخفیف وارد شده صحیح نیست'])->setStatusCode(417);
         }
         if (!$discountCode->status)
-            return response()->json(['error'=>'مقدار کد تخفیف غیر فعال شده'])->setStatusCode(417);
+            return response()->json(['errors'=>'مقدار کد تخفیف غیر فعال شده'])->setStatusCode(417);
 
 
 
         if ($order->discount_code_id and $order->discount_code_id == $discountCode->id)
         {
-            return response()->json(['error' => 'این کد تخفیف قبلا برای این سفارش استفاده شده ']);
+            return response()->json(['errors' => 'این کد تخفیف قبلا برای این سفارش استفاده شده ']);
         }
 
 
