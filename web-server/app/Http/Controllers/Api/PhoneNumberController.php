@@ -199,6 +199,36 @@ class PhoneNumberController extends Controller
         }
         
     }
+    function refreshToken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'refresh_token' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()])->setStatusCode(417);
+
+        }
+
+        $http = new GuzzleHttp\Client;
+
+        $response = $http->post('http://127.0.0.1/oauth/token', [
+         //   $response = $http->post(URL::to('/').'/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $request->input('refresh_token'),
+                'client_id' => '5a8d36aa71d2f757f110c834',
+                'client_secret' => 'X48ILgXNuhJ8HL0cmDvLfu4cOPQ41dMJsPepoYzP',
+                'scope' => '',
+            ],
+        ]);
+
+        return json_decode((string) $response->getBody(), true);
+
+
+
+    }
 
 
     function GeraHash($qtd){
@@ -273,12 +303,12 @@ class PhoneNumberController extends Controller
        // dd(URL::to('/').'/oauth/token');
 
         $response = $http->post('http://127.0.0.1/oauth/token', [
-        //$response = $http->post(URL::to('/').'/oauth/token', [
+      //  $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-              //  'client_id' => '5a34fe1a978ef455fd280094',// local
-                'client_id' => '5a8d36aa71d2f757f110c834',   //servertest
-              //  'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
+         //       'client_id' => '5a34fe1a978ef455fd280094',// local
+                'client_id' => '5a8d36aa71d2f757f110c834',   //servertes
+                //'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
                 'client_secret' => 'X48ILgXNuhJ8HL0cmDvLfu4cOPQ41dMJsPepoYzP', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,

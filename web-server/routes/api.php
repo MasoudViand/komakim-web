@@ -23,6 +23,7 @@ Route::get('/user', function () {
 Route::middleware('api')->prefix('number')->group(function (){
     Route::post('/send', 'Api\PhoneNumberController@receiveCode')->name('api.number.receive.code');
     Route::post('/verify', 'Api\PhoneNumberController@verifyCode')->name('api.number.verify.code');
+    Route::post('/refresh_token', 'Api\PhoneNumberController@refreshToken')->name('api.number.refresh.token');
     Route::post('/worker/verify', 'Api\PhoneNumberController@verifyWorkerCode')->name('api.number.worker/verify.code');
 
 });
