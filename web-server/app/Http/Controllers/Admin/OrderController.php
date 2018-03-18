@@ -290,31 +290,39 @@ class OrderController extends Controller
 
         }
         $services=[];
+
         if ($orderModel->revisions)
-            $servicesModel=$orderModel->revisions[0];
+            $servicesModel=$orderModel->revisions[0]['services'];
         else
             $servicesModel=$orderModel->services;
+
+
         foreach ($servicesModel as $item)
         {
 
             $service =[];
+
             $service['entity'] =Service::find($item['service_id']);
             $service['unit_count'] =$item['unit_count'];
             $service['description']  =$item['description'];
             $service['price'] =$item['price'];
             $questions =[];
-
-            $questionsId=array_keys($item['questions']);
-            $questionsValue=array_values($item['questions']);
-
-
-            for ($i=0;$i<count($questionsId);$i++)
+            if (key_exists('questions',$item))
             {
-                $question['text']=ServiceQuestion::find($questionsId[$i])['questions'];
-                $question['answer'] =$questionsValue[$i];
-                $questions[]=$question;
+                $questionsId=array_keys($item['questions']);
+                $questionsValue=array_values($item['questions']);
+
+
+                for ($i=0;$i<count($questionsId);$i++)
+                {
+                    $question['text']=ServiceQuestion::find($questionsId[$i])['questions'];
+                    $question['answer'] =$questionsValue[$i];
+                    $questions[]=$question;
+                }
+                $service['questions'] =$questions;
             }
-            $service['questions'] =$questions;
+
+
             $services[]=$service;
 
         }

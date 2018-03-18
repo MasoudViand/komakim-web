@@ -25,7 +25,7 @@
                                 <td class="sorting_1">{{$order['created_at']}}</td>
                                 <td class="sorting_1">{{$order['tracking_number']}}</td>
                                 <td class="sorting_1">{{$order['total_price']}}</td>
-                                <td class="sorting_1">{{$order['status']}} @if(key_exists('cancel_reason',$order))<hr>دلیل:<div class="col-sm-6">{{$order['cancel_reason']}} </div>@endif</td>
+                                <td class="sorting_1">{{$order['status']}} @if(key_exists('cancel_reason',$order))<hr>دلیل:<div class="col-sm-6">{{$order['cancel_reason']}} </div>@endif @if($order['status']=='ویرایش توسط خدمه') <hr> <button class="btn btn-primary"> نشان دادن ما بقی ویرایش ها</button> @endif</td>
 
                             </tr>
                             </tbody>
@@ -111,7 +111,7 @@
                                 </tbody>
                             </table>
 
-                            @if(count($service['questions'])>0)
+                            @if(key_exists('question',$service)and count($service['questions'])>0)
 
                                 <hr>
 
