@@ -61,6 +61,12 @@
                     </div>
 
 
+                    <div >
+                        <a href="{{ route('return.app') }}">
+                            <button class="btn btn-block btn-primary btn-lg">بازگشت به برنامه</button>
+                    </div>
+
+
                 </div>
             </div>
 

@@ -153,8 +153,6 @@ class ServiceController extends Controller
     function registerOrder(Request $request)
     {
 
-
-
         $order = $request->getContent();
 
 
@@ -179,6 +177,8 @@ class ServiceController extends Controller
 
         $order->tracking_number=(string)$tracking_number;
 
+        $order->revisions =[['services'=>$order->services,'total_price'=>$order->total_price,'created_at'=>new UTCDateTime(time()*1000),'tracking_number'=>$order->tracking_number]];
+
 
 
 
@@ -192,7 +192,7 @@ class ServiceController extends Controller
             $this->dispatch(new FindWorker($order));
 
             $job = (new CheckServiceAccepted((string)$order['_id']))->delay(60);
-            $this->dispatch($job);
+             $this->dispatch($job);
             return response()->json(['order'=>$order]);
 
         }

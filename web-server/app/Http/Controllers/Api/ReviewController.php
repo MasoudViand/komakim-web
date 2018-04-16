@@ -99,9 +99,14 @@ class ReviewController extends Controller
 
     function listReason()
     {
-        $reasons = DissatisfiedReason::all();
+        $reasonModel = DissatisfiedReason::all();
 
-        return response()->json(['reasons',$reasons]);
+
+
+
+
+
+        return response()->json(['reasons'=>$reasonModel]);
     }
 
 

@@ -15,6 +15,8 @@ class VerifyCsrfToken extends Middleware
         '/admin/user/filter',
         '/admin/order/filter',
         'pay/callback',
+        'send_mail',
+        '/client/callback',
         'admin/financial/filter',
         'admin/financial/weekly',
         'admin/financial/daily',

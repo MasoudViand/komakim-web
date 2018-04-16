@@ -34,7 +34,7 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth:admin','operator'])->except('filterOrder');
+        $this->middleware(['auth:admin','operator'])->except(['filterOrder']);
     }
 
 
@@ -139,13 +139,13 @@ class OrderController extends Controller
                     $order['status']='قبول درخواست توسط خدمه';
                     break;
                 case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                    $order['status']='شروع کار توسط خذمه';
+                    $order['status']='شروع کار توسط خدمه';
                     break;
                 case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
                     $order['status']='اتمام کار توسط خدمه';
                     break;
                 case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                    $order['status']='پرداخت توسط خدمه';
+                    $order['status']='پرداخت توسط مشتری';
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                     $order['status']='لغو توسط مشتری';
@@ -188,13 +188,13 @@ class OrderController extends Controller
                     $queryParam['status_plain_text']='قبول درخواست توسط خدمه';
                     break;
                 case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                    $queryParam['status_plain_text']='شروع کار توسط خذمه';
+                    $queryParam['status_plain_text']='شروع کار توسط خدمه';
                     break;
                 case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
                     $queryParam['status_plain_text']='اتمام کار توسط خدمه';
                     break;
                 case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                    $queryParam['status_plain_text']='پرداخت توسط خدمه';
+                    $queryParam['status_plain_text']='پرداخت توسط مشتری';
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                     $queryParam['status_plain_text']='لغو توسط مشتری';
@@ -264,13 +264,13 @@ class OrderController extends Controller
                 $order['status']='قبول درخواست توسط خدمه';
                 break;
             case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                $order['status']='شروع کار توسط خذمه';
+                $order['status']='شروع کار توسط خدمه';
                 break;
             case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
                 $order['status']='اتمام کار توسط خدمه';
                 break;
             case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                $order['status']='پرداخت توسط خدمه';
+                $order['status']='پرداخت توسط مشتری';
                 break;
             case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                 $order['status']='لغو توسط مشتری';
@@ -383,13 +383,13 @@ class OrderController extends Controller
                     $revision['status']='قبول درخواست توسط خدمه';
                     break;
                 case OrderStatusRevision::START_ORDER_BY_WORKER_STATUS:
-                    $revision['status']='شروع کار توسط خذمه';
+                    $revision['status']='شروع کار توسط خدمه';
                     break;
                 case OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS:
                     $revision['status']='اتمام کار توسط خدمه';
                     break;
                 case OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS:
-                    $revision['status']='پرداخت توسط خدمه';
+                    $revision['status']='پرداخت توسط مشتری';
                     break;
                 case OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS:
                     $revision['status']='لغو توسط مشتری';
@@ -438,6 +438,8 @@ class OrderController extends Controller
     {
 
 
+
+
         $order = Order::find($request->input('idOrder'));
 
         if ($request->has('cancel_order_text'))
@@ -445,15 +447,16 @@ class OrderController extends Controller
         $order->status =OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
         if ($order->save())
         {
-            $revision = new \stdClass();
-            $revision->order_id=($order->order_id);
-            $revision->created_at = new UTCDateTime(time()*1000);
-            $revision->status=OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
-            $revision->whom =Admin::find($request->user()->id);
-            $model = OrderStatusRevision::raw()->insertOne($revision);
+//            $revision = new \stdClass();
+//            $revision->order_id=($order->id);
+//            $revision->created_at = new UTCDateTime(time()*1000);
+//            $revision->status=OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS;
+//            $revision->whom =$request->user()->id;
+//
+//            $model = OrderStatusRevision::raw()->insertOne($revision);
+
             $worker_id = $order->worker_id;
             $user_id = $order->user_id;
-
             $user = User::find($user_id);
             $user_number = $user->phone_number;
             $message='سفارش با کد پیگیری '.$order->tracking_number.'توسط کمکیم لغو شد';
@@ -471,7 +474,7 @@ class OrderController extends Controller
                 $workerProfile->save();
             }
             $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'لغو توسط ادمین','',$order,User::CLIENT_ROLE));
-            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$request->user()));
+            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_ADMIN_STATUS,$request->user()));
             return redirect()->back();
 
 

@@ -20,6 +20,7 @@ class PayController extends Controller
     function index($phone_number,$amount)
     {
 
+
         $user = User::where('phone_number',$phone_number)->first();
         if (!$user)
         {
@@ -40,7 +41,7 @@ class PayController extends Controller
         $payOrder = new \stdClass();
 
         $payOrder->amount=(int)$amount;
-        $payOrder->ip=request()->ip();
+        $payOrder->ip=$_SERVER['REMOTE_ADDR'];
 
         $payOrder->created_at = new UTCDateTime(time()*1000);
 
@@ -67,10 +68,59 @@ class PayController extends Controller
         $data =null;
         if( ! isset($_POST['State']) or $_POST['State']!='OK')
         {
+            switch ($_POST['State'])
+            {
+                case 'Canceled By User':
+                    $data['error']='تراکنش توسط خریدار کنسل شد';
+                    break;
+                case 'Invalid Amount':
+                    $data['error']='مبلغ سند برگشتی از مبلغ تراکنش اصلی بیشتر است';
+                    break;
+                case 'Invalid Transaction':
+                    $data['error']='درخواست برگشت تراکنش رسیده است در حالی که تراکنش اصلی پیدا نمی شود';
+                    break;
+                case 'Invalid Card Number':
+                    $data['error']='شماره کارت اشتباه است';
+                    break;
+                case 'No Such Issuer':
+                    $data['error']='چنین صادر کننده کارتی وجود ندارد';
+                    break;
+                case 'Expired Card Pick Up':
+                    $data['error']='از تاریخ انقضای کارت گذشته است و کارت دیگر معتبر نیست';
+                    break;
+                case 'Incorrect PIN':
+                    $data['error']='رمز کارت (PIN) اشتباه وارد شده است';
+                    break;
+                case 'No Sufficient Funds':
+                    $data['error']='موجودی به اندازه کافی در حساب شما نیست';
+                    break;
+                case 'Issuer Down Slm':
+                    $data['error']='سیستم کارت بانک صادر کننده فعال نیست';
+                    break;
+                case 'TME Error':
+                    $data['error']='خطا در شبکه بانکی';
+                    break;
+                case 'Exceeds Withdrawal Amount Limit':
+                    $data['error']='مبلغ بیش از سقف برداشت است';
+                    break;
+                case 'Transaction Cannot Be Completed':
+                    $data['error']='امکان سند خوردن وجود ندارد';
+                    break;
+                case 'Allowable PIN Tries Exceeded Pick Up':
+                    $data['error']='رمز کارت (PIN) 3 مرتبه اشتباه وارد شده است در نتیجه کارت شما غیر فعال خواهد شد';
+                    break;
+                case 'Response Received Too Late':
+                    $data['error']='تراکنش در شبکه بانکی Timeout خورده است';
+                    break;
+                case 'Suspected Fraud Pick Up':
+                    $data['error']='فیلد CV2V و یا فیلد ExpDate اشتباه وارد شده و یا اصلا وارد نشده است';
+                    break;
+
+            }
 
 
 
-            $data['error']='پرداخت ناموفق';
+           // $data['error']='پرداخت ناموفق';
             return view('payment.callback')->with($data);
         }
 
@@ -87,13 +137,15 @@ class PayController extends Controller
 
         }
 
-        if($orderPeyment->ip != $_SERVER['REMOTE_ADDR'])
-        {
-
-            $data['error']='آی پی پرداخت کننده مطابقت ندارد';
-            return view('payment.callback')->with($data);
-
-        }
+//        dd($_SERVER['REMOTE_ADDR']);
+//
+//        if($orderPeyment->ip != $_SERVER['REMOTE_ADDR'])
+//        {
+//
+//            $data['error']='آی پی پرداخت کننده مطابقت ندارد';
+//            return view('payment.callback')->with($data);
+//
+//        }
 
 
         if($orderPeyment->status=='success')

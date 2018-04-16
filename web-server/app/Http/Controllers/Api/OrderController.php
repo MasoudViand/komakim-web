@@ -27,6 +27,7 @@ class OrderController extends Controller
         function listActiveOrder(Request $request)
 
         {
+
             $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
             $orders = Order::whereIn('status',$activeStatus)->where('user_id',new ObjectID($request->user()->id))->get();
@@ -64,14 +65,40 @@ class OrderController extends Controller
             foreach ($orders as $item)
             {
                 if ($item->worker_id)
+                {
                     $item->worker=User::find($item->worker_id);
+
+                    $url_image =  '/images/workers/profile-default-male.png';
+                    $worker_profile  =WorkerProfile::where('user_id',new ObjectID($item->worker_id))->first();
+
+                    if (file_exists((public_path('images/workers') . '/' . $worker_profile->id) . '.png')) $url_image = ('/images/workers') . '/' .$worker_profile-id. '.png';
+                    if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpg')) $url_image = ('/images/workers') . '/' .$worker_profile->id . '.jpg';
+                    if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $worker_profile->id . '.jpeg';
+
+                    $url_image='http://213.32.32.148'.''.$url_image;
+
+                    $item->worker ->url_image = $url_image;
+
+                    $mah = \Morilog\Jalali\jDateTime::strftime('M', $item['created_at']);
+                    $rooz = \Morilog\Jalali\jDateTime::strftime('j', $item['created_at']);
+                    $sal = \Morilog\Jalali\jDateTime::strftime('  y', $item['created_at']);
+                    $persian_date =[
+                        'day' =>$rooz,
+                        'month' =>$mah,
+                        'year'=>$sal
+                    ];
+                    $item->persian_date = $persian_date;
+
+                    $review =Review::where('order_id',new ObjectID($item->id))->first();
+                    if ($review)
+                        $item->score = $review->score;
+
+                }
                 else
                     $item->worker=false;
-                if ($item->revisions)
-                {
-                    $item->services=$item->revisions[0]['services'];
-                    unset($item->revisions);
-                }
+
+                unset($item->revisions);
+
 
             }
 
@@ -81,10 +108,12 @@ class OrderController extends Controller
 
         function editOrder(Request $request)
         {
+
             $order = $request->getContent();
 
 
             $order =(json_decode($order));
+
             if(!property_exists($order, 'services') || !is_array($order->services))
                 return response()->json(['errors'=>'services is invalid'])->setStatusCode('417');
 
@@ -101,45 +130,39 @@ class OrderController extends Controller
             }
 
 
-
             $orderModel=Order::find($order->parent_id);
 
 
             if (!$orderModel or $orderModel->status!=OrderStatusRevision::START_ORDER_BY_WORKER_STATUS)
                 return response()->json(['errors'=>'سفارش وجود ندارد یا وضعیت  شروع به کار ندارد'])->setStatusCode('417');
 
-
-            if (!$orderModel->revisions)
-                $revisions=[];
-            else
-                $revisions=$orderModel->revisions;
-
-
+            $revisions =$orderModel->revisions;
 
             $revision['services']=$order->services;
             $revision['total_price']=$order->total_price;
             $revision['created_at']=new UTCDateTime(time()*1000);
-            $revision['tracking_number']=$orderModel->tracking_number.'.'.(count($revisions)+1);
+            $revision['tracking_number']=$orderModel->tracking_number.'.'.(count($orderModel->revisions));
             array_unshift($revisions,$revision);
-
-
-
-
             $orderModel->revisions=$revisions;
+
+
             $orderModel->status=OrderStatusRevision::EDIT_BY_WORKER_STATUS;
 
 
 
-            if ($orderModel->save())
+           if ($orderModel->save())
             {
-                $orderModel['services']=$orderModel['revisions'][0];
-                $orderModel->tracking_number = $revision['tracking_number'];
-                unset($orderModel['revisions']);
+                $orderArray = $orderModel->getAttributes();
+
+
+                $orderArray['services']=$orderArray['revisions'][0]['services'];
+                unset($orderArray['revisions']);
+
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','',$order,User::CLIENT_ROLE));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','', $orderArray,User::CLIENT_ROLE));
 
 
-                return response()->json(['order'=>$orderModel]);
+                return response()->json(['order'=>$orderArray]);
             }
             else
                 return response()->json(['errors'=>'internal server error']);
@@ -157,20 +180,17 @@ class OrderController extends Controller
 
 
             if (!($order['status']==OrderStatusRevision::EDIT_BY_WORKER_STATUS))
-                return response()->json(['errors'=>'وضعیت سفارش ویرایش شده توسط کاربر نیست'])->setStatusCode(420);
-
+                return response()->json(['errors'=>'وضعیت سفارش ویرایش شده توسط خدمه نیست'])->setStatusCode(420);
 
 
             $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
+            $order->total_price=$order->revisions[0]['total_price'];
+            $order->services=$order->revisions[0]['services'];
 
             if ($order->save())
             {
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::APPROVE_EDIT_BY_CLIENT_STATUS,$request->user()) );
                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'تایید ادامه کار','',$order,User::WORKER_ROLE));
-
-
-
-                //$this->_sendNotificationToClient();
 
                 return response()->json(['order'=>$order]);
 
@@ -180,34 +200,40 @@ class OrderController extends Controller
             }
         }
 
-        function detailOrder(Request $request)
+    function deniedEditOrder(Request $request)
+    {
+        if (!$request->has('order_id')){
+            return response()->json(['errors'=>'order id is require'])->setStatusCode(417);
+        }
+        $order = Order::find($request->input('order_id'));
+        if ($order['user_id'] and (string)$order['user_id']!=$request->user()->id)
+            return response()->json(['errors'=>'این سفارش به شما تعلق ندارد'])->setStatusCode(420);
+
+
+        if (!($order['status']==OrderStatusRevision::EDIT_BY_WORKER_STATUS))
+            return response()->json(['errors'=>'وضعیت سفارش ویرایش شده توسط خدمه نیست'])->setStatusCode(420);
+
+
+        $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
+        if ($order->save())
         {
-            $order = Order::find($request->input('order_id'));
-
-            $review = Review::where('order_id',new ObjectID($request->input('order_id')))->first();
-
-
-            if ($review)
-                $order->review=$review;
-            else
-                $order->review=false;
-
-
+            $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::DENIED_EDIT_BY_CLIENT_STATUS,$request->user()) );
+            $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'ویرایش انجام شده مورد تایید قرار نگرفت','',$order,User::WORKER_ROLE));
             return response()->json(['order'=>$order]);
 
+        }else
+        {
+            return response()->json(['errors'=>'internal server errors'])->setStatusCode(500);
         }
+    }
 
 
 
 
-
-
-        ///////
-
-
-        function listActiveOrderWorker(Request $request)
+    function listActiveOrderWorker(Request $request)
 
     {
+
         $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
 
         $order = Order::whereIn('status',$activeStatus)->where('worker_id',new ObjectID($request->user()->id))->first();
@@ -257,6 +283,18 @@ class OrderController extends Controller
                 $item->services=$item->revisions[0]['services'];
                 unset($item->revisions);
             }
+            $item->persian_date = \Morilog\Jalali\jDateTime::strftime('  y  M j', $item['created_at']);
+            $mah = \Morilog\Jalali\jDateTime::strftime('M', $item['created_at']);
+            $rooz = \Morilog\Jalali\jDateTime::strftime('j', $item['created_at']);
+            $sal = \Morilog\Jalali\jDateTime::strftime('  y', $item['created_at']);
+            $persian_date =[
+                'day' =>$rooz,
+                'month' =>$mah,
+                'year'=>$sal
+            ];
+            $item->persian_date = $persian_date;
+
+
 
         }
 
@@ -289,6 +327,8 @@ class OrderController extends Controller
     }
     function cancelOrder(Request $request)
     {
+
+
         if (!$request->has('order_id'))
             return response()->json(['errors','order_id is require'])->setStatusCode(417);
 
@@ -301,6 +341,8 @@ class OrderController extends Controller
             $user = $request->user();
 
             $workerId=$order->worker_id;
+
+
 
             if ($workerId)
             {
@@ -315,19 +357,21 @@ class OrderController extends Controller
             {
 
 
-                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS,$user));
 
                 if ( $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS)
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order,User::CLIENT_ROLE));
+                    $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->user_id,'سفارش توسط خدمه لغو شد','',$order,User::CLIENT_ROLE));
+                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS;
+
 
             }
             if ($user->role == User::CLIENT_ROLE)
             {
-                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
+
                 $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,$user));
                 if ( $order->status == OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS)
                 $this->dispatch(new SendNotificationToSingleUserJobWithFcm($order->worker_id,'سفارش توسط مشتری لغو شد','',$order,User::WORKER_ROLE));
+                $order->status=OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS;
 
 
             }

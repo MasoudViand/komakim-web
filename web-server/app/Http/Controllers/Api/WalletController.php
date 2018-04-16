@@ -32,8 +32,9 @@ class WalletController extends Controller
 
         $payOrder = new \stdClass();
 
+
         $payOrder->amount=$request->input('amount');
-        $payOrder->ip=request()->ip();
+        $payOrder->ip=$_SERVER['REMOTE_ADDR'];
 
         $payOrder->created_at = new UTCDateTime(time()*1000);
 
@@ -76,12 +77,6 @@ class WalletController extends Controller
 
 
 
-        if ($order->revisions)
-        {
-
-
-            $total_price=$order->revisions[0]['total_price'];
-        }
 
         if ($order->discount)
         {
@@ -217,7 +212,10 @@ class WalletController extends Controller
 
         if ($discountCode->type=='percent')
         {
-            $discount = $order->total_price*$discountCode->value;
+
+
+
+            $discount = ($order->total_price*$discountCode->value)/100;
         }else
         {
             $discount = $discountCode->value;
@@ -234,11 +232,6 @@ class WalletController extends Controller
     {
         $services= $order->services;
 
-        if ($order->revisions)
-        {
-
-            $services=$order->revisions[0]['services'];
-        }
 
         $fanantialReport =new FinancialReport();
 
@@ -246,9 +239,6 @@ class WalletController extends Controller
         $total_commission =0;
         $commissionConstModel = Setting::where('type','commission')->first();
         $commissionConstModel? $commissionConst=$commissionConstModel->value:$commissionConst=5000;
-
-
-
 
         foreach ($services as $item)
         {
@@ -289,14 +279,8 @@ class WalletController extends Controller
                 $unit_count = $item['unit_count'];
                 $commission=$commissionConst;
                 $total_commission = $total_commission+ ((int)($unit_count))*$commission;
-                $total_price=$total_price+ $unit_count*$item['price'];
-
+                $total_price=$total_price+ $unit_count*$item['unit_price'];
             }
-
-
-
-
-
 
 
         }

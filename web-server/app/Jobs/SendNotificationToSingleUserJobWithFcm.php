@@ -23,6 +23,7 @@ use MongoDB\BSON\ObjectID;
 use MongoDB\Operation\Find;
 use function PHPSTORM_META\type;
 use stdClass;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 
 class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
 {
@@ -61,16 +62,28 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
     public function handle()
     {
 
+
+
+
+
+
         $user=User::find($this->user_id);
-        $data=[];
+
+
+
+
+
+
+
 
         if ($this->target==User::WORKER_ROLE)
         {
 
-            $clientUserModel =User::find($this->order->user_id);
+            $clientUserModel =User::find($this->order['user_id']);
             $clientUser['phone_number']=$clientUserModel->phone_number;
             $clientUser['name']=$clientUserModel->name;
             $clientUser['family']=$clientUserModel->family;
+
             $data=['order'=>$this->order,'user'=>$clientUser];
             $app_id ='aae19cb0-6ce8-44e9-b40d-8038799b952e';
             $authorization = 'Authorization: Basic MzM4MjM1ZjktZDE1Ni00NDg2LWEyZWYtNDUxNDNlZmJmYWYy';
@@ -79,7 +92,9 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
         else
         {
 
-            $workerUserModel =User::find($this->order->worker_id);
+
+
+            $workerUserModel =User::find($this->order['worker_id']);
 
 
             $workerUser['phone_number']=$workerUserModel->phone_number;
@@ -91,11 +106,12 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.png')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.png';
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpg';
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpeg';
+            $url_image='http://213.32.32.148'.''.$url_image;
 
-            $url_image=URL::to('/') .''.$url_image;
 
             $workerUser['url_image'] = $url_image;
-            $data=['order'=>$this->order,'user'=>$workerUser];
+
+            $data=['order'=>$this->order ,'user'=>$workerUser];
             $app_id= '5cf31f6e-0526-4083-841b-03d789183ab8';
             $authorization = 'Authorization: Basic Yzc0M2E3NzItYjZmMS00MDg4LWJiZDAtMjZkZWI4NDJmNDhi';
 
@@ -109,6 +125,8 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
         $content = array(
             "en" => $this->message
         );
+
+
         $fields = array(
             'app_id' => $app_id,
             'include_player_ids' => array($fcm_token),

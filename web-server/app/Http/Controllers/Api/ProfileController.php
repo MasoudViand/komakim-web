@@ -345,4 +345,27 @@ class ProfileController extends Controller
             return response()->json(['errors'=>"user_type is not defined"])->setStatusCode(417);
 
     }
+
+    public function editprofile( Request $request)
+    {
+
+        $user =$request->user();
+
+        if ($request->has('name'))
+                $user->name=$request->input('name');
+        if ($request->has('family'))
+                $user->family=$request->input('family');
+        if ($request->has('email'))
+                $user->email=$request->input('email');
+
+        if ($user->save())
+        {
+            return response()->json(['profile'=>$user]);
+
+        }else
+            return response()->json(['errors'=>"something not right"])->setStatusCode(417);
+
+
+
+    }
 }

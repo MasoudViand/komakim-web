@@ -30,6 +30,7 @@ Route::middleware('api')->prefix('number')->group(function (){
 
 Route::middleware('auth:api')->prefix('profile')->group(function (){
     Route::post('/', 'Api\ProfileController@addprofile')->name('api.profile.insert.submit');
+    Route::post('/edit', 'Api\ProfileController@editprofile')->name('api.profile.edit');
 });
 Route::middleware('access_token','auth:api')->post('initialize' ,'Api\ProfileController@initialize');
 Route::middleware('auth:api','profile')->get('profile/info' ,'Api\ProfileController@getprofileInfo');
@@ -57,6 +58,7 @@ Route::middleware('auth:api','profile')->prefix('order')->group(function (){
     Route::get('/active', 'Api\OrderController@listActiveOrder')->name('api.order.active.list');
     Route::post('/edit', 'Api\OrderController@editOrder')->name('api.order.active.list');
     Route::post('/edit/approve', 'Api\OrderController@approveEditOrder')->name('api.order.active.list');
+    Route::post('/edit/denied', 'Api\OrderController@deniedEditOrder');
     Route::post('/cancel', 'Api\OrderController@cancelOrder')->name('api.order.cancel');
     Route::get('/cancel/reason', 'Api\OrderController@receiveCancelReason')->name('api.order.cancel');
 

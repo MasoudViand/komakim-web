@@ -12,8 +12,33 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+
+    return view('client.pages.home');
+})->name('client.home');
+
+
+
+Route::get('/aboutus', function () {
+    return view('client.pages.aboutus');
+})->name('client.aboutus');
+
+Route::post('/send_mail', 'HomeController@sendEmail')->name('send.mail');
+
+
+//Route::post('/send_mail', function () {
+//    dd(1);
+//})->name('send.mail');
+
+Route::get('/download', function () {
+    return view('client.pages.download');
+})->name('client.download');
+
+
+Route::get('/charge_account', function () {
+    return view('client.pages.charge_account');
+})->name('client.charge_account');
+Route::post('/charge_account', 'HomeController@chargeAccount')->name('charge_account_submit');
+Route::post('/client/callback', 'HomeController@callback')->name('charge_account_callback');
 
 
 Route::get('2fa', 'Auth\TwoFactorController@showTwoFactorForm');
@@ -23,7 +48,10 @@ Route::post('2fa', 'Auth\TwoFactorController@verifyTwoFactor')->name('2fa');
 
 //Auth::routes();
 
+
 Route::post('/callback', 'HomeController@callback')->name('home');
+
+Route::get('/return_app' ,'HomeController@returnApp')->name('return.app');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/test', 'HomeController@test')->name('testhome');
