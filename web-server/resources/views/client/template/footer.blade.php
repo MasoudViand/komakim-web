@@ -3,6 +3,19 @@
     <div class="container">
         <div class="tit">تماس با ما</div>
         <div class="brd"></div>
+		<div class="text-center text-info">
+			تهران، خیابان الوند، خیابان 35،
+
+پلاک 12، طبقه چهارم
+		</div>
+		<div class="text-center text-info">
+		info@komakim.com
+		</div>
+		<div class="text-center text-info">
+			02154585		
+		</div>
+		
+		<div class="clearfix"></div><br><br>
         <div class="stit">شما می توانید از طریق فرم زیر با ما در تماس باشید</div>
 
         <div class="clearfix"></div>

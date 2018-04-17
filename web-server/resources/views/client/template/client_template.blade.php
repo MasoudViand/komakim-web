@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>کمکیم</title>
+    <title>{{ $header_title or "کمکیم" }}</title>
 {{--    <link rel="stylesheet" href="{{asset("client/css/bootstrap.min.css") }}">--}}
     <link rel="stylesheet" href="{{asset("AdminLTE-RTL/bootstrap/css/bootstrap.min.css") }}">
 

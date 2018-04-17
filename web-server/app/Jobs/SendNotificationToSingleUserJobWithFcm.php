@@ -106,8 +106,8 @@ class SendNotificationToSingleUserJobWithFcm implements ShouldQueue
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.png')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.png';
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpg';
             if (file_exists((public_path('images/workers') . '/' . $workerProfile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $workerProfile->id . '.jpeg';
-            $url_image='http://213.32.32.148'.''.$url_image;
 
+            $url_image=URL::to('/').''.$url_image;
 
             $workerUser['url_image'] = $url_image;
 

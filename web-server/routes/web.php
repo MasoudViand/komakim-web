@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 
 Route::get('/aboutus', function () {
-    return view('client.pages.aboutus');
+    return view('client.pages.aboutus')->with(['header_title'=>'درباره ما']);
 })->name('client.aboutus');
 
 Route::post('/send_mail', 'HomeController@sendEmail')->name('send.mail');
@@ -30,12 +30,12 @@ Route::post('/send_mail', 'HomeController@sendEmail')->name('send.mail');
 //})->name('send.mail');
 
 Route::get('/download', function () {
-    return view('client.pages.download');
+    return view('client.pages.download')->with(['header_title'=>'دانلود']);
 })->name('client.download');
 
 
 Route::get('/charge_account', function () {
-    return view('client.pages.charge_account');
+    return view('client.pages.charge_account')->with(['header_title'=>'شارژ حساب']);
 })->name('client.charge_account');
 Route::post('/charge_account', 'HomeController@chargeAccount')->name('charge_account_submit');
 Route::post('/client/callback', 'HomeController@callback')->name('charge_account_callback');
@@ -48,10 +48,7 @@ Route::post('2fa', 'Auth\TwoFactorController@verifyTwoFactor')->name('2fa');
 
 //Auth::routes();
 
-
 Route::post('/callback', 'HomeController@callback')->name('home');
-
-Route::get('/return_app' ,'HomeController@returnApp')->name('return.app');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/test', 'HomeController@test')->name('testhome');

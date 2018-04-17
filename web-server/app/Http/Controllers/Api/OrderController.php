@@ -60,49 +60,76 @@ class OrderController extends Controller
 
             $archiveStatus = [OrderStatusRevision::PAID_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_CLIENT_STATUS,OrderStatusRevision::CANCEL_ORDER_BY_WORKER_STATUS];
 
-            $orders = Order::whereIn('status',$archiveStatus)->where('user_id',new ObjectID($request->user()->id))->skip($offset)->take($limit)->get();
+            $archiveOrders = Order::whereIn('status',$archiveStatus)->where('user_id',new ObjectID($request->user()->id))->skip($offset)->take($limit)->get();
+
+            $activeStatus=[OrderStatusRevision::WAITING_FOR_WORKER_STATUS,OrderStatusRevision::ACCEPT_ORDER_BY_WORKER_STATUS,OrderStatusRevision::START_ORDER_BY_WORKER_STATUS,OrderStatusRevision::FINISH_ORDER_BY_WORKER_STATUS,OrderStatusRevision::EDIT_BY_WORKER_STATUS];
+
+            $activeOrders = Order::whereIn('status',$activeStatus)->where('user_id',new ObjectID($request->user()->id))->get();
+
+
+            $orders = array_merge($activeOrders->toArray(),$archiveOrders->toArray());
+
+
+            $ordersArray=[];
 
             foreach ($orders as $item)
             {
-                if ($item->worker_id)
+
+
+                if (key_exists('worker_id',$item))
                 {
-                    $item->worker=User::find($item->worker_id);
+
+
+                    $item['worker']=User::find($item['worker_id']);
+
 
                     $url_image =  '/images/workers/profile-default-male.png';
-                    $worker_profile  =WorkerProfile::where('user_id',new ObjectID($item->worker_id))->first();
-
+                    $worker_profile  =WorkerProfile::where('user_id',new ObjectID($item['worker_id']))->first();
+//
                     if (file_exists((public_path('images/workers') . '/' . $worker_profile->id) . '.png')) $url_image = ('/images/workers') . '/' .$worker_profile-id. '.png';
                     if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpg')) $url_image = ('/images/workers') . '/' .$worker_profile->id . '.jpg';
                     if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $worker_profile->id . '.jpeg';
+//
+                    $url_image=URL::to('/').''.$url_image;
+//
+                    $item['worker']['url_image'] = $url_image;
 
-                    $url_image='http://213.32.32.148'.''.$url_image;
 
-                    $item->worker ->url_image = $url_image;
 
-                    $mah = \Morilog\Jalali\jDateTime::strftime('M', $item['created_at']);
-                    $rooz = \Morilog\Jalali\jDateTime::strftime('j', $item['created_at']);
-                    $sal = \Morilog\Jalali\jDateTime::strftime('  y', $item['created_at']);
+                    $mah = (int)\Morilog\Jalali\jDateTime::strftime('m', $item['created_at']);
+                    $rooz = (int)\Morilog\Jalali\jDateTime::strftime('j', $item['created_at']);
+                    $sal = (int)\Morilog\Jalali\jDateTime::strftime('  y', $item['created_at']);
                     $persian_date =[
                         'day' =>$rooz,
                         'month' =>$mah,
                         'year'=>$sal
                     ];
-                    $item->persian_date = $persian_date;
+                    $item['persian_date'] = $persian_date;
 
-                    $review =Review::where('order_id',new ObjectID($item->id))->first();
+
+
+                    $review =Review::where('order_id',new ObjectID($item['_id']))->first();
                     if ($review)
-                        $item->score = $review->score;
+                        $item['score'] = $review->score;
+
+
 
                 }
                 else
-                    $item->worker=false;
+                    $item['worker']=null;
 
                 unset($item->revisions);
 
 
+                array_push($ordersArray,$item);
+
+
+
             }
 
-            return response()->json(['orders'=>$orders]);
+
+
+            return response()->json(['orders'=>$ordersArray]);
 
         }
 
@@ -152,17 +179,13 @@ class OrderController extends Controller
 
            if ($orderModel->save())
             {
-                $orderArray = $orderModel->getAttributes();
 
-
-                $orderArray['services']=$orderArray['revisions'][0]['services'];
-                unset($orderArray['revisions']);
 
                 $this->dispatch(new RegisterStatusOrderRevisionJob($orderModel->id,OrderStatusRevision::EDIT_BY_WORKER_STATUS,$request->user()));
-                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','', $orderArray,User::CLIENT_ROLE));
+                $this->dispatch(new SendNotificationToSingleUserJobWithFcm($orderModel->user_id,'ویرایش کار توسط خدمه','', $orderModel,User::CLIENT_ROLE));
 
 
-                return response()->json(['order'=>$orderArray]);
+                return response()->json(['order'=>$orderModel]);
             }
             else
                 return response()->json(['errors'=>'internal server error']);

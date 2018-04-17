@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
+use Symfony\Component\VarDumper\Dumper\DataDumperInterface;
 use Validator;
 use GuzzleHttp;
 
@@ -213,8 +214,11 @@ class PhoneNumberController extends Controller
 
         $http = new GuzzleHttp\Client;
 
-        $response = $http->post('http://127.0.0.1/oauth/token', [
-         //   $response = $http->post(URL::to('/').'/oauth/token', [
+
+
+
+//        $response = $http->post('http://127.0.0.1/oauth/token', [
+            $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $request->input('refresh_token'),
@@ -300,15 +304,14 @@ class PhoneNumberController extends Controller
     function _getAccessToken($phoneNumber)
     {
         $http = new GuzzleHttp\Client;
-       // dd(URL::to('/').'/oauth/token');
 
-        $response = $http->post('http://127.0.0.1/oauth/token', [
-      //  $response = $http->post(URL::to('/').'/oauth/token', [
+       // $response = $http->post('http://127.0.0.1/oauth/token', [
+        $response = $http->post(URL::to('/').'/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
-         //       'client_id' => '5a34fe1a978ef455fd280094',// local
+//                'client_id' => '5a34fe1a978ef455fd280094',// local
                 'client_id' => '5a8d36aa71d2f757f110c834',   //servertes
-                //'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
+//                'client_secret' => 'fBHnxIIy9ckSYpARFbwmreC3gRUr0mN2siGg2VmT',// local
                 'client_secret' => 'X48ILgXNuhJ8HL0cmDvLfu4cOPQ41dMJsPepoYzP', //server test
                 'username' => $phoneNumber,
                 'password' => $phoneNumber,

@@ -32,8 +32,8 @@ class ProfileController extends Controller
          $user =$request->user();
 
 
-        if ($user->isCompleted)
-            return response()->json(['errors'=>"profile previously completed"])->setStatusCode(417);
+//        if ($user->isCompleted)
+//            return response()->json(['errors'=>"profile previously completed"])->setStatusCode(417);
 
 
         $user->name =$request['name'];

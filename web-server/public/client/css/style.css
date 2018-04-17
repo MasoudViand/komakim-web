@@ -67,6 +67,9 @@ a , a:hover, a:active, a:focus {
 a:focus {
     outline: 0;
 }
+img {
+	max-width:100%;
+}
 .no-padding {
     padding: 0 !important;
 }
@@ -286,6 +289,10 @@ header {
 }
 .contact .btn {
     cursor: pointer;
+}
+.contact .text-info {
+	line-height:30px;
+	color: #646464;
 }
 .main {
 	min-height:400px;

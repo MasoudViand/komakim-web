@@ -46,6 +46,7 @@ class HomeController extends Controller
 
         $categories =Category::all();
         $data['categories']=$categories;
+        $data['header_title']='ثبت نام خدمه';
 
 
 
@@ -552,19 +553,6 @@ class HomeController extends Controller
         });
 
         return response()->json(['success'=>'ایمیل با موفقیت ارسال شد منتظر پاسخ باشید']);
-    }
-
-    function returnApp()
-    {
-        header('Location: komakimPayCheck://');
-        exit;
-
-
-
-        return response()->make( '', 200 )->header( 'Location', 'komakimPayCheck://' );
-
-
-
     }
 
 
