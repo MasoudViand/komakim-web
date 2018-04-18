@@ -291,10 +291,8 @@ class OrderController extends Controller
         }
         $services=[];
 
-        if ($orderModel->revisions)
-            $servicesModel=$orderModel->revisions[0]['services'];
-        else
-            $servicesModel=$orderModel->services;
+
+        $servicesModel=$orderModel->services;
 
 
         foreach ($servicesModel as $item)
@@ -489,18 +487,8 @@ class OrderController extends Controller
 
         if (!$orderModel)
             dd('سفارشی وجود ندارد');
-        if (!$orderModel->revisions)
-            dd('ویرایشی برای این سفارش وجود ندارد');
+
         $revisionsModel =$orderModel->revisions;
-
-        $userRevision['services']=$orderModel->services;
-        $userRevision['tracking_number']=$orderModel->tracking_number;
-        $userRevision['total_price']=$orderModel->total_price;
-        $userRevision['created_at']=$orderModel->created_at;
-
-        array_push($revisionsModel,$userRevision);
-
-        //dd($revisionsModel);
 
 
         $revisions=[];
@@ -510,6 +498,20 @@ class OrderController extends Controller
         {
             $revision['tracking_number']=$item['tracking_number'];
             $revision['total_price']=$item['total_price'];
+
+            switch ($item['status'])
+            {
+                case Order::PENDING_SERVICE_STATUS:
+                    $revision['status']='منتظر تایید ';
+                    break;
+                case Order::ACCEPTED_SERVICE_STATUS:
+                    $revision['status']='تایید شده';
+                    break;
+                case Order::REJECTED_SERVICE_STATUS:
+                    $revision['status']='رد شده توسط کاربر';
+                    break;
+
+            }
             $revision['created_at']=\Morilog\Jalali\jDateTime::strftime('Y/m/d H:i:s', strtotime($item['created_at']));
             $services=[];
             foreach ($item['services'] as $serviceModel)
@@ -561,6 +563,7 @@ class OrderController extends Controller
 
         }
         $data['revisions']=$revisions;
+
         return view('admin.pages.order.revisions_order')->with($data);
 
 

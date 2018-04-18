@@ -109,6 +109,8 @@ Route::middleware(['auth:admin','two_factor'])->prefix('admin')->group(function 
         Route::get('/insert', 'Admin\DiscountCodeController@insertForm')->name('admin.discount_code.insert');
         Route::post('/insert', 'Admin\DiscountCodeController@insert')->name('admin.discount_code.insert.submit');
         Route::get('/inactive/{discount_code_id}', 'Admin\DiscountCodeController@inactive')->name('admin.discount_code.inactive');
+        Route::get('/update/{discount_code_id}', 'Admin\DiscountCodeController@updateForm')->name('admin.discount.update');
+        Route::post('/update/', 'Admin\DiscountCodeController@update')->name('admin.discount.update.submit');
 
     });
     Route::prefix('notification')->group(function (){

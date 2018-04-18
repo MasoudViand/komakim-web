@@ -59,15 +59,18 @@
     @endif
 
 <div class="box col-xs-6">
-    <form role="form" method="POST" action="{{ route('admin.discount_code.insert.submit') }}">
+    <form role="form" method="POST" action="{{ route('admin.discount.update.submit') }}">
         {{ csrf_field() }}
         <div id="subform" class="box-body">
+
+
+            <input type="hidden" value="{{$discount->id}}" name="discountId">
 
 
 
             <div class="form-group">
                 <label for="exampleInputEmail1">کد </label>
-                <input  class="form-control" id="discount_code" name="discount_code" placeholder="کد">
+                <input  class="form-control" id="discount_code" name="discount_code" disabled value="{{$discount->name}}">
                 @if ($errors->has('discount_code'))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('discount_code') }}</strong>
@@ -77,7 +80,7 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">حداگثر تعدا استفاده </label>
-                <input type="number" class="form-control" id="total_use_limit" name="total_use_limit" placeholder="حداگثر تعدا استفاده ">
+                <input type="number" class="form-control" id="total_use_limit" name="total_use_limit" value="{{$discount->total_use_limit}}">
                 @if ($errors->has('حداگثر تعدا استفاده '))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('total_use_limit') }}</strong>
@@ -87,7 +90,7 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">تاریخ انقضا</label>
-                <input type="text" class="form-control" id="expired_at" name="expired_at" >
+                <input type="text" class="form-control" id="expired_at" name="expired_at" value="{{$discount->expired_at=='unlimited'?'':$discount->expired_at}}" >
                 @if ($errors->has('حداگثر تعدا استفاده '))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('expired_at') }}</strong>
@@ -99,9 +102,14 @@
             <div class="form-group">
                 <label for="exampleInputEmail1"  id="fields" >دسته بندی های هدف</label>
 
-                    <select id="fields"  name="fields[]" class="selectpicker" multiple data-hide-disabled="true" >
+
+
+                    <select id="fields"  name="fields[]" class="selectpicker" multiple data-hide-disabled="true"  >
                         @foreach($fields as $field)
-                            <option value="{{$field->id}}">{{$field->name}}</option>
+
+                            {{--<option value="{{$field->id}}">{{$field->name}}</option>--}}
+
+                            <option  value="{{$field->id}}" @if ($discount->fields!='unlimited' ) @foreach($discount->fields as $item) @if( $item==$field->id) selected @endif  @endforeach @endif >{{$field->name}}</option>
                         @endforeach
                     </select>
 
@@ -114,7 +122,7 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">حداکثر تخفیف</label>
-                <input type="number" class="form-control" id="upper_limit_use" name="upper_limit_use" placeholder="حداکثر تخفیف">
+                <input type="number" class="form-control" id="upper_limit_use" name="upper_limit_use" value="{{$discount->upper_limit_use}}">
                 @if ($errors->has('upper_limit_use'))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('upper_limit_use') }}</strong>
@@ -124,7 +132,7 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">حداکثر استفاده برای هر کاربر</label>
-                <input type="number" class="form-control" id="user_limit" name="user_limit" placeholder="حداکثر استفاده برای هر کاربر">
+                <input type="number" class="form-control" id="user_limit" name="user_limit" value="{{$discount->user_limit}}">
                 @if ($errors->has('user_limit'))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('user_limit') }}</strong>
@@ -137,15 +145,24 @@
             <div class="form-group">
                 <label for="exampleInputPassword1">نوع</label>
                 <select name="type" class="form-control" style="width:350px">
-                    <option value="{{\App\DiscountCode::CONST_AMOUNT_TYPE}}">مقدار ثابت</option>
-                    <option value="{{\App\DiscountCode::PERCENT_TYPE}}">درصدی</option>
+                    <option  @if($discount->type ==\App\DiscountCode::CONST_AMOUNT_TYPE) selected @endif value="{{\App\DiscountCode::CONST_AMOUNT_TYPE}}">مقدار ثابت</option>
+                    <option @if($discount->type ==\App\DiscountCode::PERCENT_TYPE) selected @endif value="{{\App\DiscountCode::PERCENT_TYPE}}">درصدی</option>
+
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">وضعیت</label>
+                <select name="status"   class="form-control" style="width:350px">
+                    <option  @if($discount->status) selected @endif value="true">فعال</option>
+                    <option @if(!$discount->status) selected @endif value="false">غیر فعال</option>
 
                 </select>
 
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">مقدار </label>
-                <input  class="form-control" id="value" name="value" type="number" placeholder="مقدار">
+                <input  class="form-control" id="value" name="value" type="number" value="{{$discount->value}}">
                 @if ($errors->has('value'))
                     <span class="help-danger">
                                         <strong>{{ $errors->first('value') }}</strong>

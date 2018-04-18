@@ -177,7 +177,7 @@ class ServiceController extends Controller
 
         $order->tracking_number=(string)$tracking_number;
 
-        $order->revisions =[['services'=>$order->services,'total_price'=>$order->total_price,'created_at'=>new UTCDateTime(time()*1000),'tracking_number'=>$order->tracking_number]];
+        $order->revisions =[['status'=>Order::ACCEPTED_SERVICE_STATUS,'services'=>$order->services,'total_price'=>$order->total_price,'created_at'=>new UTCDateTime(time()*1000),'tracking_number'=>$order->tracking_number]];
 
 
 

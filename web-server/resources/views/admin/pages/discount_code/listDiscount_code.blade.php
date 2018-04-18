@@ -31,7 +31,10 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 189px;">نوع</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">مقدار</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">وضعیت</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">غیر فعال کردن</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">تعداد استفاده شده</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">تاریخ انقضا</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">ویرایش</th>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -41,10 +44,14 @@
 
                             <tr role="row" class="odd">
                                 <td class="sorting_1">{{$discountCode->name}}</td>
-                                <td>{{ $discountCode->type=='amount' ?'مقدار ثابت':'درصدی' }}</td>
+                                <td>{{ $discountCode->type==\App\DiscountCode::CONST_AMOUNT_TYPE ?'مقدار ثابت':'درصدی' }}</td>
                                 <td>{{$discountCode->value}}</td>
                                 <td>{{$discountCode->status ?'فعال':'غیر فعال'}}</td>
-                                <td><a href="{{route('admin.discount_code.inactive',['discount_code_id' => $discountCode->id])}}"  onclick="return confirm('ایا از غیر فعال کردن کد تخفیف  اطمینان دارید')" {{$discountCode->status ?"": 'hidden'}}><i class="fa fa-remove"></i></a></td>
+                                <td class="sorting_1">{{$discountCode->count_of_used}}</td>
+                                <td class="sorting_1">{{$discountCode->expired_at}}</td>
+
+                                <td><a href="{{route('admin.discount.update',['discount_id' => $discountCode->id])}}"><i class="fa fa-edit"></i></a></td>
+
 
                             </tr>
 

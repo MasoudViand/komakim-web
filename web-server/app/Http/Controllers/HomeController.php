@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\DiscountCode;
+use App\Order;
 use App\OrderPayment;
+use App\OrderStatusRevision;
 use App\RepeatQuestion;
 use App\Setting;
 use App\Transaction;
@@ -560,14 +563,19 @@ class HomeController extends Controller
 
     function test()
     {
-//        $workerProfile = WorkerProfile::all();
-//
-//        foreach ($workerProfile as $item)
-//        {
-//            $item->has_active_order=false;
-//           if ($item->save())
-//               print_r('has_active_profile been save');
-//        }
+
+       $disounts =DiscountCode::all();
+
+       foreach ($disounts as $disount)
+       {
+           $disount->total_use_limit='unlimited';
+           $disount->fields='unlimited';
+           $disount->upper_limit_use='unlimited';
+           $disount->user_limit='unlimited';
+           $disount->expired_at='unlimited';
+           $disount->save();
+       }
     }
+
 
 }

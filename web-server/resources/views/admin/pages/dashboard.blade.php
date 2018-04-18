@@ -61,6 +61,26 @@
             <table id="example1" class="box table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                 <thead>
                 <tr role="row">
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">درامد خالص امروز </th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">درامد خالص دیروز</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{key_exists('today',$financials)?$financials['today_pure']:0}}</td>
+                    <td class="sorting_1">{{key_exists('yesterday',$financials)?$financials['yesterday_pure']:0}}</td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+            <table id="example1" class="box table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                <thead>
+                <tr role="row">
                     <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد کابران جدید امروز </th>
                     <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 162px;">تعداد کابران جدید دیروز</th>
                 </tr>

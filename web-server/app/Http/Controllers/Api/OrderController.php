@@ -14,6 +14,7 @@ use App\User;
 use App\WorkerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\URL;
 use Mockery\Tests\React_WritableStreamInterface;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
@@ -90,7 +91,7 @@ class OrderController extends Controller
                     if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpg')) $url_image = ('/images/workers') . '/' .$worker_profile->id . '.jpg';
                     if (file_exists((public_path('images/workers') . '/' .$worker_profile->id) . '.jpeg')) $url_image = ('/images/workers') . '/' . $worker_profile->id . '.jpeg';
 //
-                    $url_image=URL::to('/').''.$url_image;
+                    $url_image=URL::to('/').$url_image;
 //
                     $item['worker']['url_image'] = $url_image;
 
@@ -169,6 +170,7 @@ class OrderController extends Controller
             $revision['total_price']=$order->total_price;
             $revision['created_at']=new UTCDateTime(time()*1000);
             $revision['tracking_number']=$orderModel->tracking_number.'.'.(count($orderModel->revisions));
+            $revision['status']=Order::PENDING_SERVICE_STATUS;
             array_unshift($revisions,$revision);
             $orderModel->revisions=$revisions;
 
@@ -209,6 +211,11 @@ class OrderController extends Controller
             $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
             $order->total_price=$order->revisions[0]['total_price'];
             $order->services=$order->revisions[0]['services'];
+            $revisions = $order->revisions;
+            $revision=$revisions[0];
+            $revision['status']=Order::ACCEPTED_SERVICE_STATUS;
+            $revisions[0]=$revision;
+            $order->revisions=$revisions;
 
             if ($order->save())
             {
@@ -238,6 +245,12 @@ class OrderController extends Controller
 
 
         $order->status =OrderStatusRevision::START_ORDER_BY_WORKER_STATUS;
+        $revisions = $order->revisions;
+        $revision=$revisions[0];
+        $revision['status']=Order::REJECTED_SERVICE_STATUS;
+        $revisions[0]=$revision;
+        $order->revisions=$revisions;
+
         if ($order->save())
         {
             $this->dispatch(new RegisterStatusOrderRevisionJob($order->id,OrderStatusRevision::DENIED_EDIT_BY_CLIENT_STATUS,$request->user()) );
@@ -297,19 +310,13 @@ class OrderController extends Controller
 
         foreach ($orders as $item)
         {
-            if ($item->worker_id)
-                $item->worker=User::find($item->worker_id);
-            else
-                $item->worker=false;
-            if ($item->revisions)
-            {
-                $item->services=$item->revisions[0]['services'];
-                unset($item->revisions);
-            }
-            $item->persian_date = \Morilog\Jalali\jDateTime::strftime('  y  M j', $item['created_at']);
-            $mah = \Morilog\Jalali\jDateTime::strftime('M', $item['created_at']);
-            $rooz = \Morilog\Jalali\jDateTime::strftime('j', $item['created_at']);
-            $sal = \Morilog\Jalali\jDateTime::strftime('  y', $item['created_at']);
+
+            $item->worker=User::find($item->worker_id);
+
+            unset($item->revisions);
+            $mah = (int)\Morilog\Jalali\jDateTime::strftime('m', $item->created_at);
+            $rooz = (int)\Morilog\Jalali\jDateTime::strftime('j', $item->created_at);
+            $sal = (int)\Morilog\Jalali\jDateTime::strftime('  y', $item->created_at);
             $persian_date =[
                 'day' =>$rooz,
                 'month' =>$mah,
@@ -319,6 +326,11 @@ class OrderController extends Controller
 
 
 
+            $review =Review::where('order_id',new ObjectID($item->id))->first();
+            if ($review)
+                $item->score = $review->score;
+            else
+                $item->score = null;
         }
 
         return response()->json(['orders'=>$orders]);
@@ -327,27 +339,6 @@ class OrderController extends Controller
 
 
 
-        function detailOrderWorker(Request $request)
-    {
-        $order = Order::find($request->input('order_id'));
-
-        $review = Review::where('order_id',new ObjectID($request->input('order_id')))->first();
-
-
-        if ($review)
-            $order->review=$review;
-        else
-            $order->review=false;
-        if ($order->revisions)
-        {
-            $order->services=$order->revisions[0]['services'];
-            unset($order->revisions);
-        }
-
-
-        return response()->json(['order'=>$order]);
-
-    }
     function cancelOrder(Request $request)
     {
 

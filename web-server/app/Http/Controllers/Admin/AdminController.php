@@ -183,6 +183,8 @@ class AdminController extends Controller
             $item->type= 'yesterday';
         }
         $financials=[];
+
+
         foreach ($financialArr as $item)
         {
             $day= $item['_id']['day'];
@@ -197,10 +199,15 @@ class AdminController extends Controller
             if ($date==$to->format('d/m/Y'))
             {
                 $financials['today']=$item->total_price;
+                $financials['today_pure']=$item->commission;
                 $item->type ='today';
             }
             if ($date== $from->format('d/m/Y'))
+            {
                 $financials['yesterday']=$item->total_price;
+                $financials['yesterday_pure']=$item->commission;
+            }
+
             //$item->type= 'yesterday';
         }
 

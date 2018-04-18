@@ -131,7 +131,7 @@ class FindWorker implements ShouldQueue
                 $clientUser['name']=$clientUserModel->name;
                 $clientUser['family']=$clientUserModel->family;
 
-                $data=['order'=>$this->order,'client'=>$clientUser];
+                $data=['order'=>$this->order,'user'=>$clientUser];
 
 
 

@@ -20,6 +20,7 @@
                             <table class="table table-bordered table-striped dataTable" role="grid" >
                                 <thead>
                                 <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">وضعیت</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 207px;">تاریخ در خواست</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 45px;">کد رهگیری</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 45px;">قیمت کل</th>
@@ -28,6 +29,7 @@
 
                                 <tbody>
                                 <tr role="row" class="odd">
+                                    <td class="sorting_1">{{$revision['status']  }}</td>
                                     <td class="sorting_1">{{$revision['created_at']  }}</td>
                                     <td class="sorting_1">{{$revision['tracking_number']}}</td>
                                     <td class="sorting_1">{{$revision['total_price']}}</td>

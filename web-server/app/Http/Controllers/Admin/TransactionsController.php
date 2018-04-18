@@ -130,13 +130,13 @@ class TransactionsController extends Controller
                     $transaction['type'] ='پرداحت مشتری';
                     break;
                 case Transaction::DONE_ORDER:
-                    $transaction['type'] = 'واریز به کیف پول مشتری ';
+                    $transaction['type'] = 'واریز به کیف پول خدمه ';
                     break;
                 case Transaction::CHARGE_FROM_BANK:
                     $transaction['type'] ='شارژ کیف پول مشتری';
                     break;
                 case Transaction::BALANCE_ACCOUNT:
-                    $transaction['type']='تسفیه حساب مشتری';
+                    $transaction['type']='تسفیه حساب خدمه';
                     break;
                 default:
                     $transaction['type'] = 'تراکنش نا شناخته';

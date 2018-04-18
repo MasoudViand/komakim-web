@@ -16,6 +16,7 @@ use App\Setting;
 use App\Transaction;
 use App\User;
 use App\Wallet;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\URL;
@@ -192,28 +193,61 @@ class WalletController extends Controller
     {
         $order = Order::find($request->input('order_id'));
 
+        if (!is_null($order->discount))
+            return response()->json(['errors' => 'برای این سفارش قبلا کد تخفیفی اضافه شده'])->setStatusCode(417);
+
+
+
+
         $discountCode = DiscountCode::where('name', $request->input('discount_code'))->first();
 
-        if (!$discountCode)
-        {
-            return response()->json(['errors'=>'مقدار کد تخفیف وارد شده صحیح نیست'])->setStatusCode(417);
-        }
-        if (!$discountCode->status)
-            return response()->json(['errors'=>'مقدار کد تخفیف غیر فعال شده'])->setStatusCode(417);
 
+        if (!$discountCode) {
+            return response()->json(['errors' => 'مقدار کد تخفیف وارد شده صحیح نیست'])->setStatusCode(417);
+        }
+        if (!$discountCode->status) return response()->json(['errors' => 'مقدار کد تخفیف غیر فعال شده'])->setStatusCode(417);
+
+        $countOfUsed = $discountCode->count_of_used;
+
+
+
+        if (!$countOfUsed) $countOfUsed =0;
+
+
+        if ($discountCode->total_use_limit != 'unlimited' and $countOfUsed >= $discountCode->total_use_limit) return response()->json(['errors' => 'مهلت استفاده از کد تخفیف پایان یافته است'])->setStatusCode(417);
+
+
+        if ($discountCode->expired_at != 'unlimited' and $discountCode->expired_at->todateTime() < new \DateTime()) return response()->json(['errors' => 'مهلت استفاده از کد تخفیف پایان یافته است'])->setStatusCode(417);
+
+        if ($discountCode->fields != 'unlimited')
+        {
+
+            $fields =$discountCode->fields;
+            if (is_bool(array_search($order->category_id,$fields)))
+            {
+                if(! array_search($order->category_id,$fields))
+                    return response()->json(['errors'=>'کد تخفیف وارد شده اشتباه است'])->setStatusCode(417);
+            }
+
+        }
+
+        if ($discountCode->user_limit != 'unlimited')
+        {
+            $usedTimeByUser = DiscountCodeLog::where('user_id',new ObjectID($request->user()->id))->count();
+            if ( $usedTimeByUser>=$discountCode->user_limit)
+                return response()->json(['errors'=>'کد تخفیف وارد شده بیش از حد مجاز توسط کاربر استفاده شده است'])->setStatusCode(417);
+        }
 
 
         if ($order->discount_code_id and $order->discount_code_id == $discountCode->id)
         {
-            return response()->json(['errors' => 'این کد تخفیف قبلا برای این سفارش استفاده شده ']);
+            return response()->json(['errors' => 'این کد تخفیف قبلا برای این سفارش استفاده شده '])->setStatusCode(417);
         }
 
 
 
-        if ($discountCode->type=='percent')
+        if ($discountCode->type==DiscountCode::PERCENT_TYPE)
         {
-
-
 
             $discount = ($order->total_price*$discountCode->value)/100;
         }else
@@ -221,7 +255,15 @@ class WalletController extends Controller
             $discount = $discountCode->value;
         }
 
+        if ($discountCode->upper_limit_use != 'unlimited' and $discount>=$discountCode->upper_limit_use)
+            $discount=$discountCode->upper_limit_use;
+
+        
         $order->discount = $discount;
+        $discountCode->count_of_used =$countOfUsed+1;
+
+        $discountCode->save();
+
         $order->discount_code_id = new ObjectID($discountCode->id);
 
         $order->save();
